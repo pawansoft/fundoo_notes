@@ -38,10 +38,10 @@ describe('Test Signup Text Field', () => {
 })
 
 describe('Test validation of each field', () => {
-    it('provideFirstName_WhenFirstLetterIsNotCap_ShouldSetValidateFNameState', async() => {
-        const component = shallow(<Signup/>)
-        await component.instance().handleFName('p');
-        await component.instance().validateUserName();
-        expect(component.instance().state.fnameValid).toBe('invalid')
-    })
+    // it('provideFirstName_WhenFirstLetterIsNotCap_ShouldSetValidateFNameState', async() => {
+    //     const component = shallow(<Signup/>)
+    //     await component.instance().handleFName('p');
+    //     await component.instance().validateUserName();
+    //     expect(component.instance().state.fnameValid).toBe('invalid')
+    // })
 })
