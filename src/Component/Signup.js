@@ -191,7 +191,8 @@ export default class Signup extends Component {
 
                 <View style={{ flexDirection: 'row' }}>
                     
-                    <TouchableOpacity style = {RegisterStyle.touchable_opacity_style}>
+                    <TouchableOpacity style = {RegisterStyle.touchable_opacity_style}
+                    onPress = {() => this.props.navigation.navigate('Login')}>
                         <Text style ={RegisterStyle.button_Text}> 
                             Sign in instead
                         </Text>

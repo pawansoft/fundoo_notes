@@ -14,13 +14,10 @@ export default class Login extends Component {
     constructor(props){
         super(props);
         this.state = {
-           
             userNameValid: '',
             userName: '',
             passwordValid: '',
             password: '',
-           
-
         }
     }
 
@@ -102,7 +99,9 @@ export default class Login extends Component {
                 <View style={{ flexDirection: 'row' }}>
                     
                     <TouchableOpacity 
-                    style = {login_style.signup_button_container}>
+                    style = {login_style.signup_button_container}
+                    onPress = {() => this.props.navigation.navigate('Signup')}>
+
                         <Text style = {login_style.button_text}> 
                             Signup
                         </Text>
