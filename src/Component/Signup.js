@@ -69,7 +69,7 @@ export default class Signup extends Component {
 
     validatePassword = async() => {
         const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[*.!@#$%^&(){}:'<>,.>/~`_+=|].).{8,}$/
-        if(regex.test(this.state.password) == false){
+        if(regex.test(this.state.password) == false && this.state.password != ''){
             await this.setState({
                 passwordValid : 'Not Strong'
             })
@@ -81,7 +81,7 @@ export default class Signup extends Component {
     }
 
     comparePassword = async() => {
-        if(this.state.password == this.state.confirm && this.state.passwordValid != ''){
+        if(this.state.password != this.state.confirm){
             await this.setState({
                 passMatch: 'Wrong Password'
             })           
