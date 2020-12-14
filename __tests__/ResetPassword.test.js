@@ -5,6 +5,12 @@ import ForgotPasswordScreen from '../src/Component/ForgotPasswordScreen';
 import ForgotPassword from '../src/Component/ForgotPassword';
 configure({adapter: new Adapter()})
 
+describe('Reset Password Test', () => {
+    it('ProvideRender_WhenMatchToSnapshot_TestShouldPass', () => {
+        const component = shallow(<ForgotPassword/>)
+        expect(component).toMatchSnapshot()
+    })
+})
 describe('Test State of Reset Password', () => {
     test('ProvideUserName_WhenPassedWithField_ShouldStoreAtState', () =>{
         const component = shallow(<ForgotPassword/>);
@@ -25,10 +31,29 @@ describe('Test Invalid Detail', () => {
         component.instance().validateUserName();
         expect(component.instance().state.userNameValid).toBe('Invalid Email')
     }),
-    test('ProvideUserName_WhenPassedWithField_ShouldStoreAtState', () =>{
+    test('ProvideUserName_WhencorrectFormate_ShouldRemoveAnError', () =>{
         const component = shallow(<ForgotPassword/>);
-        component.instance().handlePassword('Pk@12345678');
+        component.instance().handleUserName('pk');
+        component.instance().validateUserName();
+        expect(component.instance().state.userNameValid).toBe('Invalid Email')
+        component.instance().handleUserName ('pk.soft29@gmail.com');
+        component.instance().validateUserName();
+        expect(component.instance().state.userNameValid).toBe('');
+    }),
+    test('ProvideUserName_WhenPasswordIsInvalid_ShouldGenerateError', () =>{
+        const component = shallow(<ForgotPassword/>);
+        component.instance().handlePassword('12345678');
         component.instance().validatePassword();
-        expect(component.instance().state.passwordValid).toBe('Invalid OTP')
+        expect(component.instance().state.passwordValid).toBe('Not Strong')
+    })
+
+    test('ProvideUserName_WhenPasswordIsValid_ShouldStoreAtState', () =>{
+        const component = shallow(<ForgotPassword/>);
+        component.instance().handlePassword('2345678');
+        component.instance().validatePassword();
+        expect(component.instance().state.passwordValid).toBe('Not Strong');
+        component.instance().handlePassword('Pk@16123114');
+        component.instance().validatePassword();
+        expect(component.instance().state.passwordValid).toBe('')
     })
 })

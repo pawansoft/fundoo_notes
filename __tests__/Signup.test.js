@@ -4,6 +4,13 @@ import {shallow, configure} from 'enzyme'
 import Signup from '../src/Component/Signup';
 
 configure({adapter: new Adapter()})
+
+describe('Signup Test', () => {
+    it('ProvideRender_WhenMatchToSnapshot_TestShouldPass', () => {
+        const component = shallow(<Signup/>)
+        expect(component).toMatchSnapshot()
+    })
+})
 describe('Test Signup Text Field', () => {
   
     it('ProvideTextFieldValue_WhenAdded_ShouldStoreAtState', () =>{
@@ -36,13 +43,22 @@ describe('Test Signup Text Field', () => {
         expect(component.instance().state.confirm).toBe('pksoft29@gmail')
     })
 })
-
-describe('Input validation of each field', () => {
-    it('provideFirstName_WhenFirstLetterIsNotCap_ShouldSetValidateFNameState', async() => {
-        const component = shallow(<Signup/>)
-        component.instance().handleFName('paw');
-        component.instance().validateUserName();
+describe('Test Regex validation',() => {
+    it('ProvideFirstName_WhenInvalid_ShouldGenerateError', () => {
+        const component = shallow(<Signup/>) 
+        component.instance(). handleFName('pawan');
+        component.instance().validateFName();
         expect(component.instance().state.fnameValid).toBe('invalid')
+    })
+
+    it('ProvideFirstName_WhenValid_ErrorMessageshouldREmoved', () => {
+        const component = shallow(<Signup/>) 
+        component.instance(). handleFName('pawan');
+        component.instance().validateFName();
+        expect(component.instance().state.fnameValid).toBe('invalid')
+        component.instance().handleFName('Pawan');
+        component.instance().validateFName();
+        expect(component.instance().state.fnameValid) .toBe ('')
     })
 
     it('ProvideLastName_WhenInvalid_ShouldGenerateInvalidMessage', () => {
@@ -52,11 +68,31 @@ describe('Input validation of each field', () => {
         expect(component.instance().state.lnameValid).toBe('invalid')
     })
 
+    it('ProvideLastName_WhenValid_ErrorMessageShouldRemoved', () => {
+        const component = shallow(<Signup/>)
+        component.instance().handleLName('kumar');
+        component.instance().validateLName();
+        expect(component.instance().state.lnameValid).toBe('invalid');
+        component.instance().handleLName('Kumar');
+        component.instance().validateLName();
+        expect(component.instance().state.lnameValid) .toBe ('');
+    })
+
     it('ProvideUserName_WhenInvalidFormat_ShouldGenerateInvalidMessage', () => {
         const component = shallow(<Signup/>)
         component.instance().handleUserName('1234567');
         component.instance().validateUserName();
         expect(component.instance().state.userNameValid).toBe('Invalid Email')
+    })
+
+    it('ProvideUserName_WhenValid_ErrorMessageShouldRemove', () => {
+        const component = shallow(<Signup/>)
+        component.instance().handleUserName('1234567');
+        component.instance().validateUserName();
+        expect(component.instance().state.userNameValid).toBe('Invalid Email');
+        component.instance().handleUserName('pk.soft29@gmail.com');
+        component.instance().validateUserName();
+        expect(component.instance().state.userNameValid).toBe('')
     })
 
     it('ProvidePassword_WhenInvalidFormat_ShouldGenerateInvalidMessage', () => {
@@ -66,6 +102,16 @@ describe('Input validation of each field', () => {
         expect(component.instance().state.passwordValid).toBe('Not Strong')
     })
 
+    it('ProvidePassword_WhenValid_ErrorMessageShouldRemoved', () => {
+        const component = shallow(<Signup/>)
+        component.instance().handlePassword('1234567');
+        component.instance().validatePassword();
+        expect(component.instance().state.passwordValid).toBe('Not Strong');
+        component.instance().handlePassword('Pk@16123114');
+        component.instance().validatePassword();
+        expect(component.instance().state.passwordValid).toBe('');
+    })
+
     it('ProvideConfirmPassword_WhenNotMatchecWithPassword_ShouldGenerateErrorMessage', () => {
         const component = shallow(<Signup/>)
         component.instance().handlePassword('pk.soft29');
@@ -73,4 +119,16 @@ describe('Input validation of each field', () => {
         component.instance().comparePassword();
         expect(component.instance().state.passMatch).toBe('Wrong Password')
     })
+
+    it('ProvideConfirmPassword_WhenMatchecWithPassword_ErrorMessageShouldRemoved', () => {
+        const component = shallow(<Signup/>)
+        component.instance().handlePassword('pk.soft29');
+        component.instance().handleConfirm('abc@12345');
+        component.instance().comparePassword();
+        expect(component.instance().state.passMatch).toBe('Wrong Password');
+        component.instance().handleConfirm('pk.soft29');
+        component.instance().comparePassword();
+        expect(component.instance().state.passMatch).toBe('');
+    })
 })
+    
