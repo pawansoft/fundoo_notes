@@ -9,7 +9,6 @@ configure({adapter: new Adapter()})
          const component = shallow (<Login/>);
          component.instance().handleUserName('pk.soft29@gmail.com');
          expect(component.instance().state.userName).toBe('pk.soft29@gmail.com')
-
      })
 
      test('ProvidePassword_WhenAdded_ShouldStoreAtState', () => {
@@ -18,7 +17,7 @@ configure({adapter: new Adapter()})
          expect(component.instance().state.password).toBe('Pk@1234567');
      })
  })
- describe('Test valid input', () => {
+ describe('Test Invalid input', () => {
      test('ProvideUserName_WhenIncorrectFormat_ShouldGenerateInvalidField', () => {
         const component = shallow(<Login/>);
         component.instance().handleUserName('1234567');

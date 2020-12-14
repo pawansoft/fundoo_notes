@@ -7,7 +7,6 @@ import {
     Image
 } from 'react-native';
 import RegisterStyle from '../Style/Register';
-
 export default class Signup extends Component {
 
     constructor(props){
@@ -70,13 +69,13 @@ export default class Signup extends Component {
 
     validatePassword = async() => {
         const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[*.!@#$%^&(){}:'<>,.>/~`_+=|].).{8,}$/
-        if(regex.test(this.state.password) == false ){
+        if(regex.test(this.state.password) == false){
             await this.setState({
                 passwordValid : 'Not Strong'
             })
         }else{
             await this.setState({
-                userNameValid : ''
+                passwordValid : ''
             })
         }
     }
@@ -122,6 +121,22 @@ export default class Signup extends Component {
         await this.setState({
             confirm : confirm
         })
+    }
+    handleSignUpButton = () => {
+        if(this.state.fname != '' &&
+        this.state.fnameValid == '' &&
+        this.state.lname != '' &&
+        this.state.validateLName == '' &&
+        this.state.validateUserName == '' &&
+        this.state.userName != '' &&
+        this.state.password != '' &&
+        this.state.validateUserName == ''&&
+        this.state.passMatch == ''){
+                   this.props.navigation.navigate('Login')
+        }
+        else{
+            alert('Opps something went wrong')
+        }
     }
 
     render() {
@@ -198,7 +213,8 @@ export default class Signup extends Component {
                         </Text>
                     </TouchableOpacity>
                     
-                    <TouchableOpacity style = {RegisterStyle.button}>
+                    <TouchableOpacity style = {RegisterStyle.button}
+                    onPress = {this.handleSignUpButton}>
                         <Text style ={RegisterStyle.button_Text}>
                             Next
                         </Text>

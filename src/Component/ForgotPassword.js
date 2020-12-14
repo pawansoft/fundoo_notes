@@ -35,10 +35,10 @@ export default class ForgotPassword extends Component {
     }
 
     validatePassword = async() => {
-        const regex = /^[0-9]{6}$/
-        if(regex.test(this.state.password) == false ){
+        const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[*.!@#$%^&(){}:'<>,.>/~`_+=|].).{8,}$/
+        if(regex.test(this.state.password) == false && this.state.password != null){
             await this.setState({
-                passwordValid : 'Invalid OTP'
+                passwordValid : 'Not Strong'
             })
         }else{
             await this.setState({
@@ -85,8 +85,9 @@ export default class ForgotPassword extends Component {
                         value = {this.state.password}
                         onChangeText = {this.handlePassword}
                         onEndEditing = {this.validatePassword}
-                        placeholder={'OTP__,__,__'} />
+                        placeholder={'Password'} />
                         <Text style = {login_style.error_text}>{this.state.passwordValid}</Text>
+
                 </View>
                  
                 <View style={{ flexDirection: 'row' }}>
