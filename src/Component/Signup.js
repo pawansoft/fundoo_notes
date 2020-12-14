@@ -123,18 +123,21 @@ export default class Signup extends Component {
         })
     }
     handleSignUpButton = () => {
-        if(this.state.fname != '' &&
-        this.state.fnameValid == '' &&
+        if(
+        this.state.fname != '' &&
         this.state.lname != '' &&
-        this.state.validateLName == '' &&
-        this.state.validateUserName == '' &&
         this.state.userName != '' &&
         this.state.password != '' &&
-        this.state.validateUserName == ''&&
+        this.state.confirm != '' &&
+        this.state.fnameValid == '' &&
+        this.state.lnameValid == '' &&
+        this.state.userNameValid == '' &&
         this.state.passMatch == ''){
-                   this.props.navigation.navigate('Login')
+            
+            this.props.navigation.navigate('Login')
         }
-        else{
+        else
+        {
             alert('Opps something went wrong')
         }
     }

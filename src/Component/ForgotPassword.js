@@ -59,6 +59,20 @@ export default class ForgotPassword extends Component {
         })
     }
 
+    handleResetButton = () =>{
+        if(
+            this.state.userName != '' &&
+            this.state.password != '' &&
+            this.state.passwordValid == '' &&
+            this.state.userNameValid == ''){
+            
+                this.props.navigation.navigate('Login');
+        }
+        else{
+            alert('Oops something went wrong')
+        }
+    }
+
     render() {
         return (
             <View>
@@ -94,10 +108,9 @@ export default class ForgotPassword extends Component {
                     
                     <TouchableOpacity 
                     style = {login_style.signup_button_container}
-                    onPress = {() => this.props.navigation.navigate('Login')}>
-
+                    onPress = {this.handleResetButton}>
                         <Text style = {login_style.button_text}> 
-                            Next >>
+                            Next 
                         </Text>
                     </TouchableOpacity>
                     

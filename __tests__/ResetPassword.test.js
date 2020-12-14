@@ -57,3 +57,15 @@ describe('Test Invalid Detail', () => {
         expect(component.instance().state.passwordValid).toBe('')
     })
 })
+describe('test OnPressEvent',() => {
+        it('test onPressEvent of signup button ', async() => {
+            const navigation = { navigate: jest.fn()}
+            const onPressEvent = jest.fn();
+            const component = shallow(<ForgotPassword onPress = {onPressEvent} navigation = {navigation}/>);
+            component.instance().handleUserName('pk.soft29@gmail.com');
+            component.instance().handlePassword('Pk@16123114');
+            
+            await component.instance().handleResetButton();
+            expect(navigation.navigate).toBeCalledWith("Login");
+        })
+})
