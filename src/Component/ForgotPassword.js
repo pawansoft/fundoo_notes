@@ -73,6 +73,10 @@ export default class ForgotPassword extends Component {
         }
     }
 
+    handleLoginButton = () => {
+        this.props.navigation.navigate('Login')
+    }
+
     render() {
         return (
             <View>
@@ -114,6 +118,14 @@ export default class ForgotPassword extends Component {
                         </Text>
                     </TouchableOpacity>
                     
+
+                    <TouchableOpacity 
+                    style = {{marginLeft: '30%', marginTop : '10%'}}
+                    onPress = {this.handleLoginButton }>
+                        <Text style = {login_style.button_text}> 
+                            Go to Login
+                        </Text>
+                    </TouchableOpacity>
                     
                 </View>
                 

@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native'
 const RegisterStyle = StyleSheet.create({
     text_input: {
         marginLeft :'5%',
-        fontSize: 20,
+      
         borderWidth: 1,
         width: '90%',
         color: 'black',
@@ -21,6 +21,7 @@ const RegisterStyle = StyleSheet.create({
     Opacity_Text:{
         fontSize : 50
     },
+    
     touchable_opacity_style:{
         marginTop : '10%',
         marginLeft : '5%'
@@ -28,16 +29,16 @@ const RegisterStyle = StyleSheet.create({
     },
     button:{
         marginTop : '10%',
-        marginLeft: '50%',
+        marginLeft: '42%',
         height : 40,
         width: 90,
         borderRadius: 3,
         
     },
-    button_text:{
-        alignSelf: 'center',
-        color : 'white',
-        
+    button_text : {
+        fontSize : 20,
+        fontWeight: 'bold',
+        color : 'blue'
     },
     signin_text: {
         fontSize : 25,

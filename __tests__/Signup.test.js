@@ -132,7 +132,7 @@ describe('Test Regex validation',() => {
     })
 })
 describe('Test Signup Button', () => {
-    it('test onPressEvent of signup button ', async() => {
+    it('PressSignupButton_WhenAllFieldValueIsCorrect_ShouldNavigateToLogin ', async() => {
         const navigation = { navigate: jest.fn()}
         const onPressEvent = jest.fn();
         const component = shallow(<Signup onPress = {onPressEvent} navigation = {navigation}/>);

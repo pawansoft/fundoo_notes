@@ -91,7 +91,7 @@ export default class Login extends Component {
                 </View>
                 <TouchableOpacity style = {login_style.forget_password}
                 onPress = {() => this.props.navigation.navigate('ForgotPassword')}>
-                            <Text>
+                            <Text style = {login_style.forget_password_text}>
                                 Forget Password
                             </Text>
                         </TouchableOpacity>

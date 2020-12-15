@@ -211,14 +211,14 @@ export default class Signup extends Component {
                     
                     <TouchableOpacity style = {RegisterStyle.touchable_opacity_style}
                     onPress = {() => this.props.navigation.navigate('Login')}>
-                        <Text style ={RegisterStyle.button_Text}> 
+                        <Text style ={RegisterStyle.button_text}> 
                             Sign in instead
                         </Text>
                     </TouchableOpacity>
                     
                     <TouchableOpacity style = {RegisterStyle.button}
                     onPress = {this.handleSignUpButton}>
-                        <Text style ={RegisterStyle.button_Text}>
+                        <Text style ={RegisterStyle.button_text}>
                             Next
                         </Text>
                     </TouchableOpacity>

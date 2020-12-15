@@ -36,6 +36,9 @@ const login_style = StyleSheet.create({
     forget_password: {
         marginLeft : '5%',
     },
+    forget_password_text: {
+        fontStyle: 'italic'
+    },
     signup_button_container :{
         margin: '10%',
         marginTop : '7%',

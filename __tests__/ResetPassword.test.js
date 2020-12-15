@@ -58,7 +58,7 @@ describe('Test Invalid Detail', () => {
     })
 })
 describe('test OnPressEvent',() => {
-        it('test onPressEvent of signup button ', async() => {
+        it('test onPressEvent of Next button ', async() => {
             const navigation = { navigate: jest.fn()}
             const onPressEvent = jest.fn();
             const component = shallow(<ForgotPassword onPress = {onPressEvent} navigation = {navigation}/>);
@@ -66,6 +66,15 @@ describe('test OnPressEvent',() => {
             component.instance().handlePassword('Pk@16123114');
             
             await component.instance().handleResetButton();
+            expect(navigation.navigate).toBeCalledWith("Login");
+        })
+
+        it('test onPressEvent of Login button ', async() => {
+            const navigation = { navigate: jest.fn()}
+            const onPressEvent = jest.fn();
+            const component = shallow(<ForgotPassword onPress = {onPressEvent} navigation = {navigation}/>);
+        
+            await component.instance().handleLoginButton();
             expect(navigation.navigate).toBeCalledWith("Login");
         })
 })
