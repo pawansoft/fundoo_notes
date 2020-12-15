@@ -6,6 +6,7 @@ import {
     Text,
     Image
 } from 'react-native';
+import auth from '@react-native-firebase/auth'
 import RegisterStyle from '../Style/Register';
 export default class Signup extends Component {
 
@@ -123,23 +124,22 @@ export default class Signup extends Component {
         })
     }
     handleSignUpButton = () => {
-        if(
-        this.state.fname != '' &&
-        this.state.lname != '' &&
-        this.state.userName != '' &&
-        this.state.password != '' &&
-        this.state.confirm != '' &&
-        this.state.fnameValid == '' &&
-        this.state.lnameValid == '' &&
-        this.state.userNameValid == '' &&
-        this.state.passMatch == ''){
-            
-            this.props.navigation.navigate('Login')
-        }
-        else
-        {
-            alert('Opps something went wrong')
-        }
+        auth()
+        .createUserWithEmailAndPassword(this.state.userName, this.state.password, this.state.fname, this.state.lname)
+        .then(() => {
+            console.log('User account created & signed in!');
+        })
+        .catch(error => {
+            if (error.code === 'auth/email-already-in-use') {
+            console.log('That email address is already in use!');
+            }
+
+            if (error.code === 'auth/invalid-email') {
+            console.log('That email address is invalid!');
+            }
+
+            console.error(error);
+        });
     }
 
     render() {

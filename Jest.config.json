@@ -6,8 +6,13 @@
         "src"
     ],
     "transform": {
-        "^.+\\.js$": "/home/user/Documents/React-Native/fundoo_notes/node_modules/react-native/jest/preprocessor.js"
-    },
+		"^.+\\.js$": "/home/user/Documents/React-Native/fundoo_notes/node_modules/react-native/jest/preprocessor.js",
+		"\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+		  "/home/user/Documents/React-Native/fundoo_notes/assetsTransformer.js"
+	},
+	"moduleNameMapper": {
+		"my-module.js": "/home/user/Documents/React-Native/fundoo_notes/path/to/my-module.js"
+	  },
     "setupFiles": [
         "/home/user/Documents/React-Native/fundoo_notes/jest/setup.js"
     ],

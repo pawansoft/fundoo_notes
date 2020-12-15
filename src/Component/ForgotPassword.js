@@ -8,69 +8,51 @@ import {
     ScrollView
 } from 'react-native';
 import login_style from '../Style/login_style';
-
+import auth from '@react-native-firebase/auth'
+import reset_component_style from '../Style/reset_component_style';
 export default class ForgotPassword extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             userNameValid: '',
             userName: '',
-            passwordValid: '',
-            password: '',
         }
     }
 
-    validateUserName = async() => {
+    validateUserName = async () => {
         const regex = /^[0-9a-zA-Z]+([._+-][0-9a-zA-Z]+)*[@][0-9A-Za-z]+([.][a-zA-Z]{2,4})*$/
-        if(regex.test(this.state.userName) == false ){
+        if (regex.test(this.state.userName) == false) {
             await this.setState({
-                userNameValid : 'Invalid Email'
+                userNameValid: 'Invalid Email'
             })
-        }else{
+        } else {
             await this.setState({
-                userNameValid : ''
-            })
-        }
-    }
-
-    validatePassword = async() => {
-        const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[*.!@#$%^&(){}:'<>,.>/~`_+=|].).{8,}$/
-        if(regex.test(this.state.password) == false && this.state.password != null){
-            await this.setState({
-                passwordValid : 'Not Strong'
-            })
-        }else{
-            await this.setState({
-                passwordValid : ''
+                userNameValid: ''
             })
         }
     }
 
-    handleUserName = async(userName) => {
+    handleUserName = async (userName) => {
         await this.setState({
-            userName : userName
+            userName: userName
         })
     }
 
-    handlePassword = async(password) => {
-        await this.setState({
-            password : password
-        })
-    }
-
-    handleResetButton = () =>{
-        if(
+    handleResetButton = () => {
+        if (
             this.state.userName != '' &&
-            this.state.password != '' &&
-            this.state.passwordValid == '' &&
-            this.state.userNameValid == ''){
-            
-                this.props.navigation.navigate('Login');
+            this.state.userNameValid == '') {
+            this.passwordReset();
+            alert('reset link sent to you please check your mail')
         }
-        else{
+        else {
             alert('Oops something went wrong')
         }
+    }
+
+    passwordReset = () => {
+        auth().sendPasswordResetEmail(this.state.userName)
     }
 
     handleLoginButton = () => {
@@ -80,57 +62,43 @@ export default class ForgotPassword extends Component {
     render() {
         return (
             <View>
-                <View style = {login_style.header_image}>
-                    <Image  source={require('../assets/logo.png')}/>
-                   
+                <View style={login_style.header_image}>
+                    <Image source={require('../assets/logo.png')} />
                 </View>
 
-                <ScrollView style = {login_style.scroll_view}>
-                <View style = {login_style.container}>
-                <Text style = {{alignSelf:'center', fontWeight: 'bold'}}>Reset Password</Text>
-                    <View style = {login_style.text_container}>
-                        <TextInput
-                            value = {this.state.userName}
-                            onChangeText = {this.handleUserName}
-                        placeholder={'Username'}
-                        onEndEditing = {this.validateUserName} />
-                        <Text style = {login_style.error_text}>{this.state.userNameValid}</Text>
-                </View>
-                <View style = {login_style.text_container}>
-                    <TextInput
+                <ScrollView style={login_style.scroll_view}>
+                    <View style={login_style.container}>
+                        <Text style={{ alignSelf: 'center', fontWeight: 'bold' }}>Reset Password</Text>
                         
-                        secureTextEntry={true}
-                        value = {this.state.password}
-                        onChangeText = {this.handlePassword}
-                        onEndEditing = {this.validatePassword}
-                        placeholder={'Password'} />
-                        <Text style = {login_style.error_text}>{this.state.passwordValid}</Text>
+                    <View style={reset_component_style.text_container}>
+                        <TextInput
+                            value={this.state.userName}
+                            onChangeText={this.handleUserName}
+                            placeholder={'Username'}
+                            onEndEditing={this.validateUserName} />
+                        <Text style={login_style.error_text}>{this.state.userNameValid}</Text>
+                    </View>
 
-                </View>
-                 
-                <View style={{ flexDirection: 'row' }}>
-                    
-                    <TouchableOpacity 
-                    style = {login_style.signup_button_container}
-                    onPress = {this.handleResetButton}>
-                        <Text style = {login_style.button_text}> 
-                            Next 
-                        </Text>
-                    </TouchableOpacity>
-                    
+                    <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity
+                            style={login_style.signup_button_container}
+                            onPress={this.handleResetButton}>
+                            <Text style={login_style.button_text}>
+                                Next
+                            </Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity 
-                    style = {{marginLeft: '30%', marginTop : '10%'}}
-                    onPress = {this.handleLoginButton }>
-                        <Text style = {login_style.button_text}> 
-                            Go to Login
-                        </Text>
-                    </TouchableOpacity>
-                    
+
+                        <TouchableOpacity
+                            style={{ marginLeft: '30%', marginTop: '7%' }}
+                            onPress={this.handleLoginButton}>
+                            <Text style={login_style.button_text}>
+                                Go to Login
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                
-            </View>
-            </ScrollView>
+                </ScrollView>
             </View>
         )
     }

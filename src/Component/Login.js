@@ -8,10 +8,10 @@ import {
     ScrollView
 } from 'react-native';
 import login_style from '../Style/login_style';
-
+import auth from '@react-native-firebase/auth'
 export default class Login extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             userNameValid: '',
@@ -21,102 +21,103 @@ export default class Login extends Component {
         }
     }
 
-    validateUserName = async() => {
+    validateUserName = async () => {
         const regex = /^[0-9a-zA-Z]+([._+-][0-9a-zA-Z]+)*[@][0-9A-Za-z]+([.][a-zA-Z]{2,4})*$/
-        if(regex.test(this.state.userName) == false ){
+        if (regex.test(this.state.userName) == false) {
             await this.setState({
-                userNameValid : 'Invalid Email'
+                userNameValid: 'Invalid Email'
             })
-        }else{
+        } else {
             await this.setState({
-                userNameValid : ''
+                userNameValid: ''
             })
         }
     }
 
-    validatePassword = async() => {
+    validatePassword = async () => {
         const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[*.!@#$%^&(){}:'<>,.>/~`_+=|].).{8,}$/
-        if(regex.test(this.state.password) == false ){
+        if (regex.test(this.state.password) == false) {
             await this.setState({
-                passwordValid : 'Invalid Format'
+                passwordValid: 'Invalid Format'
             })
-        }else{
+        } else {
             await this.setState({
-                userNameValid : ''
+                userNameValid: ''
             })
         }
     }
 
-    handleUserName = async(userName) => {
+    handleUserName = async (userName) => {
         await this.setState({
-            userName : userName
+            userName: userName
         })
     }
 
-    handlePassword = async(password) => {
+    handlePassword = async (password) => {
         await this.setState({
-            password : password
+            password: password
         })
+    }
+    handleLoginButton =() => {
+        auth().signInWithEmailAndPassword(this.state.userName, this.state.password)
+                .then(() => this.props.navigation.navigate('ForgotPassword'))
+                .catch(error => console.log(error))
     }
 
     render() {
         return (
             <View>
-                <View style = {login_style.header_image}>
-                    <Image  source={require('../assets/logo.png')}/>
+                <View style={login_style.header_image}>
+                    <Image source={require('../assets/logo.png')} />
                 </View>
 
-               
-                <ScrollView style = {login_style.scroll_view}>
-                <View style = {login_style.container}>
-                    <Text style = {{alignSelf : 'center', fontWeight: 'bold'}}>Login</Text>                
-                    <View style = {login_style.text_container}>
-                        <TextInput
+                <ScrollView style={login_style.scroll_view}>
+                    <View style={login_style.container}>
+                        <Text style={{ alignSelf: 'center', fontWeight: 'bold' }}>Login</Text>
+                        <View style={login_style.text_container}>
+                            <TextInput
+                                value={this.state.userName}
+                                onChangeText={this.handleUserName}
+                                placeholder={'Username'}
+                                onEndEditing={this.validateUserName} />
+                            <Text style={login_style.error_text}>{this.state.userNameValid}</Text>
+                        </View>
 
-                            value = {this.state.userName}
-                            onChangeText = {this.handleUserName}
-                        placeholder={'Username'}
-                        onEndEditing = {this.validateUserName} />
-                        <Text style = {login_style.error_text}>{this.state.userNameValid}</Text>
-                </View>
-                <View style = {login_style.text_container}>
-                    <TextInput
+                        <View style={login_style.text_container}>
+                            <TextInput
+                                secureTextEntry={true}
+                                value={this.state.password}
+                                onChangeText={this.handlePassword}
+                                onEndEditing={this.validatePassword}
+                                placeholder={'Password'} />
+                            <Text style={login_style.error_text}>{this.state.passwordValid}</Text>
+                        </View>
                         
-                        secureTextEntry={true}
-                        value = {this.state.password}
-                        onChangeText = {this.handlePassword}
-                        onEndEditing = {this.validatePassword}
-                        placeholder={'Password'} />
-                        <Text style = {login_style.error_text}>{this.state.passwordValid}</Text>
-                </View>
-                <TouchableOpacity style = {login_style.forget_password}
-                onPress = {() => this.props.navigation.navigate('ForgotPassword')}>
-                            <Text style = {login_style.forget_password_text}>
+                        <TouchableOpacity style={login_style.forget_password}
+                            onPress={() => this.props.navigation.navigate('ForgotPassword')}>
+                            <Text style={login_style.forget_password_text}>
                                 Forget Password
                             </Text>
                         </TouchableOpacity>
-                    
-                
-                <View style={{ flexDirection: 'row' }}>
-                    
-                    <TouchableOpacity 
-                    style = {login_style.signup_button_container}
-                    onPress = {() => this.props.navigation.navigate('Signup')}>
 
-                        <Text style = {login_style.button_text}> 
-                            Signup
-                        </Text>
-                    </TouchableOpacity>
-                    
-                    <TouchableOpacity style = {login_style.login_button_container}>
-                        <Text style = {login_style.button_text}>
-                            Login                   
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                
-            </View>
-            </ScrollView>
+                        <View style={{ flexDirection: 'row' }}>
+                            <TouchableOpacity
+                                style={login_style.signup_button_container}
+                                onPress={() => this.props.navigation.navigate('Signup')}>
+                                <Text style={login_style.button_text}>
+                                    Signup
+                                </Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={login_style.login_button_container}
+                            onPress = {this.handleLoginButton}>
+                                <Text style={login_style.button_text}>
+                                    Login
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </ScrollView>
             </View>
         )
     }

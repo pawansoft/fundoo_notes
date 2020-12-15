@@ -31,6 +31,7 @@ describe('Test Invalid Detail', () => {
         component.instance().validateUserName();
         expect(component.instance().state.userNameValid).toBe('Invalid Email')
     }),
+
     test('ProvideUserName_WhencorrectFormate_ShouldRemoveAnError', () =>{
         const component = shallow(<ForgotPassword/>);
         component.instance().handleUserName('pk');
@@ -40,6 +41,7 @@ describe('Test Invalid Detail', () => {
         component.instance().validateUserName();
         expect(component.instance().state.userNameValid).toBe('');
     }),
+    
     test('ProvideUserName_WhenPasswordIsInvalid_ShouldGenerateError', () =>{
         const component = shallow(<ForgotPassword/>);
         component.instance().handlePassword('12345678');
