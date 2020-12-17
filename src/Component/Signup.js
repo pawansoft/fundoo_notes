@@ -6,7 +6,9 @@ import {
     Text,
     Image
 } from 'react-native';
-import auth from '@react-native-firebase/auth'
+import Firebase from '../../config/Firebase';
+import { SignupService } from '../../Services/UserServices/UserService';
+
 import RegisterStyle from '../Style/Register';
 export default class Signup extends Component {
 
@@ -123,23 +125,28 @@ export default class Signup extends Component {
             confirm : confirm
         })
     }
+
     handleSignUpButton = () => {
-        auth()
-        .createUserWithEmailAndPassword(this.state.userName, this.state.password, this.state.fname, this.state.lname)
-        .then(() => {
-            console.log('User account created & signed in!');
-        })
-        .catch(error => {
-            if (error.code === 'auth/email-already-in-use') {
-            console.log('That email address is already in use!');
-            }
+        if(this.state.fname != '' &&
+        this.state.lname != '' &&
+        this.state.userName != '' &&
+        this.state.password != '' &&
+        this.state.fnameValid == '' &&
+        this.state.lnameValid =='' &&
+        this.state.userNameValid =='' &&
+        this.state.passwordValid == '' &&
+        this.state.passMatch == ''){
+            SignupService(this.state.userName, this.state.password, this.state.fname, this.state.lname)
+           .then(() => this.props.navigation.navigate('Login'))
+           .catch(error => console.log(error))
+        }
+        else{
+            alert ('Some fields are missing !!')
+        }
+    }
 
-            if (error.code === 'auth/invalid-email') {
-            console.log('That email address is invalid!');
-            }
-
-            console.error(error);
-        });
+    SigninInsteadNavigationHandler = () => {
+        this.props.navigation.navigate('Login')
     }
 
     render() {
@@ -210,9 +217,9 @@ export default class Signup extends Component {
                 <View style={{ flexDirection: 'row' }}>
                     
                     <TouchableOpacity style = {RegisterStyle.touchable_opacity_style}
-                    onPress = {() => this.props.navigation.navigate('Login')}>
+                    onPress = {this.SigninInsteadNavigationHandler}>
                         <Text style ={RegisterStyle.button_text}> 
-                            Sign in instead
+                            Signin instead
                         </Text>
                     </TouchableOpacity>
                     

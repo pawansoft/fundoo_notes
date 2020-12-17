@@ -7,15 +7,15 @@ import {
     Image,
     ScrollView
 } from 'react-native';
+import { LoginService } from '../../Services/UserServices/UserService';
 import login_style from '../Style/login_style';
-import auth from '@react-native-firebase/auth'
 export default class Login extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             userNameValid: '',
-            userName: '',
+            emailId: '',
             passwordValid: '',
             password: '',
         }
@@ -23,7 +23,7 @@ export default class Login extends Component {
 
     validateUserName = async () => {
         const regex = /^[0-9a-zA-Z]+([._+-][0-9a-zA-Z]+)*[@][0-9A-Za-z]+([.][a-zA-Z]{2,4})*$/
-        if (regex.test(this.state.userName) == false) {
+        if (regex.test(this.state.emailId) == false) {
             await this.setState({
                 userNameValid: 'Invalid Email'
             })
@@ -47,9 +47,9 @@ export default class Login extends Component {
         }
     }
 
-    handleUserName = async (userName) => {
+    handleUserName = async (emailId) => {
         await this.setState({
-            userName: userName
+            emailId: emailId
         })
     }
 
@@ -58,10 +58,23 @@ export default class Login extends Component {
             password: password
         })
     }
+    
     handleLoginButton =() => {
-        auth().signInWithEmailAndPassword(this.state.userName, this.state.password)
-                .then(() => this.props.navigation.navigate('ForgotPassword'))
-                .catch(error => console.log(error))
+        if(this.state.emailId != '' &&
+        this.state.password != '' &&
+        this.state.passwordValid == '' &&
+        this.state.userNameValid == ''){
+           LoginService(this.state.emailId, this.state.password).then(() => {
+               this.props.navigation.navigate('Signup')
+           }).catch(error => console.log(error));
+        }
+        else{
+            alert ('Oops something went wrong !!')
+        }
+    }
+
+    handleSignupButtonNavigation = () => {
+        this.props.navigation.navigate('Signup')
     }
 
     render() {
@@ -76,9 +89,9 @@ export default class Login extends Component {
                         <Text style={{ alignSelf: 'center', fontWeight: 'bold' }}>Login</Text>
                         <View style={login_style.text_container}>
                             <TextInput
-                                value={this.state.userName}
+                                value={this.state.emailId}
                                 onChangeText={this.handleUserName}
-                                placeholder={'Username'}
+                                placeholder={'Email Id'}
                                 onEndEditing={this.validateUserName} />
                             <Text style={login_style.error_text}>{this.state.userNameValid}</Text>
                         </View>
@@ -103,7 +116,7 @@ export default class Login extends Component {
                         <View style={{ flexDirection: 'row' }}>
                             <TouchableOpacity
                                 style={login_style.signup_button_container}
-                                onPress={() => this.props.navigation.navigate('Signup')}>
+                                onPress={this.handleSignupButtonNavigation}>
                                 <Text style={login_style.button_text}>
                                     Signup
                                 </Text>

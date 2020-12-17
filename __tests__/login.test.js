@@ -59,3 +59,14 @@ describe('Test Login States', () => {
         expect(component.instance().state.validatePassword).toBe(undefined)
     })
  })
+
+ describe('Test Navigation', () => {
+    it('WhenPressSignupButton_ShouldNavigateToLogin ', async() => {
+        const navigation = { navigate: jest.fn()}
+        const onPressEvent = jest.fn();
+        const component = shallow(<Login onPress = {onPressEvent} navigation = {navigation}/>);
+    
+        await component.instance().handleSignupButtonNavigation();
+        expect(navigation.navigate).toBeCalledWith("Signup");
+    })
+ })

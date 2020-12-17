@@ -7,52 +7,52 @@ import {
     Image,
     ScrollView
 } from 'react-native';
+
+import { ResetPasscodeService } from '../../Services/UserServices/UserService';
 import login_style from '../Style/login_style';
-import auth from '@react-native-firebase/auth'
 import reset_component_style from '../Style/reset_component_style';
+import DialogeBox from './DialogeBox';
 export default class ForgotPassword extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            userNameValid: '',
-            userName: '',
+            isEmailValid: '',
+            emailId: '',
         }
     }
 
-    validateUserName = async () => {
+    findValidEmail = async () => {
         const regex = /^[0-9a-zA-Z]+([._+-][0-9a-zA-Z]+)*[@][0-9A-Za-z]+([.][a-zA-Z]{2,4})*$/
-        if (regex.test(this.state.userName) == false) {
+        if (regex.test(this.state.emailId) == false) {
             await this.setState({
-                userNameValid: 'Invalid Email'
+                isEmailValid: 'Invalid Email'
             })
         } else {
             await this.setState({
-                userNameValid: ''
+                isEmailValid: ''
             })
         }
     }
 
-    handleUserName = async (userName) => {
+    handleEmailId = async (emailId) => {
         await this.setState({
-            userName: userName
+            emailId: emailId
         })
     }
 
     handleResetButton = () => {
         if (
-            this.state.userName != '' &&
-            this.state.userNameValid == '') {
-            this.passwordReset();
-            alert('reset link sent to you please check your mail')
+            this.state.emailId != '' &&
+            this.state.isEmailValid == '') {        
+                ResetPasscodeService(this.state.emailId).then(() => {
+                    alert('Password reset mail has sent to you please check your mail')
+                })
+                .catch(error => console.log(error))
         }
         else {
             alert('Oops something went wrong')
         }
-    }
-
-    passwordReset = () => {
-        auth().sendPasswordResetEmail(this.state.userName)
     }
 
     handleLoginButton = () => {
@@ -72,11 +72,11 @@ export default class ForgotPassword extends Component {
                         
                     <View style={reset_component_style.text_container}>
                         <TextInput
-                            value={this.state.userName}
-                            onChangeText={this.handleUserName}
-                            placeholder={'Username'}
-                            onEndEditing={this.validateUserName} />
-                        <Text style={login_style.error_text}>{this.state.userNameValid}</Text>
+                            value={this.state.emailId}
+                            onChangeText={this.handleEmailId}
+                            placeholder={'Email Id'}
+                            onEndEditing={this.findValidEmail} />
+                        <Text style={login_style.error_text}>{this.state.isEmailValid}</Text>
                     </View>
 
                     <View style={{ flexDirection: 'row' }}>

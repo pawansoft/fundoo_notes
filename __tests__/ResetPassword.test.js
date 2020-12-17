@@ -16,11 +16,6 @@ describe('Test State of Reset Password', () => {
         const component = shallow(<ForgotPassword/>);
         component.instance().handleUserName('pk.soft29@gmail.com');
         expect(component.instance().state.userName).toBe('pk.soft29@gmail.com')
-    }),
-    test('ProvideUserName_WhenPassedWithField_ShouldStoreAtState', () =>{
-        const component = shallow(<ForgotPassword/>);
-        component.instance().handlePassword('Pk@12345678');
-        expect(component.instance().state.password).toBe('Pk@12345678')
     })
 })
 
@@ -40,37 +35,10 @@ describe('Test Invalid Detail', () => {
         component.instance().handleUserName ('pk.soft29@gmail.com');
         component.instance().validateUserName();
         expect(component.instance().state.userNameValid).toBe('');
-    }),
+    })
     
-    test('ProvideUserName_WhenPasswordIsInvalid_ShouldGenerateError', () =>{
-        const component = shallow(<ForgotPassword/>);
-        component.instance().handlePassword('12345678');
-        component.instance().validatePassword();
-        expect(component.instance().state.passwordValid).toBe('Not Strong')
-    })
-
-    test('ProvideUserName_WhenPasswordIsValid_ShouldStoreAtState', () =>{
-        const component = shallow(<ForgotPassword/>);
-        component.instance().handlePassword('2345678');
-        component.instance().validatePassword();
-        expect(component.instance().state.passwordValid).toBe('Not Strong');
-        component.instance().handlePassword('Pk@16123114');
-        component.instance().validatePassword();
-        expect(component.instance().state.passwordValid).toBe('')
-    })
 })
 describe('test OnPressEvent',() => {
-        it('test onPressEvent of Next button ', async() => {
-            const navigation = { navigate: jest.fn()}
-            const onPressEvent = jest.fn();
-            const component = shallow(<ForgotPassword onPress = {onPressEvent} navigation = {navigation}/>);
-            component.instance().handleUserName('pk.soft29@gmail.com');
-            component.instance().handlePassword('Pk@16123114');
-            
-            await component.instance().handleResetButton();
-            expect(navigation.navigate).toBeCalledWith("Login");
-        })
-
         it('test onPressEvent of Login button ', async() => {
             const navigation = { navigate: jest.fn()}
             const onPressEvent = jest.fn();
