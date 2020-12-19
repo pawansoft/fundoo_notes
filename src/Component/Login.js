@@ -13,9 +13,6 @@ import { Button } from 'react-native-paper';
 // import { LoginService,  AccessToken, GraphRequest, GraphRequestManager, fbLogin } from '../../Services/UserServices/UserService';
 import login_style from '../Style/login_style';
 
-//Facebook extension
-import firebase from 'firebase'
-import { LoginManager, AccessToken } from 'react-native-fbsdk';
 import UserService from '../../Services/UserServices/UserService';
 import SocialService from '../../Services/UserServices/SocialService';
 
@@ -154,8 +151,8 @@ export default class Login extends Component {
                         </View>
                         <View style = {login_style.facebook_button}>
                             <Button icon ='facebook' mode= "contained" 
-                            onPress = {this.handleFacebookButton}>
-                                Login with facebook
+                                onPress = {this.handleFacebookButton}>
+                                    Login with facebook
                             </Button>
                         </View>
                     </View>
