@@ -5,15 +5,28 @@ import {
     TouchableOpacity,
     Text,
     Image,
-    ScrollView
+    ScrollView,
+    
 } from 'react-native';
-import { LoginService } from '../../Services/UserServices/UserService';
+
+import { Button } from 'react-native-paper';
+// import { LoginService,  AccessToken, GraphRequest, GraphRequestManager, fbLogin } from '../../Services/UserServices/UserService';
 import login_style from '../Style/login_style';
+
+//Facebook extension
+import firebase from 'firebase'
+import { LoginManager, AccessToken } from 'react-native-fbsdk';
+import UserService from '../../Services/UserServices/UserService';
+import SocialService from '../../Services/UserServices/SocialService';
+
 export default class Login extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            user_name: '',
+            avatar_url: '',
+            avatar_show: false,
             userNameValid: '',
             emailId: '',
             passwordValid: '',
@@ -33,7 +46,7 @@ export default class Login extends Component {
             })
         }
     }
-
+    
     validatePassword = async () => {
         const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[*.!@#$%^&(){}:'<>,.>/~`_+=|].).{8,}$/
         if (regex.test(this.state.password) == false) {
@@ -42,7 +55,7 @@ export default class Login extends Component {
             })
         } else {
             await this.setState({
-                userNameValid: ''
+                passwordValid: ''
             })
         }
     }
@@ -58,18 +71,19 @@ export default class Login extends Component {
             password: password
         })
     }
-    
-    handleLoginButton =() => {
-        if(this.state.emailId != '' &&
-        this.state.password != '' &&
-        this.state.passwordValid == '' &&
-        this.state.userNameValid == ''){
-           LoginService(this.state.emailId, this.state.password).then(() => {
-               this.props.navigation.navigate('Signup')
-           }).catch(error => console.log(error));
+
+    handleLoginButton = () => {
+        if (this.state.emailId != '' &&
+            this.state.password != '' &&
+            this.state.passwordValid == '' &&
+            this.state.userNameValid == '') {
+                UserService.LoginService(this.state.emailId, this.state.password).then(() => {
+                    this.props.navigation.navigate('Signup')
+                }).catch(error => alert('Username or password is not correct!!'));
+            
         }
-        else{
-            alert ('Oops something went wrong !!')
+        else {
+            alert('Oops something went wrong !!')
         }
     }
 
@@ -77,6 +91,15 @@ export default class Login extends Component {
         this.props.navigation.navigate('Signup')
     }
 
+    handleFacebookButton = () => {
+        SocialService.facebookLogin()
+        .then(UserCredential => this.props.navigation.navigate('Signup'))
+        .catch(error => {
+            console.log(error);
+        })
+       
+    }
+    
     render() {
         return (
             <View>
@@ -105,7 +128,7 @@ export default class Login extends Component {
                                 placeholder={'Password'} />
                             <Text style={login_style.error_text}>{this.state.passwordValid}</Text>
                         </View>
-                        
+
                         <TouchableOpacity style={login_style.forget_password}
                             onPress={() => this.props.navigation.navigate('ForgotPassword')}>
                             <Text style={login_style.forget_password_text}>
@@ -123,13 +146,20 @@ export default class Login extends Component {
                             </TouchableOpacity>
 
                             <TouchableOpacity style={login_style.login_button_container}
-                            onPress = {this.handleLoginButton}>
+                                onPress={this.handleLoginButton}>
                                 <Text style={login_style.button_text}>
                                     Login
                                 </Text>
                             </TouchableOpacity>
                         </View>
+                        <View style = {login_style.facebook_button}>
+                            <Button icon ='facebook' mode= "contained" 
+                            onPress = {this.handleFacebookButton}>
+                                Login with facebook
+                            </Button>
+                        </View>
                     </View>
+              
                 </ScrollView>
             </View>
         )

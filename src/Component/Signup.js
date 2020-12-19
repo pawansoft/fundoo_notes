@@ -6,10 +6,9 @@ import {
     Text,
     Image
 } from 'react-native';
-import Firebase from '../../config/Firebase';
-import { SignupService } from '../../Services/UserServices/UserService';
-
+import UserService from '../../Services/UserServices/UserService';
 import RegisterStyle from '../Style/Register';
+
 export default class Signup extends Component {
 
     constructor(props){
@@ -24,8 +23,7 @@ export default class Signup extends Component {
             passwordValid: '',
             password: '',
             passMatch: '',
-            confirm: '',
-
+            confirm: '',        
         }
     }
 
@@ -136,9 +134,10 @@ export default class Signup extends Component {
         this.state.userNameValid =='' &&
         this.state.passwordValid == '' &&
         this.state.passMatch == ''){
-            SignupService(this.state.userName, this.state.password, this.state.fname, this.state.lname)
-           .then(() => this.props.navigation.navigate('Login'))
-           .catch(error => console.log(error))
+            UserService.SignupService(this.state.userName, this.state.password, this.state.fname, this.state.lname)
+            .then(() => this.props.navigation.navigate('Login'))
+            .catch(error => console.log(error))
+            
         }
         else{
             alert ('Some fields are missing !!')

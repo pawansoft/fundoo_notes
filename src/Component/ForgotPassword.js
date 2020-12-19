@@ -8,7 +8,7 @@ import {
     ScrollView
 } from 'react-native';
 
-import { ResetPasscodeService } from '../../Services/UserServices/UserService';
+import UserService, { ResetPasscodeService } from '../../Services/UserServices/UserService';
 import login_style from '../Style/login_style';
 import reset_component_style from '../Style/reset_component_style';
 import DialogeBox from './DialogeBox';
@@ -44,11 +44,11 @@ export default class ForgotPassword extends Component {
     handleResetButton = () => {
         if (
             this.state.emailId != '' &&
-            this.state.isEmailValid == '') {        
-                ResetPasscodeService(this.state.emailId).then(() => {
+            this.state.isEmailValid == '') {
+                UserService.ResetPasscodeService(this.state.emailId).then(() => {
                     alert('Password reset mail has sent to you please check your mail')
                 })
-                .catch(error => console.log(error))
+                .catch(error => console.log(error))     
         }
         else {
             alert('Oops something went wrong')

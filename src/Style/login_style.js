@@ -6,7 +6,7 @@ const login_style = StyleSheet.create({
         borderColor : 'black',
         width : '90%',
         marginLeft: '5%',
-        height : '75%',
+        height : '100%',
         borderRadius : 5,
         
     },
@@ -20,12 +20,13 @@ const login_style = StyleSheet.create({
         fontSize : 20,
         marginTop : '10%'
     },
+    
     text_container: {
         borderWidth : 1,
         borderColor : 'black',
         margin: '5%',
         width : '90%',
-        height : '15%',
+        height : '12%',
         borderRadius : 5
 
     },
@@ -51,6 +52,10 @@ const login_style = StyleSheet.create({
     login_button_container: {
         marginTop : '7%',
         marginLeft :' 35%'
+    },
+    facebook_button: {
+        width : '85%',
+        marginLeft: '7%',
     },
     scroll_view :{
         marginBottom : 200

@@ -8,6 +8,10 @@ target 'fundoo_notes' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'ReactNativeLocalization', :path => '../node_modules/react-native-localization'
+
+  pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk'
+
   target 'fundoo_notesTests' do
     inherit! :complete
     # Pods for testing

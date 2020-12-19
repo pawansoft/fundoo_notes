@@ -14,27 +14,27 @@ describe('Reset Password Test', () => {
 describe('Test State of Reset Password', () => {
     test('ProvideUserName_WhenPassedWithField_ShouldStoreAtState', () =>{
         const component = shallow(<ForgotPassword/>);
-        component.instance().handleUserName('pk.soft29@gmail.com');
-        expect(component.instance().state.userName).toBe('pk.soft29@gmail.com')
+        component.instance().handleEmailId('pk.soft29@gmail.com');
+        expect(component.instance().state.emailId).toBe('pk.soft29@gmail.com')
     })
 })
 
 describe('Test Invalid Detail', () => {
     test('ProvideUserName_WhenIncorrectFormate_ShouldGenerateError', () =>{
         const component = shallow(<ForgotPassword/>);
-        component.instance().handleUserName('pk');
-        component.instance().validateUserName();
-        expect(component.instance().state.userNameValid).toBe('Invalid Email')
+        component.instance().handleEmailId('pk');
+        component.instance().findValidEmail();
+        expect(component.instance().state.isEmailValid).toBe('Invalid Email')
     }),
 
     test('ProvideUserName_WhencorrectFormate_ShouldRemoveAnError', () =>{
         const component = shallow(<ForgotPassword/>);
-        component.instance().handleUserName('pk');
-        component.instance().validateUserName();
-        expect(component.instance().state.userNameValid).toBe('Invalid Email')
-        component.instance().handleUserName ('pk.soft29@gmail.com');
-        component.instance().validateUserName();
-        expect(component.instance().state.userNameValid).toBe('');
+        component.instance().handleEmailId('pk');
+        component.instance().findValidEmail();
+        expect(component.instance().state.isEmailValid).toBe('Invalid Email')
+        component.instance().handleEmailId ('pk.soft29@gmail.com');
+        component.instance().findValidEmail();
+        expect(component.instance().state.isEmailValid).toBe('');
     })
     
 })

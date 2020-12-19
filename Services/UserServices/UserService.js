@@ -1,28 +1,34 @@
 import Firebase from '../../config/Firebase'
+import { LoginManager, AccessToken } from 'react-native-fbsdk';
 
-export function SignupService(email, password){
-    return new Promise((resolve, reject) => {
-        Firebase.auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(() => resolve('Success'))
-        .catch(error => reject('error'))
-    })
+class UserService{
+    SignupService(email, password){
+        return new Promise((resolve, reject) => {
+            Firebase.auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(() => resolve('Success'))
+            .catch(error => reject('error'))
+        })
+    }
+
+    LoginService(email, password){
+        return new Promise((resolve, reject) => {
+            Firebase.auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(() => resolve('Success'))
+            .catch(error => reject('error'))
+        })
+    }
+
+    ResetPasscodeService(emailId){
+        return new Promise((resolve, reject) => {
+            Firebase.auth()
+            .sendPasswordResetEmail(emailId)
+            .then(() => resolve('Success'))
+            .catch(error => reject('error'))
+        })
+    }
+
 }
 
-export function LoginService(email, password){
-    return new Promise((resolve, reject) => {
-        Firebase.auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(() => resolve('Success'))
-        .catch(error => reject('error'))
-    })
-}
-
-export function ResetPasscodeService(emailId){
-    return new Promise((resolve, reject) => {
-        Firebase.auth()
-        .sendPasswordResetEmail(emailId)
-        .then(() => resolve('Success'))
-        .catch(error => reject('error'))
-    })
-}
+export default new UserService();
