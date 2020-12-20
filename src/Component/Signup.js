@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import UserService from '../../Services/UserServices/UserService';
 import RegisterStyle from '../Style/Register';
+import {strings} from '../../Localization/Localization'
 
 export default class Signup extends Component {
 
@@ -160,14 +161,14 @@ export default class Signup extends Component {
 
                 <View>
                     <Text style = {RegisterStyle.signin_text}>
-                        Sign Up
+                        {strings.Signup}
                     </Text>
                 </View>
 
                 <View style={{ flexDirection: 'row' }}>
                     <View style={RegisterStyle.row_text_input}>
                     <TextInput
-                        placeholder={'First Name'}
+                        placeholder={strings.firstname}
                         value = {this.state.fname} 
                         onChangeText = {this.handleFName}
                         onEndEditing = {this.validateFName}/>
@@ -178,7 +179,7 @@ export default class Signup extends Component {
                     <TextInput
                         value = {this.state.lname}
                         onChangeText = {this.handleLName}
-                        placeholder={'Last Name'}
+                        placeholder={strings.lastname}
                         onEndEditing = {this.validateLName} />
                         <Text style = {RegisterStyle.error_first_name}>{this.state.lnameValid}</Text>
                     </View>
@@ -189,7 +190,7 @@ export default class Signup extends Component {
                         style={RegisterStyle.text_input}
                         value = {this.state.userName}
                         onChangeText = {this.handleUserName}
-                        placeholder={'Username'}
+                        placeholder={strings.username}
                         onEndEditing = {this.validateUserName} />
                         <Text style = {RegisterStyle.error_first_name}>{this.state.userNameValid}</Text>
                 </View>
@@ -201,7 +202,7 @@ export default class Signup extends Component {
                         value = {this.state.password}
                         onChangeText = {this.handlePassword}
                         onEndEditing = {this.validatePassword}
-                        placeholder={'Password'} />
+                        placeholder={strings.pass} />
                         <Text style = {RegisterStyle.passcode_error}>{this.state.passwordValid}</Text>
                     </View>
                     <View style={RegisterStyle.row_text_input}>
@@ -210,7 +211,7 @@ export default class Signup extends Component {
                         value = {this.state.confirm}
                         onChangeText = {this.handleConfirm}
                         onEndEditing = {this.comparePassword}
-                        placeholder={'Confirm'} />
+                        placeholder={strings.confirm} />
                         <Text style = {RegisterStyle.passcode_error}>{this.state.passMatch}</Text>
                 </View >
                 </View>
@@ -220,14 +221,14 @@ export default class Signup extends Component {
                     <TouchableOpacity style = {RegisterStyle.touchable_opacity_style}
                     onPress = {this.SigninInsteadNavigationHandler}>
                         <Text style ={RegisterStyle.button_text}> 
-                            Signin instead
+                            {strings.signin}
                         </Text>
                     </TouchableOpacity>
                     
                     <TouchableOpacity style = {RegisterStyle.button}
                     onPress = {this.handleSignUpButton}>
                         <Text style ={RegisterStyle.button_text}>
-                            Next
+                            {strings.Next}
                         </Text>
                     </TouchableOpacity>
                 </View>

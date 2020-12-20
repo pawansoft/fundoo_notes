@@ -7,11 +7,11 @@ import {
     Image,
     ScrollView
 } from 'react-native';
+import { strings } from '../../Localization/Localization';
 
 import UserService, { ResetPasscodeService } from '../../Services/UserServices/UserService';
 import login_style from '../Style/login_style';
 import reset_component_style from '../Style/reset_component_style';
-import DialogeBox from './DialogeBox';
 export default class ForgotPassword extends Component {
 
     constructor(props) {
@@ -68,13 +68,15 @@ export default class ForgotPassword extends Component {
 
                 <ScrollView style={login_style.scroll_view}>
                     <View style={login_style.container}>
-                        <Text style={{ alignSelf: 'center', fontWeight: 'bold' }}>Reset Password</Text>
+                        <Text style={{ alignSelf: 'center', fontWeight: 'bold' }}>
+                            {strings.Resetpass}
+                        </Text>
                         
                     <View style={reset_component_style.text_container}>
                         <TextInput
                             value={this.state.emailId}
                             onChangeText={this.handleEmailId}
-                            placeholder={'Email Id'}
+                            placeholder={strings.emailId}
                             onEndEditing={this.findValidEmail} />
                         <Text style={login_style.error_text}>{this.state.isEmailValid}</Text>
                     </View>
@@ -84,7 +86,7 @@ export default class ForgotPassword extends Component {
                             style={login_style.signup_button_container}
                             onPress={this.handleResetButton}>
                             <Text style={login_style.button_text}>
-                                Next
+                                {strings.Next}
                             </Text>
                         </TouchableOpacity>
 
@@ -93,7 +95,7 @@ export default class ForgotPassword extends Component {
                             style={{ marginLeft: '30%', marginTop: '7%' }}
                             onPress={this.handleLoginButton}>
                             <Text style={login_style.button_text}>
-                                Go to Login
+                                {strings.signin}
                             </Text>
                         </TouchableOpacity>
                     </View>

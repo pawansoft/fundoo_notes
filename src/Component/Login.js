@@ -9,7 +9,7 @@ import {
     
 } from 'react-native';
 import { Button } from 'react-native-paper';
-
+import {strings} from '../../Localization/Localization'
 import login_style from '../Style/login_style';
 
 import UserService from '../../Services/UserServices/UserService';
@@ -28,7 +28,7 @@ export default class Login extends Component {
             userNameValid: '',
             emailId: '',
             passwordValid: '',
-            password: '',
+            passcode: '',
             isLoggedIn : false
         }
     }
@@ -69,7 +69,7 @@ export default class Login extends Component {
     
     validatePassword = async () => {
         const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[*.!@#$%^&(){}:'<>,.>/~`_+=|].).{8,}$/
-        if (regex.test(this.state.password) == false) {
+        if (regex.test(this.state.passcode) == false) {
             await this.setState({
                 passwordValid: 'Invalid Format'
             })
@@ -86,18 +86,18 @@ export default class Login extends Component {
         })
     }
 
-    handlePassword = async (password) => {
+    handlePassword = async (passcode) => {
         await this.setState({
-            password: password
+            passcode: passcode
         })
     }
 
     handleLoginButton = () => {
         if (this.state.emailId != '' &&
-            this.state.password != '' &&
+            this.state.passcode != '' &&
             this.state.passwordValid == '' &&
             this.state.userNameValid == '') {
-                UserService.LoginService(this.state.emailId, this.state.password)
+                UserService.LoginService(this.state.emailId, this.state.passcode)
                 .then((userDetail) => {
                     this._setLogingStatusAndDeatil(userDetail);
                     this.props.navigation.navigate('Dashboard')
@@ -141,7 +141,7 @@ export default class Login extends Component {
                             <TextInput
                                 value={this.state.emailId}
                                 onChangeText={this.handleUserName}
-                                placeholder={'Email Id'}
+                                placeholder={strings.emailId}
                                 onEndEditing={this.validateUserName} />
                             <Text style={login_style.error_text}>{this.state.userNameValid}</Text>
                         </View>
@@ -149,17 +149,17 @@ export default class Login extends Component {
                         <View style={login_style.text_container}>
                             <TextInput
                                 secureTextEntry={true}
-                                value={this.state.password}
+                                value={this.state.passcode}
                                 onChangeText={this.handlePassword}
                                 onEndEditing={this.validatePassword}
-                                placeholder={'Password'} />
+                                placeholder={strings.pass} />
                             <Text style={login_style.error_text}>{this.state.passwordValid}</Text>
                         </View>
 
                         <TouchableOpacity style={login_style.forget_password}
                             onPress={() => this.props.navigation.navigate('ForgotPassword')}>
                             <Text style={login_style.forget_password_text}>
-                                Forget Password
+                                {strings.Forget} {strings.pass}
                             </Text>
                         </TouchableOpacity>
 
@@ -168,21 +168,21 @@ export default class Login extends Component {
                                 style={login_style.signup_button_container}
                                 onPress={this.handleSignupButtonNavigation}>
                                 <Text style={login_style.button_text}>
-                                    Signup
+                                    {strings.Signup}
                                 </Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={login_style.login_button_container}
                                 onPress={this.handleLoginButton}>
                                 <Text style={login_style.button_text}>
-                                    Login
+                                    {strings.Login}
                                 </Text>
                             </TouchableOpacity>
                         </View>
                         <View style = {login_style.facebook_button}>
                             <Button icon ='facebook' mode= "contained" 
                                 onPress = {this.handleFacebookButton}>
-                                    Login with facebook
+                                    {strings.facebook}
                             </Button>
                         </View>
                     </View>
