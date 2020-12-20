@@ -8,13 +8,14 @@ import {
     ScrollView,
     
 } from 'react-native';
-
 import { Button } from 'react-native-paper';
-// import { LoginService,  AccessToken, GraphRequest, GraphRequestManager, fbLogin } from '../../Services/UserServices/UserService';
+
 import login_style from '../Style/login_style';
 
 import UserService from '../../Services/UserServices/UserService';
 import SocialService from '../../Services/UserServices/SocialService';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class Login extends Component {
 
@@ -28,6 +29,7 @@ export default class Login extends Component {
             emailId: '',
             passwordValid: '',
             password: '',
+            isLoggedIn : false
         }
     }
 
@@ -41,6 +43,27 @@ export default class Login extends Component {
             await this.setState({
                 userNameValid: ''
             })
+        }
+    }
+
+    async componentDidMount(){
+        const isLoggedIn = await AsyncStorage.getItem('isLoggedIn')
+        console.log(isLoggedIn);
+        if(isLoggedIn == 'true'){
+            const userDetail = await AsyncStorage.getItem('userCredential')
+            this.props.navigation.navigate('Dashboard')
+        }
+    }
+
+    _setLogingStatusAndDeatil = async (UserCredential) => {
+        try{
+                await this.setState({
+                    isLoggedIn: true
+                })
+                await AsyncStorage.setItem('isLoggedIn', JSON.stringify(this.state.isLoggedIn));
+                await AsyncStorage.setItem('userCredential', JSON.stringify(UserCredential));
+        }catch(error){
+            console.log(error);
         }
     }
     
@@ -74,8 +97,10 @@ export default class Login extends Component {
             this.state.password != '' &&
             this.state.passwordValid == '' &&
             this.state.userNameValid == '') {
-                UserService.LoginService(this.state.emailId, this.state.password).then(() => {
-                    this.props.navigation.navigate('Signup')
+                UserService.LoginService(this.state.emailId, this.state.password)
+                .then((userDetail) => {
+                    this._setLogingStatusAndDeatil(userDetail);
+                    this.props.navigation.navigate('Dashboard')
                 }).catch(error => alert('Username or password is not correct!!'));
             
         }
@@ -90,7 +115,9 @@ export default class Login extends Component {
 
     handleFacebookButton = () => {
         SocialService.facebookLogin()
-        .then(UserCredential => this.props.navigation.navigate('Signup'))
+        .then(UserCredential =>
+            this._setLogingStatusAndDeatil(UserCredential), 
+            this.props.navigation.navigate('Dashboard'))
         .catch(error => {
             console.log(error);
         })

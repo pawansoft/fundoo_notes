@@ -1,12 +1,11 @@
 import Firebase from '../../config/Firebase'
-import { LoginManager, AccessToken } from 'react-native-fbsdk';
 
 class UserService{
     SignupService(email, password){
         return new Promise((resolve, reject) => {
             Firebase.auth()
             .createUserWithEmailAndPassword(email, password)
-            .then(() => resolve('Success'))
+            .then(userDetail => resolve(userDetail))
             .catch(error => reject('error'))
         })
     }
@@ -15,7 +14,7 @@ class UserService{
         return new Promise((resolve, reject) => {
             Firebase.auth()
             .signInWithEmailAndPassword(email, password)
-            .then(() => resolve('Success'))
+            .then(userDetail => resolve(userDetail))
             .catch(error => reject('error'))
         })
     }
@@ -24,7 +23,7 @@ class UserService{
         return new Promise((resolve, reject) => {
             Firebase.auth()
             .sendPasswordResetEmail(emailId)
-            .then(() => resolve('Success'))
+            .then(userDetail => resolve(userDetail))
             .catch(error => reject('error'))
         })
     }

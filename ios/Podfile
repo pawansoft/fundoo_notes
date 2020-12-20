@@ -12,6 +12,8 @@ target 'fundoo_notes' do
 
   pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk'
 
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
+
   target 'fundoo_notesTests' do
     inherit! :complete
     # Pods for testing
