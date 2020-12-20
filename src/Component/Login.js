@@ -9,7 +9,7 @@ import {
     
 } from 'react-native';
 import { Button } from 'react-native-paper';
-import {strings} from '../../Localization/Localization'
+import {strings} from '../Localization/Localization'
 import login_style from '../Style/login_style';
 
 import UserService from '../../Services/UserServices/UserService';

@@ -1,15 +1,15 @@
 import LocalizedStrings from 'react-native-localization';
 import Localization from 'react-native-localization';
-import Login from '../src/Component/Login';
+
 
 export let strings = new LocalizedStrings({
     "en-US" : {
-            pass : password,
-            Forget: Forget,
-            Signup: Signup,
-            Login : Login,
+            pass : 'password',
+            Forget: 'Forget',
+            Signup: 'Signup',
+            Login : 'Login',
             facebook: 'Login with facebook',
-            emailId: emailId,
+            emailId: 'email Id',
             firstname: 'First Name',
             lastname: 'Last Name',
             username: 'User Name',
@@ -19,8 +19,8 @@ export let strings = new LocalizedStrings({
             Resetpass: 'Reset Password',
     },
     hi :{
-        pass: कुंजिका,
-        Forget: भूल,
+        pass: 'कुंजिका',
+        Forget: 'भूल',
         Signup: 'साइन अप करें',
         Login: 'लॉग इन करें',
         facebook: 'फेसबुक में जाये',
@@ -34,10 +34,10 @@ export let strings = new LocalizedStrings({
         Resetpass: 'पासवर्ड रीसेट',
     },
     mr: {
-        pass: संकेतशब्द,
-        Forget: विसरा,
+        pass: 'संकेतशब्द',
+        Forget: 'विसरा',
         Signup: 'साइन अप',
-        Login : लॉगिन,
+        Login : 'लॉगिन',
         facebook: 'फेसबुक सह लॉगिन करा',
         emailId: 'ई - मेल आयडी',
         firstname: 'पहिले नाव',
@@ -47,8 +47,6 @@ export let strings = new LocalizedStrings({
         signin: 'साइन इन',
         next: 'पुढे',
         Resetpass: 'संकेतशब्द रीसेट करा'
-        
-
     }
 
 })

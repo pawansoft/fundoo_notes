@@ -20,7 +20,7 @@ describe ('Test User Service',() => {
 
     it('ProvideUesrIdAndPassword_WhenAlreadyPresent_ShouldLoggedIn', () => {
         const isAdded = UserService.LoginService('pk.soft29@gmail.com', 'Pk@16123114');
-        return expect(isAdded).resolves.toBe('Success');
+        return expect(isAdded).resolves.not.toBe(null);
     })
 
     it('ProvideUesrIdAndPassword_WhenNotMatched_ShouldRejectWithError', () => {

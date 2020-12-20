@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import UserService from '../../Services/UserServices/UserService';
 import RegisterStyle from '../Style/Register';
-import {strings} from '../../Localization/Localization'
+import {strings} from '../Localization/Localization'
 
 export default class Signup extends Component {
 

@@ -7,7 +7,7 @@ import {
     Image,
     ScrollView
 } from 'react-native';
-import { strings } from '../../Localization/Localization';
+import { strings } from '../Localization/Localization';
 
 import UserService, { ResetPasscodeService } from '../../Services/UserServices/UserService';
 import login_style from '../Style/login_style';

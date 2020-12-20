@@ -23,7 +23,7 @@ class UserService{
         return new Promise((resolve, reject) => {
             Firebase.auth()
             .sendPasswordResetEmail(emailId)
-            .then(userDetail => resolve(userDetail))
+            .then(() => resolve('Success'))
             .catch(error => reject('error'))
         })
     }
