@@ -135,8 +135,10 @@ export default class Signup extends Component {
         this.state.passwordValid == '' &&
         this.state.passMatch == ''){
             UserService.SignupService(this.state.userName, this.state.password, this.state.fname, this.state.lname)
-            .then(() => this.props.navigation.navigate('Login'))
-            .catch(error => console.log(error))
+            .then(() => {
+                UserService.storeDetailToDatabase(this.state.userName, this.state.fname, this.state.lname)
+                this.props.navigation.navigate('Login')
+            }).catch(error => console.log(error))
             
         }
         else{

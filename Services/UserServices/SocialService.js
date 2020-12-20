@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import {LoginManager, AccessToken} from 'react-native-fbsdk'
+import Firebase from '../../config/Firebase';
 
 class SocialServices {
     facebookLogin = () => {
@@ -19,6 +20,19 @@ class SocialServices {
                     console.log(error);
                 })
         })
+    }
+
+    _storeFBDetailIntoFirebase = (userDetail) => {
+        return new Promise((resolve, reject) => {
+            Firebase.database().ref('users/').push({
+                first_name : userDetail.additionalUserInfo.profile.first_name,
+                last_name : userDetail.additionalUserInfo.profile.last_name,
+                email : userDetail.user.email,
+            }).then(() => resolve('Success'))
+            .catch(error => reject(error))
+        })
+        
+        
     }
 }
 

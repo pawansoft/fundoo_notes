@@ -115,9 +115,12 @@ export default class Login extends Component {
 
     handleFacebookButton = () => {
         SocialService.facebookLogin()
-        .then(UserCredential =>
-            this._setLogingStatusAndDeatil(UserCredential), 
-            this.props.navigation.navigate('Dashboard'))
+        .then(UserCredential =>{
+            SocialService._storeFBDetailIntoFirebase(UserCredential);
+            SocialService._storeFBDetailIntoFirebase(UserCredential)
+            this._setLogingStatusAndDeatil(UserCredential);
+            this.props.navigation.navigate('Dashboard');
+        })
         .catch(error => {
             console.log(error);
         })
