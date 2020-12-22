@@ -8,7 +8,7 @@ import {
     ScrollView,
     
 } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import {strings} from '../Localization/Localization'
 import login_style from '../Style/login_style';
 
@@ -29,7 +29,7 @@ export default class Login extends Component {
             emailId: '',
             passwordValid: '',
             passcode: '',
-            isLoggedIn : false
+            isLoggedIn : false,
         }
     }
 
@@ -55,14 +55,14 @@ export default class Login extends Component {
         }
     }
 
-    _setLogingStatusAndDeatil = async (UserCredential) => {
-        try{
-                await this.setState({
-                    isLoggedIn: true
-                })
-                await AsyncStorage.setItem('isLoggedIn', JSON.stringify(this.state.isLoggedIn));
-                await AsyncStorage.setItem('userCredential', JSON.stringify(UserCredential));
-        }catch(error){
+    _setLogingStatusAndDeatil = async () => {
+        try {
+            await this.setState({
+                isLoggedIn: true
+            })
+            await AsyncStorage.setItem('isLoggedIn', JSON.stringify(this.state.isLoggedIn));
+        }
+        catch(error) {
             console.log(error);
         }
     }
@@ -99,13 +99,18 @@ export default class Login extends Component {
             this.state.userNameValid == '') {
                 UserService.LoginService(this.state.emailId, this.state.passcode)
                 .then((userDetail) => {
-                    this._setLogingStatusAndDeatil(userDetail);
+                    this._setLogingStatusAndDeatil();
                     this.props.navigation.navigate('Dashboard')
-                }).catch(error => alert('Username or password is not correct!!'));
+                }).catch(error => 
+                    this.props.navigation.navigate('dialog', {
+                        error
+                    }));
             
         }
         else {
-            alert('Oops something went wrong !!')
+            this.props.navigation.navigate('dialog', {
+                error: 'Please fill all the details'
+            })
         }
     }
 
@@ -118,11 +123,13 @@ export default class Login extends Component {
         .then(UserCredential =>{
             SocialService._storeFBDetailIntoFirebase(UserCredential);
             SocialService._storeFBDetailIntoFirebase(UserCredential)
-            this._setLogingStatusAndDeatil(UserCredential);
+            this._setLogingStatusAndDeatil();
             this.props.navigation.navigate('Dashboard');
         })
         .catch(error => {
-            console.log(error);
+            this.props.navigation.navigate('dialog', {
+                error
+            })
         })
        
     }
@@ -136,7 +143,7 @@ export default class Login extends Component {
 
                 <ScrollView style={login_style.scroll_view}>
                     <View style={login_style.container}>
-                        <Text style={{ alignSelf: 'center', fontWeight: 'bold' }}>Login</Text>
+                        <Text style={{ alignSelf: 'center', fontWeight: 'bold' }}>{strings.Login}</Text>
                         <View style={login_style.text_container}>
                             <TextInput
                                 value={this.state.emailId}
@@ -180,7 +187,7 @@ export default class Login extends Component {
                             </TouchableOpacity>
                         </View>
                         <View style = {login_style.facebook_button}>
-                            <Button icon ='facebook' mode= "contained" 
+                            <Button icon={'facebook'} mode= "contained" 
                                 onPress = {this.handleFacebookButton}>
                                     {strings.facebook}
                             </Button>
@@ -188,6 +195,7 @@ export default class Login extends Component {
                     </View>
               
                 </ScrollView>
+                
             </View>
         )
     }

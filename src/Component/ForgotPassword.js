@@ -48,10 +48,15 @@ export default class ForgotPassword extends Component {
                 UserService.ResetPasscodeService(this.state.emailId).then(() => {
                     alert('Password reset mail has sent to you please check your mail')
                 })
-                .catch(error => console.log(error))     
+                .catch(error => 
+                    this.props.navigation.navigate('dialog', {
+                        error
+                    }))     
         }
         else {
-            alert('Oops something went wrong')
+            this.props.navigation.navigate('dialog', {
+                error: 'Something went wrong !!!'
+            })
         }
     }
 
@@ -86,7 +91,7 @@ export default class ForgotPassword extends Component {
                             style={login_style.signup_button_container}
                             onPress={this.handleResetButton}>
                             <Text style={login_style.button_text}>
-                                {strings.Next}
+                                {strings.next}
                             </Text>
                         </TouchableOpacity>
 

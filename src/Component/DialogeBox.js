@@ -1,31 +1,47 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
+import { strings } from '../Localization/Localization';
 
-const DialogeBox = () => {
+class DialogeBox extends Component{
   
-  const [visible, setVisible] = React.useState(false);
+  constructor(props){
+    super(props);
+    this.state = {
+      visible: true,
+      error : {
+        errorMessage: props.route.params.error
+      }
+    }
+  }
+  showDialog = async() =>{
+    await this.setState({
+      visible : true
+    })
+  } 
 
-  const showDialog = () => setVisible(true);
+  hideDialog = async() =>{
+    await this.setState({
+      visible : false
+    })
+  }
 
-  const hideDialog = () => setVisible(false);
-
-  return (
-    <View>
-      <Button onPress={showDialog}>Show Dialog</Button>
-      <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>Alert</Dialog.Title>
-          <Dialog.Content>
-            <Paragraph>This is simple dialog</Paragraph>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={hideDialog}>Done</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    </View>
-  );
-};
+  render(){
+    const {navigation} = this.props;
+    return (    
+        <Portal>
+          <Dialog visible = {this.state.visible} onDismiss = {this.hideDialog}>
+            <Dialog.Title>{strings.error}</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>{this.state.error.errorMessage}</Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={hideDialog}>{strings.done}</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>     
+    );
+  };
+}
 
 export default DialogeBox;

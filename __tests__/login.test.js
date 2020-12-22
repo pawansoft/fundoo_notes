@@ -3,8 +3,11 @@ import Adapter from 'enzyme-adapter-react-16'
 import {shallow, configure} from 'enzyme'
 import Login from '../src/Component/Login';
 import SocialService from '../Services/UserServices/SocialService';
+import RNLocalization from '../_mocks_/localizationMOck/react-native-localization-mock';
 
+jest.mock('react-native-localization', () => RNLocalization)
 configure({adapter: new Adapter()})
+
 describe('Login Test', () => {
     it('ProvideRender_WhenMatchToSnapshot_TestShouldPass', () => {
         const component = shallow(<Login/>)
@@ -72,12 +75,12 @@ describe('Test Login States', () => {
     })
  })
 describe('Social Login', () => {
-    it('test onPress event of facebook sign in button it will navigate to Dashboard Screen', async() => {
+    it('pressFacebookLoginButton_WhenLoggedInSuccessfully_ShouldNavigateToDashboard', () => {
         const navigation = { navigate : jest.fn() }
         const onPressEvent = jest.fn();
         const component = shallow(<Login onPress = {onPressEvent} navigation = {navigation} />)
         const instance = component.instance();
-        await instance.handleFacebookButton();
-        return await SocialService.facebookLogin().then(userCredential => expect(navigation.navigate).toBeCalledWith('Dashboard'))
+        instance.handleFacebookButton();
+        return SocialService.facebookLogin().then(userCredential => expect(navigation.navigate).toBeCalledWith('Dashboard'))
     })
 })

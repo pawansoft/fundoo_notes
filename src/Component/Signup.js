@@ -9,7 +9,7 @@ import {
 import UserService from '../../Services/UserServices/UserService';
 import RegisterStyle from '../Style/Register';
 import {strings} from '../Localization/Localization'
-
+import {Button, Dialog, Portal, Provider, Paragraph} from 'react-native-paper'; 
 export default class Signup extends Component {
 
     constructor(props){
@@ -24,7 +24,7 @@ export default class Signup extends Component {
             passwordValid: '',
             password: '',
             passMatch: '',
-            confirm: '',        
+            confirm: '',
         }
     }
 
@@ -135,15 +135,21 @@ export default class Signup extends Component {
         this.state.userNameValid =='' &&
         this.state.passwordValid == '' &&
         this.state.passMatch == ''){
-            UserService.SignupService(this.state.userName, this.state.password, this.state.fname, this.state.lname)
-            .then(() => {
-                UserService.storeDetailToDatabase(this.state.userName, this.state.fname, this.state.lname)
+            UserService.SignupService(this.state.userName, this.state.password)
+            .then((userDetails) => {
+                console.log(userDetails);
+                UserService.storeDetailToDatabase( this.state.userName, this.state.fname, this.state.lname)
                 this.props.navigation.navigate('Login')
-            }).catch(error => console.log(error))
+            }).catch(error => 
+                this.props.navigation.navigate('dialog', {
+                    error
+                }))
             
         }
         else{
-            alert ('Some fields are missing !!')
+            this.props.navigation.navigate('dialog',{
+                error : 'Some fields are invalid to null'
+            })
         }
     }
 
@@ -228,10 +234,11 @@ export default class Signup extends Component {
                     <TouchableOpacity style = {RegisterStyle.button}
                     onPress = {this.handleSignUpButton}>
                         <Text style ={RegisterStyle.button_text}>
-                            {strings.Next}
+                            {strings.next}
                         </Text>
                     </TouchableOpacity>
                 </View>
+             
             </View>
         )
     }

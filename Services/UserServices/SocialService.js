@@ -24,7 +24,7 @@ class SocialServices {
 
     _storeFBDetailIntoFirebase = (userDetail) => {
         return new Promise((resolve, reject) => {
-            Firebase.database().ref('users/').push({
+            Firebase.database().ref('facebook-users/').push({
                 first_name : userDetail.additionalUserInfo.profile.first_name,
                 last_name : userDetail.additionalUserInfo.profile.last_name,
                 email : userDetail.user.email,
