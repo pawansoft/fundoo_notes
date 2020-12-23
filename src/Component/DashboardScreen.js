@@ -35,7 +35,7 @@ class DashboardScreen extends Component {
                 <View>
                     <Appbar style = {dashboardStyle.headerContainer}>
                     <Appbar.Action
-                            icon = 'checkbox'
+                            icon = {require ('../assets/check.png')}
                             onPress={() => console.log('Pressed button')}/>
                    
                     <Appbar.Action
@@ -52,7 +52,7 @@ class DashboardScreen extends Component {
                     
                     <Appbar.Action
                         style = {dashboardStyle.plusButton}
-                        icon = 'plus'/>
+                        icon = {require ('../assets/plus.png')}/>
                     </Appbar>
                 </View>
             </View>
