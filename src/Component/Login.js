@@ -49,9 +49,10 @@ export default class Login extends Component {
     async componentDidMount(){
         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn')
         console.log(isLoggedIn);
+        AsyncStorage.setItem('isLisLoggedIno', 'false')
         if(isLoggedIn == 'true'){
             const userDetail = await AsyncStorage.getItem('userCredential')
-            this.props.navigation.navigate('Dashboard')
+            this.props.navigation.navigate('Home')
         }
     }
 
@@ -100,7 +101,7 @@ export default class Login extends Component {
                 UserService.LoginService(this.state.emailId, this.state.passcode)
                 .then((userDetail) => {
                     this._setLogingStatusAndDeatil();
-                    this.props.navigation.navigate('Dashboard')
+                    this.props.navigation.navigate('Home')
                 }).catch(error => 
                     this.props.navigation.navigate('dialog', {
                         error
@@ -124,7 +125,7 @@ export default class Login extends Component {
             SocialService._storeFBDetailIntoFirebase(UserCredential);
             SocialService._storeFBDetailIntoFirebase(UserCredential)
             this._setLogingStatusAndDeatil();
-            this.props.navigation.navigate('Dashboard');
+            this.props.navigation.navigate('Home');
         })
         .catch(error => {
             this.props.navigation.navigate('dialog', {

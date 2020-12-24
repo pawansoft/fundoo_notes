@@ -25,7 +25,7 @@ describe ('Test User Service',() => {
 
     it('ProvideUesrIdAndPassword_WhenNotMatched_ShouldRejectWithError', () => {
         const isAdded = UserService.LoginService('pk.soft29@gmail.com', 'Pk.16123114');
-        return expect(isAdded).rejects.toBe('error');
+        return expect(isAdded).rejects.not.toBe(null);
     })
 
     it('ProvideEmail_WhenFound_ShouldSendPasswordResetMail', () => {
@@ -34,6 +34,6 @@ describe ('Test User Service',() => {
     })
     it('ProvideEmail_WhenNotFound_ShouldRejectWithError', () => {
         const isMailSent = UserService.ResetPasscodeService('pawan@gmail.com');
-        return expect(isMailSent).rejects.toBe('error')
+        return expect(isMailSent).rejects.not.toBe(null)
     })
 })

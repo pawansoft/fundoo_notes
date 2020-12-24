@@ -28,18 +28,16 @@ class UserService{
         })
     }
 
-    storeDetailToDatabase = (emailId, firstName, lastName) => {
+    storeDetailToDatabase = (userId, emailId, firstName, lastName) => {
         return new Promise((resolve, reject) => {
-            Firebase.database().ref('users/').push({
+            Firebase.database().ref('users/' +userId).push({
                 userName : emailId,
                 first_name: firstName,
                 last_name : lastName
             }).then(() => resolve('Success'))
             .catch(error => reject(error))
         })
-        
     }
 }
-
 
 export default new UserService();

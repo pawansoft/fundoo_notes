@@ -9,7 +9,6 @@ import {
 import UserService from '../../Services/UserServices/UserService';
 import RegisterStyle from '../Style/Register';
 import {strings} from '../Localization/Localization'
-import {Button, Dialog, Portal, Provider, Paragraph} from 'react-native-paper'; 
 export default class Signup extends Component {
 
     constructor(props){
@@ -138,7 +137,7 @@ export default class Signup extends Component {
             UserService.SignupService(this.state.userName, this.state.password)
             .then((userDetails) => {
                 console.log(userDetails);
-                UserService.storeDetailToDatabase( this.state.userName, this.state.fname, this.state.lname)
+                UserService.storeDetailToDatabase(userDetails.user.uid, this.state.userName, this.state.fname, this.state.lname)
                 this.props.navigation.navigate('Login')
             }).catch(error => 
                 this.props.navigation.navigate('dialog', {
@@ -174,7 +173,7 @@ export default class Signup extends Component {
                 <View style={{ flexDirection: 'row' }}>
                     <View style={RegisterStyle.row_text_input}>
                     <TextInput
-                        placeholder={strings.firstname}
+                        placeholder = {strings.firstname}
                         value = {this.state.fname} 
                         onChangeText = {this.handleFName}
                         onEndEditing = {this.validateFName}/>
@@ -185,7 +184,7 @@ export default class Signup extends Component {
                     <TextInput
                         value = {this.state.lname}
                         onChangeText = {this.handleLName}
-                        placeholder={strings.lastname}
+                        placeholder = {strings.lastname}
                         onEndEditing = {this.validateLName} />
                         <Text style = {RegisterStyle.error_first_name}>{this.state.lnameValid}</Text>
                     </View>
@@ -196,19 +195,19 @@ export default class Signup extends Component {
                         style={RegisterStyle.text_input}
                         value = {this.state.userName}
                         onChangeText = {this.handleUserName}
-                        placeholder={strings.username}
+                        placeholder = {strings.username}
                         onEndEditing = {this.validateUserName} />
                         <Text style = {RegisterStyle.error_first_name}>{this.state.userNameValid}</Text>
                 </View>
                 
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row' }}>-+
                     <View style = {RegisterStyle.row_text_input}>
                     <TextInput
                         secureTextEntry={true}
                         value = {this.state.password}
                         onChangeText = {this.handlePassword}
                         onEndEditing = {this.validatePassword}
-                        placeholder={strings.pass} />
+                        placeholder = {strings.pass} />
                         <Text style = {RegisterStyle.passcode_error}>{this.state.passwordValid}</Text>
                     </View>
                     <View style={RegisterStyle.row_text_input}>
@@ -217,28 +216,26 @@ export default class Signup extends Component {
                         value = {this.state.confirm}
                         onChangeText = {this.handleConfirm}
                         onEndEditing = {this.comparePassword}
-                        placeholder={strings.confirm} />
+                        placeholder = {strings.confirm} />
                         <Text style = {RegisterStyle.passcode_error}>{this.state.passMatch}</Text>
                 </View >
                 </View>
 
                 <View style={{ flexDirection: 'row' }}>
-                    
                     <TouchableOpacity style = {RegisterStyle.touchable_opacity_style}
                     onPress = {this.SigninInsteadNavigationHandler}>
-                        <Text style ={RegisterStyle.button_text}> 
+                        <Text style = {RegisterStyle.button_text}> 
                             {strings.signin}
                         </Text>
                     </TouchableOpacity>
                     
                     <TouchableOpacity style = {RegisterStyle.button}
-                    onPress = {this.handleSignUpButton}>
+                        onPress = {this.handleSignUpButton}>
                         <Text style ={RegisterStyle.button_text}>
                             {strings.next}
                         </Text>
                     </TouchableOpacity>
                 </View>
-             
             </View>
         )
     }

@@ -1,4 +1,4 @@
-export default class RNLocalization {
+class RNLocalization {
   _language = 'en-US';
 
   constructor(props) {
@@ -18,3 +18,5 @@ export default class RNLocalization {
       }
     }
   }
+
+  export default RNLocalization;

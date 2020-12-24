@@ -3,9 +3,26 @@ import Adapter from 'enzyme-adapter-react-16'
 import {shallow, configure} from 'enzyme'
 import Login from '../src/Component/Login';
 import SocialService from '../Services/UserServices/SocialService';
-import RNLocalization from '../_mocks_/localizationMOck/react-native-localization-mock';
 
-jest.mock('react-native-localization', () => RNLocalization)
+jest.mock('react-native-localization', () => class RNLocalization {
+    language = 'en-US'
+  
+    constructor (props) {
+      this.props = props
+      this.setLanguage(this.language)
+    }
+  
+    setLanguage (interfaceLanguage) {
+      this.language = interfaceLanguage
+      if (this.props[interfaceLanguage]) {
+        var localizedStrings = this.props[this.language]
+        for (var key in localizedStrings) {
+          if (localizedStrings.hasOwnProperty(key)) this[key] = localizedStrings[key]
+        }
+      }
+    }
+})
+
 configure({adapter: new Adapter()})
 
 describe('Login Test', () => {

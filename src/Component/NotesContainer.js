@@ -7,7 +7,7 @@ import {
 import { strings } from '../Localization/Localization';
 import RegisterStyle from '../Style/Register';
 
-export default class Dashboard extends Component{
+export default class NotesContainer extends Component{
     constructor(props){
         super(props)
     }

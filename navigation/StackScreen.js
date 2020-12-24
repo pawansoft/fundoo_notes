@@ -8,22 +8,23 @@ import ForgotPasswordScreen from '../src/Component/ForgotPasswordScreen';
 import DashboardScreen from '../src/Component/DashboardScreen';
 import ResponsiveImage from '../src/Component/ResponsiveImage';
 import DialogeBox from '../src/Component/DialogeBox';
+import DrawerNavigator from './DrawerNavigator';
 
 const Stack = createStackNavigator();
 
 function StackScreen(){
     return(
-        <NavigationContainer>
-            <Stack.Navigator
-            initialRouteName = "Login"
-            screenOptions = {{headerShown : false}}>
-                <Stack.Screen name = "Login" component = {LoginScreen} />
-                <Stack.Screen name = "Signup" component = {SignupScreen} />
-                <Stack.Screen name = "ForgotPassword" component = {ForgotPasswordScreen} />
-                <Stack.Screen name = 'Dashboard' component = {DashboardScreen}/>
-                <Stack.Screen name = 'ResponsiveImg' component ={ResponsiveImage}/>
-                <Stack.Screen name = "dialog" component = {DialogeBox}/>
-          </Stack.Navigator>
+       <NavigationContainer>
+        <Stack.Navigator
+        initialRouteName = "Login"
+        screenOptions = {{headerShown : false}}>
+            <Stack.Screen name = "Login" component = {LoginScreen} />
+            <Stack.Screen name = "Signup" component = {SignupScreen} />
+            <Stack.Screen name = "ForgotPassword" component = {ForgotPasswordScreen}/>
+            <Stack.Screen name = 'ResponsiveImg' component = {ResponsiveImage}/>
+            <Stack.Screen name = "dialog" component = {DialogeBox}/>
+            <Stack.Screen name = 'Home' component = {DrawerNavigator}/>
+            </Stack.Navigator>
         </NavigationContainer>
     )
 }
