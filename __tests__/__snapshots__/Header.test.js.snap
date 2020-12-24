@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test DashboardScreen provideSnapshot_whenMatched_testShouldpass 1`] = `ShallowWrapper {}`;

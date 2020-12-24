@@ -4,26 +4,54 @@ import {
     Text,
     StyleSheet
 } from 'react-native'
-
-import {
-    DrawerContentScrollView,
-    DrawerItem
-} from '@react-navigation/drawer';
 import { Drawer } from 'react-native-paper';
+import {DrawerContentScrollView} from '@react-navigation/drawer';
+import DrawerStyle from '../Style/DrawerStyle';
 
-function DrawerContent(){
+const DrawerContent = ({props}) => {
     return(
-        <View>
-            <DrawerContentScrollView> 
-            <Text>
-                This is my drawer
-            </Text>
-            </DrawerContentScrollView>
-            <Drawer.Section style = {styles.bottomDrawerSection}>
-                <DrawerItem
-                    label = 'Sign Out'
-                />
+        <View style = {{flex : 1}}>
+            <Text style = {DrawerStyle.headerText}>Fundoo Notes</Text>
+            <DrawerContentScrollView {...props}>
+            <Drawer.Section style = {DrawerStyle.dr}>
+                <Drawer.Item 
+                icon = 'lightbulb-outline'
+                label = "Notes"/> 
+
+                <Drawer.Item
+                icon = "bell-outline"
+                label = "Reminder"/> 
             </Drawer.Section>
+            
+            <Drawer.Section>
+                <Drawer.Item
+                icon = 'plus'
+                label = 'Create new label'/>    
+            </Drawer.Section>
+            
+            <Drawer.Section>
+                <Drawer.Item
+                icon = 'archive-arrow-down-outline'
+                label = 'Archive'/>
+
+                <Drawer.Item
+                icon = 'delete'
+                label = 'Delete'/>
+            </Drawer.Section>
+
+            <Drawer.Item
+            icon = 'cog-outline'
+            label = 'Setting'/>
+
+            <Drawer.Item
+            icon = 'help-circle'
+            label = 'Help & feedback'/>
+            </DrawerContentScrollView>
+
+            <Drawer.Item
+            style = {DrawerStyle.footer}
+            icon = 'logout'
+            label = 'Logout'/>
         </View>
     )
 }

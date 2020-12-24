@@ -91,6 +91,7 @@ describe('Test Login States', () => {
         expect(navigation.navigate).toBeCalledWith("Signup");
     })
  })
+
 describe('Social Login', () => {
     it('pressFacebookLoginButton_WhenLoggedInSuccessfully_ShouldNavigateToDashboard', () => {
         const navigation = { navigate : jest.fn() }
@@ -99,5 +100,5 @@ describe('Social Login', () => {
         const instance = component.instance();
         instance.handleFacebookButton();
         return SocialService.facebookLogin().then(userCredential => expect(navigation.navigate).toBeCalledWith('Dashboard'))
-    })
+    }, 3000)
 })

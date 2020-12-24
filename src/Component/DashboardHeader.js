@@ -10,6 +10,12 @@ export default class DashboardHeader extends Component{
         }
     }
 
+    selectView = async () => {
+        await this.setState({
+            listView : !this.state.listView
+        })
+    }
+
     render(){
         return(
             <Appbar style = {dashboardStyle.headerContainer}>
@@ -18,7 +24,9 @@ export default class DashboardHeader extends Component{
                 onPress = {() => this.props.navigation.openDrawer()}/>
                 
                 <Searchbar
-                placeholder = 'Search Notes' style = {{width : '60%'}}/>
+                placeholder = 'Search Notes' 
+                style = {{width : '60%'}}
+                onPress = {this.selectView}/>
                 
                 <Appbar.Action
                     style = {{marginRight : 10}}

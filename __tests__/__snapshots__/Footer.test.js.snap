@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test dashboard footer ProvideDashbaordFooter_WhenMatchecSnapshot_testShouldPass 1`] = `ShallowWrapper {}`;
