@@ -1,9 +1,8 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import NotesContainer from '../src/Component/NotesContainer';
-import Reminder from '../src/Component/Reminder';
-import DrawerContent from '../src/Component/DrawerContent';
-import DashboardScreen from '../src/Component/DashboardScreen';
+import DashboardScreen from '../src/Component/Dashboard/DashboardScreen';
+import Reminder from '../src/Component/Dashboard/Reminder';
+import DrawerContent from '../src/Component/Dashboard/DrawerContent';
 
 const Drawer = createDrawerNavigator();
 

@@ -136,7 +136,6 @@ export default class Signup extends Component {
         this.state.passMatch == ''){
             UserService.SignupService(this.state.userName, this.state.password)
             .then((userDetails) => {
-                console.log(userDetails);
                 UserService.storeDetailToDatabase(userDetails.user.uid, this.state.userName, this.state.fname, this.state.lname)
                 this.props.navigation.navigate('Login')
             }).catch(error => 
@@ -200,7 +199,7 @@ export default class Signup extends Component {
                         <Text style = {RegisterStyle.error_first_name}>{this.state.userNameValid}</Text>
                 </View>
                 
-                <View style={{ flexDirection: 'row' }}>-+
+                <View style={{ flexDirection: 'row' }}>
                     <View style = {RegisterStyle.row_text_input}>
                     <TextInput
                         secureTextEntry={true}

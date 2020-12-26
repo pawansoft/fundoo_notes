@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Appbar, Button, Avatar, Searchbar} from 'react-native-paper';
-import dashboardStyle from '../Style/dashboardStyle';
+import { Appbar, Avatar, Searchbar} from 'react-native-paper';
+import dashboardStyle from '../../Style/dashboardStyle';
 
 export default class DashboardHeader extends Component{
     constructor(props) {
@@ -33,7 +33,7 @@ export default class DashboardHeader extends Component{
                     icon = {this.state.listView ? 'view-grid-outline' : 'view-agenda-outline'}
                     onPress={() => console.log('Nothing is added so far')}        
                 />
-                <Avatar.Image style = {{flexDirection: "row", justifyContent: "space-between", alignItems: "center"  }} size = {40} source = {require('../assets/img.png')}/>
+                <Avatar.Image style = {{flexDirection: "row", justifyContent: "space-between", alignItems: "center"  }} size = {40} source = {require('../../assets/img.png')}/>
             </Appbar>
         )
     }

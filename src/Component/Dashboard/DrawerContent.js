@@ -6,9 +6,12 @@ import {
 } from 'react-native'
 import { Drawer } from 'react-native-paper';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
-import DrawerStyle from '../Style/DrawerStyle';
+import DrawerStyle from '../../Style/DrawerStyle';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const DrawerContent = ({props}) => {
+   
     return(
         <View style = {{flex : 1}}>
             <Text style = {DrawerStyle.headerText}>Fundoo Notes</Text>

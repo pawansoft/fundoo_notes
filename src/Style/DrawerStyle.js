@@ -1,4 +1,3 @@
-import React from 'react'
 import {
     StyleSheet
 } from 'react-native'
@@ -11,13 +10,14 @@ const DrawerStyle = StyleSheet.create({
         fontSize : 20,
         marginTop: '10%',
         marginLeft: '5%',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginBottom: '10%',
+        alignSelf : 'center'
     },
     footer: {
-        marginBottom : '5%'
+        marginBottom : '7%'
     },
     drawerSection: {
-        
         borderWidth : 0.5,
         marginTop : 20
     }

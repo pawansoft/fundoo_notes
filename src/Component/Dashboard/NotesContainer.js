@@ -2,14 +2,22 @@ import React,{ Component } from 'react';
 import {
     View,
     Text, 
-    TouchableOpacity
+    TouchableOpacity,
 } from 'react-native'
-import { strings } from '../Localization/Localization';
-import RegisterStyle from '../Style/Register';
+import { strings } from '../../Localization/Localization';
+import RegisterStyle from '../../Style/Register';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class NotesContainer extends Component{
     constructor(props){
         super(props)
+        this.state = {
+            notes : []
+        }
+    }
+
+    async componentDidMount(){
+        const usedid = await AsyncStorage.getItem('userId');
     }
 
     SigninInsteadNavigationHandler = () => {

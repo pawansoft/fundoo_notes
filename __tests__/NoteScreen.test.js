@@ -1,7 +1,7 @@
 import React from 'react';
-import {configure, shallow} from 'enzyme';
+import{configure, shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16'
-import DashboardScreen from '../src/Component/Dashboard/DashboardScreen';
+import NoteScreen from '../src/Component/NotesCreator/NoteScreen';
 
 configure({adapter: new Adapter()})
 
@@ -24,10 +24,9 @@ jest.mock('react-native-localization', () => class RNLocalization {
     }
 })
 
-describe('test DashboardScreen', () => {
-    it('provideSnapshot_whenMatched_testShouldpass', () =>{
-        const componnt = shallow(<DashboardScreen/>)
-        expect(componnt).toMatchSnapshot();
+describe('Test note screen', () => {
+    it('ProvideNoteScreen_WhenSnapshotMatches_ShouldPassTestCase', () =>{
+        const component = shallow(<NoteScreen/>)
+        expect(component).toMatchSnapshot();
     })
-
 })

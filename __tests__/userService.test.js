@@ -8,7 +8,7 @@ describe ('Test User Service',() => {
 
     // it('ProvideSignupDetail_WhenSaved_ShouldReturnResolve', () => {
 
-    //         const isAdded = SignupService('pk.soft29@gmail.com', 'Pk@16123114');
+    //         const isAdded = UserService.SignupService('pk.soft29@gmail.com', 'Pk@16123114');
     //         return expect(isAdded).resolves.toBe('Success');
     // })
 
@@ -19,6 +19,7 @@ describe ('Test User Service',() => {
 
 
     it('ProvideUesrIdAndPassword_WhenAlreadyPresent_ShouldLoggedIn', () => {
+        jest.setTimeout(30000);
         const isAdded = UserService.LoginService('pk.soft29@gmail.com', 'Pk@16123114');
         return expect(isAdded).resolves.not.toBe(null);
     })
@@ -28,12 +29,12 @@ describe ('Test User Service',() => {
         return expect(isAdded).rejects.not.toBe(null);
     })
 
-    it('ProvideEmail_WhenFound_ShouldSendPasswordResetMail', () => {
-        const isMailSent = UserService.ResetPasscodeService('pk.soft29@gmail.com');
-        return expect(isMailSent).resolves.toBe('Success')
-    })
+    // it('ProvideEmail_WhenFound_ShouldSendPasswordResetMail', () => {
+    //     const isMailSent = UserService.ResetPasscodeService('pk.soft29@gmail.com');
+    //     return expect(isMailSent).resolves.toBe('Success')
+    // })
     it('ProvideEmail_WhenNotFound_ShouldRejectWithError', () => {
         const isMailSent = UserService.ResetPasscodeService('pawan@gmail.com');
-        return expect(isMailSent).rejects.not.toBe(null)
+        return expect(isMailSent).rejects.toBe('error')
     })
 })

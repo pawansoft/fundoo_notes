@@ -1,9 +1,17 @@
 import React, { Component } from 'react'
 import {View} from 'react-native';
 import { Appbar} from 'react-native-paper';
-import dashboardStyle from '../Style/dashboardStyle';
+import dashboardStyle from '../../Style/dashboardStyle';
 
 export default class BottomBar extends Component{
+    constructor(props){
+        super(props)
+    }
+
+    handleNewNoteCreateButton = () => {
+        this.props.navigation.navigate('NewNotes')
+    }
+
     render(){
         return(
             <View>
@@ -26,7 +34,8 @@ export default class BottomBar extends Component{
                         
                     <Appbar.Action
                         style = {dashboardStyle.plusButton}
-                        icon = {require ('../assets/plus.png')}/>
+                        icon = {require ('../../assets/plus.png')}
+                        onPress = {this.handleNewNoteCreateButton}/>
                 </Appbar>
             </View>
         )

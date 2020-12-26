@@ -4,7 +4,7 @@ import {configure, shallow} from 'enzyme';
 import {Appbar, Avatar, Searchbar} from 'react-native-paper';
 
 import Adapter from 'enzyme-adapter-react-16'
-import DashboardHeader from '../src/Component/DashboardHeader';
+import DashboardHeader from '../src/Component/Dashboard/DashboardHeader';
 
 configure({adapter: new Adapter()})
 

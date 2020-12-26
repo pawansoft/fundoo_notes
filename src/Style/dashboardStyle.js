@@ -27,7 +27,7 @@ const dashboardStyle = StyleSheet.create({
     plusButton:{
         marginLeft : '30%',
         marginRight : '5%',
-        marginBottom : 80,
+        marginBottom : 90,
         backgroundColor: 'white',
         height : 60,
         width: 60,

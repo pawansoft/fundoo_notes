@@ -1,10 +1,8 @@
 import React from 'react';
 import {configure, shallow} from 'enzyme';
-
-import {Appbar, Avatar, Searchbar} from 'react-native-paper';
-
+import {Appbar} from 'react-native-paper';
 import Adapter from 'enzyme-adapter-react-16'
-import BottomBar from '../src/Component/dashboardFooter';
+import BottomBar from '../src/Component/Dashboard/dashboardFooter';
 
 configure({adapter: new Adapter()})
 
@@ -44,5 +42,16 @@ describe('Test dashboard footer',() => {
         const component = shallow(<BottomBar/>)
         expect(component.find(Appbar.Action)).toHaveLength(5);
     })
+})
+
+describe('Test Navigation In Dashboard Footer', () => {
+  it('PressPlusButton_WhenEventOccure_ShouldNavigateToNotScreen', async() => {
+    const navigation = { navigate: jest.fn()}
+    const onPressEvent = jest.fn();
+
+    const component = shallow(<BottomBar onPress = {onPressEvent} navigation = {navigation}/>)
+    await component.instance().handleNewNoteCreateButton();
+    expect(navigation.navigate).toBeCalledWith("NewNotes")
+  })
 })
 

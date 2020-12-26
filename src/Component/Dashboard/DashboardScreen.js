@@ -28,7 +28,7 @@ class DashboardScreen extends Component {
                     </View> 
                 </ScrollView> 
                 <View>
-                    <BottomBar/>
+                    <BottomBar navigation = {this.props.navigation}/>
                 </View>
             </View>
         )

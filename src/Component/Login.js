@@ -11,10 +11,8 @@ import {
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import {strings} from '../Localization/Localization'
 import login_style from '../Style/login_style';
-
 import UserService from '../../Services/UserServices/UserService';
 import SocialService from '../../Services/UserServices/SocialService';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class Login extends Component {
@@ -47,21 +45,23 @@ export default class Login extends Component {
     }
 
     async componentDidMount(){
-        const isLoggedIn = await AsyncStorage.getItem('isLoggedIn')
-        console.log(isLoggedIn);
+        const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+        const userId = await AsyncStorage.getItem('userId');
+        console.log('userid' + userId);
         AsyncStorage.setItem('isLisLoggedIno', 'false')
         if(isLoggedIn == 'true'){
-            const userDetail = await AsyncStorage.getItem('userCredential')
+           
             this.props.navigation.navigate('Home')
         }
     }
 
-    _setLogingStatusAndDeatil = async () => {
+    _setLogingStatusAndDeatil = async (userId) => {
         try {
             await this.setState({
                 isLoggedIn: true
             })
             await AsyncStorage.setItem('isLoggedIn', JSON.stringify(this.state.isLoggedIn));
+            await AsyncStorage.setItem('userId', JSON.stringify(userId));
         }
         catch(error) {
             console.log(error);
@@ -100,9 +100,9 @@ export default class Login extends Component {
             this.state.userNameValid == '') {
                 UserService.LoginService(this.state.emailId, this.state.passcode)
                 .then((userDetail) => {
-                    this._setLogingStatusAndDeatil();
+                    this._setLogingStatusAndDeatil(userDetail.user.uid);
                     this.props.navigation.navigate('Home')
-                }).catch(error => 
+                }).catch((error) => 
                     this.props.navigation.navigate('dialog', {
                         error
                     }));
@@ -123,8 +123,7 @@ export default class Login extends Component {
         SocialService.facebookLogin()
         .then(UserCredential =>{
             SocialService._storeFBDetailIntoFirebase(UserCredential);
-            SocialService._storeFBDetailIntoFirebase(UserCredential)
-            this._setLogingStatusAndDeatil();
+            this._setLogingStatusAndDeatil(userDetails.user.uid);
             this.props.navigation.navigate('Home');
         })
         .catch(error => {

@@ -4,6 +4,7 @@ import {shallow, configure} from 'enzyme'
 import Login from '../src/Component/Login';
 import SocialService from '../Services/UserServices/SocialService';
 
+
 jest.mock('react-native-localization', () => class RNLocalization {
     language = 'en-US'
   

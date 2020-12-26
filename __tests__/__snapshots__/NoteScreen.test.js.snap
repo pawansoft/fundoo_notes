@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test note screen ProvideNoteScreen_WhenSnapshotMatches_ShouldPassTestCase 1`] = `ShallowWrapper {}`;

@@ -36,7 +36,7 @@ class UserService{
                 last_name : lastName
             }).then(() => resolve('Success'))
             .catch(error => reject(error))
-        })
+        }, 300000)
     }
 }
 
