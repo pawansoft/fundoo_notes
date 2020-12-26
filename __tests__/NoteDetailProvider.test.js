@@ -62,4 +62,15 @@ jest.mock('react-native-localization', () => class RNLocalization {
      expect(component.find(Appbar.Action).at(7).props().icon).toEqual('dots-vertical');
      
    })
+
+   it('ProvideTitleAndNote_WhenPressBackButton_ShouldSaveDEtailAndNavigateToDashboard', async() => {
+      const component = shallow (<NotesHolder onPress = {onPressEvent} navigation = {navigation}/>);
+      const navigation = { navigate: jest.fn()}
+      const onPressEvent = jest.fn();
+  
+      await component.instance().handleTitle('First Note');
+      await component.instance().handleNote('This is my first Note');
+      await component.instance().handleBackButton();
+      expect(navigation.navigate).toBeCalledWith("Notes")
+   })
  })

@@ -15,11 +15,11 @@ class FirebaseService{
     _getNoteService = async(userId) => {
        return new Promise((resolve, reject)=> {
         Firebase.database()
-        .ref('Notes', +userId)
-        .on('value', snapshot => {
+        .ref('Notes/' +userId)
+        .once('value', snapshot => {
             resolve(snapshot.val())
-        })
-       }).catch(error => reject (error))
+        }).catch(error => reject(error))
+       })
     }
 }
 
