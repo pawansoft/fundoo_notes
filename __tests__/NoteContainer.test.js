@@ -30,7 +30,7 @@ describe('Test Note Container', () => {
         expect(component).toMatchSnapshot();
     })
 
-    it('ProvideLoginDetail_WhenNavigateToDashboard_ShouldPopulateDatabaseDetail', async () => {
+    it('whenReadingNotesFromDatabase_ShouldStoreAtTheStateNotes', async () => {
         const component = shallow(<NotesContainer/>);
         await component.instance().componentDidMount();
         expect(component.instance().state.notes).not.toBe(null)

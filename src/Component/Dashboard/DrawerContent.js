@@ -7,54 +7,54 @@ import {
 import { Drawer } from 'react-native-paper';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import DrawerStyle from '../../Style/DrawerStyle';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { strings } from '../../Localization/Localization';
 
 
 const DrawerContent = ({props}) => {
    
     return(
         <View style = {{flex : 1}}>
-            <Text style = {DrawerStyle.headerText}>Fundoo Notes</Text>
+            <Text style = {DrawerStyle.headerText}>{strings.fundoo}</Text>
             <DrawerContentScrollView {...props}>
             <Drawer.Section style = {DrawerStyle.dr}>
                 <Drawer.Item 
                 icon = 'lightbulb-outline'
-                label = "Notes"/> 
+                label = {strings.Notes}/> 
 
                 <Drawer.Item
                 icon = "bell-outline"
-                label = "Reminder"/> 
+                label = {strings.Reminder}/> 
             </Drawer.Section>
             
             <Drawer.Section>
                 <Drawer.Item
                 icon = 'plus'
-                label = 'Create new label'/>    
+                label = {strings.newLabel}/>    
             </Drawer.Section>
             
             <Drawer.Section>
                 <Drawer.Item
                 icon = 'archive-arrow-down-outline'
-                label = 'Archive'/>
+                label = {strings.Archive}/>
 
                 <Drawer.Item
                 icon = 'delete'
-                label = 'Delete'/>
+                label = {strings.Delete}/>
             </Drawer.Section>
 
             <Drawer.Item
             icon = 'cog-outline'
-            label = 'Setting'/>
+            label = {strings.Setting}/>
 
             <Drawer.Item
             icon = 'help-circle'
-            label = 'Help & feedback'/>
+            label = {strings.HelpFeed}/>
             </DrawerContentScrollView>
 
             <Drawer.Item
             style = {DrawerStyle.footer}
             icon = 'logout'
-            label = 'Logout'/>
+            label = {strings.Logout}/>
         </View>
     )
 }

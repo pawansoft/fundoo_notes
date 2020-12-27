@@ -15,7 +15,16 @@ const hindi = {
         welcome: 'डैशबोर्ड पर आपका स्वागत है',
         responsive: 'उत्तरदायी छवि',
         error: 'त्रुटि हुई',
-        done: 'किया हुआ'
+        done: 'किया हुआ',
+        Notes : 'टिप्पणियाँ',
+        Reminder: 'अनुस्मारक',
+        newLabel: 'नया लेबल बनाएं',
+        Archive: 'पुरालेख',
+        Delete: 'हटाएं',
+        Setting: 'स्थापना',
+        HelpFeed: 'सहायता और प्रतिक्रिया',
+        Logout:'लॉग आउट',
+        fundoo: 'फंडू नोट्स'
 }
 
 export default hindi;

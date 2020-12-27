@@ -5,16 +5,9 @@ import dashboardStyle from '../../Style/dashboardStyle';
 export default class DashboardHeader extends Component{
     constructor(props) {
         super(props)
-        this.state = {
-            listView : true
-        }
+        
     }
 
-    selectView = async () => {
-        await this.setState({
-            listView : !this.state.listView
-        })
-    }
 
     render(){
         return(
@@ -30,9 +23,9 @@ export default class DashboardHeader extends Component{
                 
                 <Appbar.Action
                     style = {{marginRight : 10}}
-                    icon = {this.state.listView ? 'view-grid-outline' : 'view-agenda-outline'}
-                    onPress={() => console.log('Nothing is added so far')}        
-                />
+                    icon = {(this.props.listView) ? 'view-grid-outline' : 'view-agenda-outline'}
+                    onPress={this.props.onPress}/>
+
                 <Avatar.Image style = {{flexDirection: "row", justifyContent: "space-between", alignItems: "center"  }} size = {40} source = {require('../../assets/img.png')}/>
             </Appbar>
         )

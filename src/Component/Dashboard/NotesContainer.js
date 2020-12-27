@@ -10,6 +10,7 @@ import RegisterStyle from '../../Style/Register';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FirebaseService from '../../../Services/firebase_services/FirebaseService';
 import {Card, Paragraph, Title} from 'react-native-paper'
+import NotesContainerStyle from '../../Style/NotesContainerStyle';
 
 export default class NotesContainer extends Component{
     constructor(props){
@@ -44,10 +45,11 @@ export default class NotesContainer extends Component{
                     <View style = {{flexDirection : 'row', flexWrap : 'wrap'}}>
                         {noteKey.length > 0 ?
                             noteKey.map(key => (
-                                <Card style = {{margin : '10%'}}
+                                <Card 
+                                style = {(this.props.listview)? NotesContainerStyle.container_list : NotesContainerStyle.container}
                                 key = {key}>
                                   <Card.Content>
-                                      <Title>
+                                      <Title style = {NotesContainerStyle.container_title}>
                                           {this.state.notes[key].Title}
                                       </Title>
                                       <Paragraph>

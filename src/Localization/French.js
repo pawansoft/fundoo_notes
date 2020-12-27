@@ -15,7 +15,16 @@ const French = {
     welcome: 'Bienvenue',
     responsive: 'image réactive',
     error:'Erreur',
-    done: 'terminé'
+    done: 'terminé',
+    Notes: 'Remarques',
+    Reminder: 'Rappel',
+    newLabel: 'créer une nouvelle étiquette',
+    Archive: 'Archiver',
+    Delete: 'Effacer',
+    Setting: 'Réglage',
+    HelpFeed: 'Aide et commentaires',
+    Logout: 'Se déconnecter',
+    fundoo: 'Notes de Fundoo'
 }
 
 export default French;

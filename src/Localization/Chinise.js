@@ -16,6 +16,15 @@ const Chinies = {
         responsive: '响应图像',
         error :'发生了错误',
         done: '完成',
+        Notes: '笔记',
+        Reminder: '提醒',
+        newLabel: '创建新标签',
+        Archive: '封存',
+        Delete: '删除',
+        Setting: '设置',
+        HelpFeed: '帮助和反馈',
+        Logout: 'बाहेर पडणे',
+        fundoo: '丰都笔记'
 }
 
 export default Chinies;

@@ -15,6 +15,15 @@ const English = {
     welcome: 'Welcome to dashboard',
     responsive:'Responsive Image',
     error : 'error occurred',
-    done: 'Done'
+    done: 'Done',
+    Notes: 'Notes',
+    Reminder: 'Reminder',
+    newLabel: 'Create new label',
+    Archive: 'Archive',
+    Delete: 'Delete',
+    Setting: 'Setting',
+    HelpFeed: 'Help & feedback',
+    Logout: 'Logout',
+    fundoo: 'Fundoo Notes'
 }
 export default English

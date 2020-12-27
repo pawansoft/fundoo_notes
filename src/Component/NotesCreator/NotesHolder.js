@@ -37,12 +37,12 @@ export default class NotesHolder extends Component{
 
     handleBackButton = async() => {
         const userId = await AsyncStorage.getItem('userId');
-        if(this.state.title != null && this.state.note !=null){
+        if(this.state.title != '' || this.state.note != ''){
             FirebaseService._storeNoteService(userId, this.state.title, this.state.note)
             .then(() => this.props.navigation.navigate('Notes'))
             .catch(error => console.log(error))
         }else{
-            console.log('Fill the details');
+            this.props.navigation.navigate('Notes')
         }
         
     }

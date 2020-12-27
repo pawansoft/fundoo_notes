@@ -15,6 +15,15 @@ const Marathi = {
     welcome: 'डॅशबोर्डवर आपले स्वागत आहे',
     responsive: 'उत्तरदायी प्रतिमा',
     error:'त्रुटी आली',
-    done: 'केले'
+    done: 'केले',
+    Notes: 'टीप',
+    Reminder: 'स्मरणपत्र',
+    newLabel: 'नवीन लेबल तयार करा',
+    Archive: 'संग्रह',
+    Delete: 'हटवा',
+    Setting: 'सेटिंग',
+    HelpFeed: 'मदत आणि अभिप्राय',
+    Logout: 'बाहेर पडणे',
+    fundoo: 'फंडू नोट्स'
 }
 export default Marathi;

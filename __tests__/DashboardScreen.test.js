@@ -2,8 +2,10 @@ import React from 'react';
 import {configure, shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16'
 import DashboardScreen from '../src/Component/Dashboard/DashboardScreen';
+import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 
 configure({adapter: new Adapter()})
+jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 
 jest.mock('react-native-localization', () => class RNLocalization {
     language = 'en-US'
