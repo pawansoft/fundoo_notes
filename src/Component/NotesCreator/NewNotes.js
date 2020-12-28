@@ -6,19 +6,37 @@ import{
     TextInput,
     View
 } from 'react-native';
-import { Appbar } from 'react-native-paper';
+import { Appbar , Snackbar} from 'react-native-paper';
 import Textarea from 'react-native-textarea';
-import FirebaseService from '../../../Services/firebase_services/FirebaseService';
+import FirebaseService from '../../../Services/firebase_services/NoteServices';
 import NotesHolderStyle from '../../Style/NotesHolderStyle';
 
-export default class NotesHolder extends Component{
+export default class NewNotes extends Component{
     constructor(props){
         super(props)
         this.state = {
             title : '',
             note : '', 
+            key : '',
+            userid: '',
             nullValueError : '',
         }
+    }
+
+   componentDidMount = async() =>{
+        const userId = await AsyncStorage.getItem('userId');
+        await this.setState({
+            userid: userId
+        })
+        if(this.props.route.state.params != undefined){
+            await this.setState({
+                key: this.props.route.params.key,
+                note : this.props.route.params.notes.note,
+                title: this.props.route.params.notes.title
+            })
+        }
+        // console.log("note key"+this.state.key);
+        console.log(this.state.note);
     }
 
     handleTitle = async(title) => {
@@ -36,13 +54,12 @@ export default class NotesHolder extends Component{
     }
 
     handleBackButton = async() => {
-        const userId = await AsyncStorage.getItem('userId');
         if(this.state.title != '' || this.state.note != ''){
-            FirebaseService._storeNoteService(userId, this.state.title, this.state.note)
+            FirebaseService._storeNoteService(this.state.userid, this.state.title, this.state.note)
             .then(() => this.props.navigation.navigate('Notes'))
             .catch(error => console.log(error))
         }else{
-            this.props.navigation.navigate('Notes')
+            this.props.navigation.push('Home', {screen: 'Notes',  params : {isEmpty: true}})
         }
         
     }

@@ -4,20 +4,20 @@ import{
 
 const NotesContainerStyle = StyleSheet.create({
     container :{
-        marginTop: '5%',
-        marginLeft: '5%',
+        marginTop: '3%',
+        marginLeft: '3%',
         borderWidth: 1,
         borderColor: '#bbb',
-        width : '42%'
+        width : '45%'
     },
     container_title: {
         marginBottom : 5,
         borderEndColor: 'black'
     },
     container_list:{
-        width : '90%',
+        width : '96%',
         marginTop: '2%',
-        marginLeft: '5%',
+        marginLeft: '2%',
         borderWidth: 1,
         borderColor: '#bbb',
     }

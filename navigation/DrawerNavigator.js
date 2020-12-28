@@ -6,7 +6,7 @@ import DrawerContent from '../src/Component/Dashboard/DrawerContent';
 
 const Drawer = createDrawerNavigator();
 
-function DrawerNavigator ({props}){
+function DrawerNavigator (){
     return(
         <Drawer.Navigator drawerContent = {props => <DrawerContent {...props}/>}>
             <Drawer.Screen name = 'Notes' component = {DashboardScreen}/>

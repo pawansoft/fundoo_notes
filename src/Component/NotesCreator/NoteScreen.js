@@ -1,9 +1,10 @@
 import React from 'react';
-import NotesHolder from './NotesHolder';
+import NewNotes from './NewNotes';
+
 
 const NoteScreen = ({navigation}) => {
     return(
-        <NotesHolder navigation = {navigation}/>
+        <NewNotes navigation = {navigation}/>
     )
 }
 export default NoteScreen;

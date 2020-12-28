@@ -11,6 +11,10 @@ import { strings } from '../../Localization/Localization';
 
 
 const DrawerContent = ({props}) => {
+
+    const handleNoteButtonEvent = () => {
+        props.navigation.navigate('Home', {screen : 'Notes'})
+    }
    
     return(
         <View style = {{flex : 1}}>
@@ -19,8 +23,9 @@ const DrawerContent = ({props}) => {
             <Drawer.Section style = {DrawerStyle.dr}>
                 <Drawer.Item 
                 icon = 'lightbulb-outline'
-                label = {strings.Notes}/> 
-
+                label = {strings.Notes}
+                onPress = {handleNoteButtonEvent}/> 
+                
                 <Drawer.Item
                 icon = "bell-outline"
                 label = {strings.Reminder}/> 

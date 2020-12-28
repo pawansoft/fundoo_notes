@@ -4,9 +4,13 @@ import Firebase from '../../config/Firebase';
 class FirebaseService{
     _storeNoteService = (userId, title, note) =>{
         return new Promise((resolve, reject) => {
+            const notes = {
+                title : title,
+                note : note,
+                isDeleted: false
+            }
             Firebase.database().ref('Notes/' +userId).push({
-                Title : title,
-                Note: note,
+                NotesDetail : notes
             }).then(() => resolve('success'))
             .catch(error => reject(error))
         })
@@ -20,6 +24,21 @@ class FirebaseService{
             resolve(snapshot.val())
         }).catch(error => reject(error))
        })
+    }
+
+    _updateNoteService = (userId, key, title, note) => {
+        return new Promise((resolve, reject) => {
+            const notes = {
+                title : title,
+                note : note,
+                isDeleted : false
+            }
+            Firebase.database().ref('Notes/' + userId  + '/' + key).set({
+                notes : notes
+            })
+            .then(() => resolve('success'))
+            .catch(error => reject(error))
+        })
     }
 }
 

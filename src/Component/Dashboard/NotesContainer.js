@@ -8,7 +8,7 @@ import {
 import { strings } from '../../Localization/Localization';
 import RegisterStyle from '../../Style/Register';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import FirebaseService from '../../../Services/firebase_services/FirebaseService';
+import FirebaseService from '../../../Services/firebase_services/NoteServices';
 import {Card, Paragraph, Title} from 'react-native-paper'
 import NotesContainerStyle from '../../Style/NotesContainerStyle';
 
@@ -22,11 +22,13 @@ export default class NotesContainer extends Component{
 
     async componentDidMount(){
         const userid = await AsyncStorage.getItem('userId');
-        await FirebaseService._getNoteService(userid).then(notes => {
-            this.setState({
+        await FirebaseService._getNoteService(userid).then(async data => {
+            let notes = data ? data: {}
+            await this.setState({
                 notes : notes
             })
         })
+        console.log(this.state.notes['-MP_VZvaxb_3aG-EJT82'].NotesDetail);
     }
 
     SigninInsteadNavigationHandler = () => {
@@ -36,6 +38,13 @@ export default class NotesContainer extends Component{
     goToResponsiveWebsiteNavigationHandle = () => {
         this.props.navigation.navigate('ResponsiveImg')
     }
+
+    updateNote = (key) => {
+        this.props.navigation.push('NewNotes', {
+            key : key,
+            notes : this.state.notes[key]
+        })
+    }
     
     render(){
         let noteKey = Object.keys(this.state.notes);
@@ -44,14 +53,17 @@ export default class NotesContainer extends Component{
                 <ScrollView>
                     <View style = {{flexDirection : 'row', flexWrap : 'wrap'}}>
                         {noteKey.length > 0 ?
-                            noteKey.map(key => (
+                            noteKey.reverse().map(key => (
                                 <Card 
                                 style = {(this.props.listview)? NotesContainerStyle.container_list : NotesContainerStyle.container}
-                                key = {key}>
+                                key = {key}
+                                onPress = {() => this.updateNote(key)}>
+                                    
                                   <Card.Content>
                                       <Title style = {NotesContainerStyle.container_title}>
-                                          {this.state.notes[key].Title}
+                                          {this.state.notes[key].title}
                                       </Title>
+                
                                       <Paragraph>
                                           {this.state.notes[key].Note}
                                       </Paragraph>
