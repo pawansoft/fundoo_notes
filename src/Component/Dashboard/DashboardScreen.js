@@ -30,20 +30,18 @@ class DashboardScreen extends Component {
     }
     
    snakbarHandler = async() => {
-    const {onDismiss} = this.props
         await this.setState({ 
             showEmptyNoteSnackbar : false
         })
     this.props.navigation.setParams({isEmptyNote : false})
-    onDismiss()
+  
    }
 
-    selectView = async () => {
-        const {onPress} = this.props
+    selectView = async () => {    
         await this.setState({
             listView : !this.state.listView
         })
-        //onPress()
+    
     }
 
     render(){

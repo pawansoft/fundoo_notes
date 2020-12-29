@@ -6,10 +6,12 @@ import{
     TextInput,
     View
 } from 'react-native';
-import { Appbar , Snackbar} from 'react-native-paper';
+import { Appbar , Menu, Snackbar} from 'react-native-paper';
 import Textarea from 'react-native-textarea';
 import FirebaseService from '../../../Services/firebase_services/NoteServices';
 import NotesHolderStyle from '../../Style/NotesHolderStyle';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class NewNotes extends Component{
     constructor(props){
@@ -28,15 +30,18 @@ export default class NewNotes extends Component{
         await this.setState({
             userid: userId
         })
-        if(this.props.route.state.params != undefined){
+        console.log(this.props.route.params);
+        if(this.props.route.params != undefined){
             await this.setState({
                 key: this.props.route.params.key,
                 note : this.props.route.params.notes.note,
                 title: this.props.route.params.notes.title
             })
+            console.log(this.props.route.params.key);
         }
+        console.log("Key from params"+this.props.route.params.key);
         // console.log("note key"+this.state.key);
-        console.log(this.state.note);
+        // console.log(this.state.note);
     }
 
     handleTitle = async(title) => {
@@ -62,6 +67,10 @@ export default class NewNotes extends Component{
             this.props.navigation.push('Home', {screen: 'Notes',  params : {isEmpty: true}})
         }
         
+    }
+
+    handleRBSheetOpenButton = async() => {
+        this.RBSheet.open();
     }
 
     render(){
@@ -114,9 +123,37 @@ export default class NewNotes extends Component{
                         icon = 'redo-variant'/>
 
                         <Appbar.Action
-                        icon = 'dots-vertical'/>
+                        icon = 'dots-vertical'
+                        onPress = {this.handleRBSheetOpenButton}/>
                     </View>
                 </Appbar>
+                <RBSheet
+                    ref = {ref => {this.RBSheet = ref}}
+                    height = {250}
+                    customStyles = {{
+                        container : {
+                            marginBottom : 50,
+                            borderTopWidth : 1,
+                            borderColor : "#d3d3d3",
+                            
+                        },
+                        wrapper: {
+                            backgroundColor: "transparent",
+                        },
+                    }}>
+                        <View>
+                            <Menu.Item icon="delete-outline" onPress={this.handleDeleteButton} title="Delete" />
+                            <Menu.Item icon="content-copy" title="Make a copy" />
+                            <Menu.Item icon="share-variant" title="Send" />
+                            <Menu.Item 
+                                icon={({ size, color }) => (
+                                    <Icon name="person-add-outline" size={size} color={color} />
+                                    )} 
+                                title="Collaborator"/>
+                            <Menu.Item icon="label-outline" title="Labels" />
+                        
+                        </View>
+                </RBSheet>
             </View>
         )
     }

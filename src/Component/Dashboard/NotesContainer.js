@@ -40,10 +40,7 @@ export default class NotesContainer extends Component{
     }
 
     updateNote = (key) => {
-        this.props.navigation.push('NewNotes', {
-            key : key,
-            notes : this.state.notes[key]
-        })
+        this.props.navigation.push('NewNotes', { key : key, notes : this.state.notes[key]})
     }
     
     render(){
@@ -57,16 +54,16 @@ export default class NotesContainer extends Component{
                                 <Card 
                                 style = {(this.props.listview)? NotesContainerStyle.container_list : NotesContainerStyle.container}
                                 key = {key}
-                                onPress = {() => this.updateNote(key)}>
-                                    
+                                onPress = {() => this.updateNote(key)}>   
                                   <Card.Content>
                                       <Title style = {NotesContainerStyle.container_title}>
-                                          {this.state.notes[key].title}
+                                          {this.state.notes[key].Title}
                                       </Title>
                 
                                       <Paragraph>
                                           {this.state.notes[key].Note}
                                       </Paragraph>
+                                     
 
                                   </Card.Content>  
                                 </Card>
