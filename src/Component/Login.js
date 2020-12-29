@@ -48,9 +48,8 @@ export default class Login extends Component {
         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
         const userId = await AsyncStorage.getItem('userId');
         console.log('userid' + userId);
-        AsyncStorage.setItem('isLisLoggedIno', 'false')
-        if(isLoggedIn == 'true'){
-           
+        console.log('isUserLoggedIn: ',isLoggedIn);
+        if(isLoggedIn == 'true'){  
             this.props.navigation.navigate('Home')
         }
     }

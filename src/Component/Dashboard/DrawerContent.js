@@ -8,6 +8,7 @@ import { Drawer } from 'react-native-paper';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import DrawerStyle from '../../Style/DrawerStyle';
 import { strings } from '../../Localization/Localization';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 class DrawerContent extends Component {
@@ -23,6 +24,11 @@ class DrawerContent extends Component {
         this.props.navigationProps.navigation.push('Home', {screen : 'Delete'})
     }
 
+    handleLogoutButton = async() => {
+        await AsyncStorage.setItem('isLoggedIn', 'false');
+        await AsyncStorage.setItem('userId', '')
+        this.props.navigationProps.navigation.navigate('Login')
+    }
     render(){
         return(
             <View style = {{flex : 1}}>
@@ -68,7 +74,8 @@ class DrawerContent extends Component {
                 <Drawer.Item
                 style = {DrawerStyle.footer}
                 icon = 'logout'
-                label = {strings.Logout}/>
+                label = {strings.Logout}
+                onPress = {this.handleLogoutButton}/>
             </View>
         )
    }
