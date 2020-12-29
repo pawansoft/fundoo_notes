@@ -2,9 +2,9 @@ import React from 'react';
 import NewNotes from './NewNotes';
 
 
-const NoteScreen = ({navigation}) => {
+const NoteScreen = ({navigation, route}) => {
     return(
-        <NewNotes navigation = {navigation}/>
+        <NewNotes navigation = {navigation} route = {route}/>
     )
 }
 export default NoteScreen;

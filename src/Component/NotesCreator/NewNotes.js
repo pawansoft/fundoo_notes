@@ -18,13 +18,11 @@ export default class NewNotes extends Component{
     constructor(props){
         super(props)
         this.state = {
-            title : '',
-            note : '', 
-            key : '',
+            title: '',
+            note: '', 
+            key: '',
             userid: '',
-            isNoteNotAdded: false
         }
-        console.log(props.route);
     }
 
    componentDidMount = async() =>{
@@ -32,13 +30,16 @@ export default class NewNotes extends Component{
         await this.setState({
             userid: userId
         })
-        console.log('parameter'+this.props.route.params);
+       
         if(this.props.route.params != undefined){
+            console.log('inrender method');
+            console.log(this.props.route.params.notes);
             await this.setState({
                 key: this.props.route.params.key,
-                note : this.props.route.params.notes.NotesDetail.note,
+                note: this.props.route.params.notes.NotesDetail.note,
                 title: this.props.route.params.notes.NotesDetail.title
             })
+            console.log(this.state.key);
         }
     }
 
@@ -58,38 +59,30 @@ export default class NewNotes extends Component{
 
     handleBackButton = async() => {
         if(this.state.title != '' || this.state.note != ''){
-            FirebaseService._storeNoteService(this.state.userid, this.state.title, this.state.note)
-            .then(() => this.props.navigation.navigate('Notes'))
-            .catch(error => console.log(error))
-        }else{
+            if(this.props.route.params != undefined)
+            {
+                FirebaseService._updateNoteService(this.state.userid, this.state.key, this.state.title, this.state.note)
+                .then(() => this.props.navigation.navigate('Notes'))
+                .catch(error => console.log(error))
+            }
+            else if(this.props.route.params == undefined){
+              
+                    FirebaseService._storeNoteService(this.state.userid, this.state.title, this.state.note)
+                    .then(() => this.props.navigation.navigate('Notes'))
+                    .catch(error => console.log(error))
+            }
+        }
+        else{
             this.props.navigation.push('Home', {screen: 'Notes',  params : {isEmpty: true}})
         }
-        
+       
+         
     }
 
     handleRBSheetOpenButton = async() => {
         this.RBSheet.open();
     }
 
-    handleDeleteButton = async() =>{
-        this.RBSheet.close();
-        if(this.props.route.params == undefined){
-            await this.setState({
-                isNoteNotAdded: true
-            })
-        }
-        else{
-            NoteServices._deleteNotesService(this.state.userid, this.state.key, this.state.title, this.state.note)
-            .then(() => this.props.navigation.push('Home', {screen : 'Notes', params : {isNoteDeleted : true}}))
-            .catch(error => console.log(error))
-        }
-    }
-
-    notAddedNoteDeletionHandler = async() => {
-        await this.setState({
-            isNoteDeleted : false
-        })
-    }
     render(){
         return(
             <View style = {{flex :1}}>
@@ -119,12 +112,14 @@ export default class NewNotes extends Component{
                     <View style = {NotesHolderStyle.Title}>
                         <TextInput 
                         style = {NotesHolderStyle.TitleFont}
-                        onChangeText = {this.handleTitle}
-                        placeholder = 'Title'/>
+                        placeholder = 'Title'
+                        value = {this.state.title}
+                        onChangeText = {this.handleTitle}/>
                     </View>
                     <View style = {NotesHolderStyle.Note}>
                         <Textarea
                         placeholder = 'Notes'
+                        value = {this.state.note}
                         onChangeText = {this.handleNote}/>
                     </View>
                 </ScrollView>
@@ -158,14 +153,14 @@ export default class NewNotes extends Component{
                             backgroundColor: "transparent",
                         },
                     }}>
-                        <View>
-                            <Menu.Item icon="delete-outline" title="Delete" onPress = {this.handleDeleteButton}/>
-                            <Menu.Item icon="content-copy" title="Make a copy" />
-                            <Menu.Item icon="share-variant" title="Send" />
-                            <Menu.Item 
-                                icon={({ size, color }) => (
+                    <View>
+                        <Menu.Item icon="delete-outline" title="Delete"/>
+                        <Menu.Item icon="content-copy" title="Make a copy" />
+                        <Menu.Item icon="share-variant" title="Send" />
+                        <Menu.Item 
+                            icon={({ size, color }) => (
                                     <Icon name="person-add-outline" size={size} color={color} />
-                                    )} 
+                                )} 
                                 title="Collaborator"/>
                             <Menu.Item icon="label-outline" title="Labels" />
                         

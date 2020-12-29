@@ -33,8 +33,8 @@ class FirebaseService{
                 note : note,
                 isDeleted : false
             }
-            Firebase.database().ref('Notes/' + userId  + '/' + key).set({
-                notes : notes
+            Firebase.database().ref('Notes/'+userId+ '/'+key).set({
+                NotesDetail : notes
             })
             .then(() => resolve('success'))
             .catch(error => reject(error))
@@ -49,7 +49,7 @@ class FirebaseService{
                 isDeleted : true
             }
             Firebase.database().ref('Notes/' + userId  + '/' + key).set({
-                notes : notes
+                NotesDetail : notes
             })
             .then(() => resolve('success'))
             .catch(error => reject(error))

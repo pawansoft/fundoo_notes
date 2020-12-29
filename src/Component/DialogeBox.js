@@ -14,6 +14,7 @@ class DialogeBox extends Component{
       }
     }
   }
+  
   showDialog = async() =>{
     await this.setState({
       visible : true
