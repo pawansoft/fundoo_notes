@@ -48,7 +48,7 @@ class FirebaseService{
                 note : note,
                 isDeleted : true
             }
-            Firebase.database().ref('Notes/' + userId  + '/' + key).set({
+            Firebase.database().ref('Notes/'+userId+ '/'+ key).set({
                 NotesDetail : notes
             })
             .then(() => resolve('success'))

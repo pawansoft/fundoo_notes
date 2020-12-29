@@ -22,6 +22,7 @@ export default class NewNotes extends Component{
             note: '', 
             key: '',
             userid: '',
+            isEmpty: false
         }
     }
 
@@ -74,13 +75,30 @@ export default class NewNotes extends Component{
         }
         else{
             this.props.navigation.push('Home', {screen: 'Notes',  params : {isEmpty: true}})
+        }        
+    }
+
+    handleDeleteNoteButton = async() =>{
+        if(this.state.title != '' || this.state.note != ''){
+            NoteServices._deleteNotesService(this.state.userid, this.state.key, this.state.title, this.state.note)
+            .then(() => this.props.navigation.navigate('Notes'))
+            .catch(error => console.log(error))
         }
-       
-         
+        else{
+            await this.setState ({
+                isEmpty : true
+            })
+        }
     }
 
     handleRBSheetOpenButton = async() => {
         this.RBSheet.open();
+    }
+
+    onDismissSnakbarHandler = async() => {
+        this.setState({
+            isEmpty: false
+        })
     }
 
     render(){
@@ -154,7 +172,8 @@ export default class NewNotes extends Component{
                         },
                     }}>
                     <View>
-                        <Menu.Item icon="delete-outline" title="Delete"/>
+                        <Menu.Item icon="delete-outline" title="Delete"
+                        onPress = {this.handleDeleteNoteButton}/>
                         <Menu.Item icon="content-copy" title="Make a copy" />
                         <Menu.Item icon="share-variant" title="Send" />
                         <Menu.Item 
@@ -162,17 +181,17 @@ export default class NewNotes extends Component{
                                     <Icon name="person-add-outline" size={size} color={color} />
                                 )} 
                                 title="Collaborator"/>
-                            <Menu.Item icon="label-outline" title="Labels" />
-                        
+                            <Menu.Item icon="label-outline" title="Labels" />           
                         </View>
                 </RBSheet>
                 <Snackbar
                     style = {{marginBottom : 100}}
-                    visible={this.state.isNoteNotAdded}
-                    onDismiss={this.notAddedNoteDeletionHandler}
+                    visible={this.state.isEmpty}
+                    onDismiss={this.onDismissSnakbarHandler}
                     duration = {10000}>
-                    Notes not added can't be deleted
+                    Empty notes can not be deleted
                 </Snackbar>
+                
             </View>
         )
     }
