@@ -17,14 +17,17 @@ const NotesHolderStyle = StyleSheet.create({
         borderColor: '#ddd'   
     },
     Title :{
-        margin : '10%'
+        marginTop: '10%',
+        marginLeft : '10%',
+        marginBottom: '2%'
     },
     TitleFont :{
         fontSize: 24,
         fontWeight : 'bold'
     },
     Note: {
-        marginLeft : '10%'
+        marginLeft : '10%',
+        marginRight: '10%'
     }
 })
 

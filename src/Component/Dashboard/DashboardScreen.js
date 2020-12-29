@@ -41,7 +41,6 @@ class DashboardScreen extends Component {
         await this.setState({
             listView : !this.state.listView
         })
-    
     }
 
     render(){

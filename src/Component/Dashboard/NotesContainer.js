@@ -24,8 +24,6 @@ export default class NotesContainer extends Component {
             await this.setState({
                 notes: notes
             })
-
-            console.log(this.state.notes);
         })
     }
 
@@ -47,28 +45,28 @@ export default class NotesContainer extends Component {
             <View>
                 <ScrollView>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                        {noteKey.length > 0 ?
-                            noteKey.reverse().map(key => (
-                                <Card
-                                    style={(this.props.listview) ? NotesContainerStyle.container_list : NotesContainerStyle.container}
-                                    key = {key}
-                                    onPress={() => this.updateNote(key)}>
-                                    <Card.Content>
-                                        {console.log(key)}
-                                        {console.log(this.state.notes[key].NotesDetail)}
-                                        <Title style={NotesContainerStyle.container_title}>
-                                            {this.state.notes[key].NotesDetail.title}
-                                        </Title>
+                    { noteKey.length > 0 ?
+                        noteKey.reverse().map(key => ( 
+                            <React.Fragment key = {key}>
+                                {this.state.notes[key].NotesDetail.isDeleted == false ? 
+                                    (<Card 
+                                        style={(this.state.listView) ? NotesContainerStyle.container_list : NotesContainerStyle.container}>
+                                        <Card.Content>
+                                            <Title>
+                                                {this.state.notes[key].NotesDetail.title}
+                                            </Title>
+                                            <Paragraph>
+                                                {this.state.notes[key].NotesDetail.note}
+                                            </Paragraph>
+                                        </Card.Content>  
+                                    </Card>)
+                                : null}
+                            </React.Fragment>
+                        )) 
+                        :
+                        null
+                    }
 
-                                        <Paragraph>
-                                            {this.state.notes[key].NotesDetail.note}
-                                        </Paragraph>
-                                    </Card.Content>
-                                </Card>
-                            ))
-
-                            : null
-                        }
 
                     </View>
                 </ScrollView>
