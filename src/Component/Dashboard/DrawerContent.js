@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     View,
     Text,
@@ -10,58 +10,68 @@ import DrawerStyle from '../../Style/DrawerStyle';
 import { strings } from '../../Localization/Localization';
 
 
-const DrawerContent = ({props}) => {
-
-    const handleNoteButtonEvent = () => {
-        props.navigation.navigate('Home', {screen : 'Notes'})
+class DrawerContent extends Component {
+    constructor(props){
+        super(props)
     }
-   
-    return(
-        <View style = {{flex : 1}}>
-            <Text style = {DrawerStyle.headerText}>{strings.fundoo}</Text>
-            <DrawerContentScrollView {...props}>
-            <Drawer.Section style = {DrawerStyle.dr}>
-                <Drawer.Item 
-                icon = 'lightbulb-outline'
-                label = {strings.Notes}
-                onPress = {handleNoteButtonEvent}/> 
+
+    handleNoteButton = () => {
+        this.props.navigationProps.navigation.push('Home', {screen : 'Notes'})
+    }
+
+    handleDeleteButton = () => {
+        this.props.navigationProps.navigation.push('Home', {screen : 'Delete'})
+    }
+
+    render(){
+        return(
+            <View style = {{flex : 1}}>
+                <Text style = {DrawerStyle.headerText}>{strings.fundoo}</Text>
+                <DrawerContentScrollView>
+                <Drawer.Section style = {DrawerStyle.dr}>
+                    <Drawer.Item 
+                    icon = 'lightbulb-outline'
+                    label = {strings.Notes}
+                    onPress = {this.handleNoteButton}/> 
+                    
+                    <Drawer.Item
+                    icon = "bell-outline"
+                    label = {strings.Reminder}/> 
+                </Drawer.Section>
                 
-                <Drawer.Item
-                icon = "bell-outline"
-                label = {strings.Reminder}/> 
-            </Drawer.Section>
-            
-            <Drawer.Section>
-                <Drawer.Item
-                icon = 'plus'
-                label = {strings.newLabel}/>    
-            </Drawer.Section>
-            
-            <Drawer.Section>
-                <Drawer.Item
-                icon = 'archive-arrow-down-outline'
-                label = {strings.Archive}/>
+                <Drawer.Section>
+                    <Drawer.Item
+                    icon = 'plus'
+                    label = {strings.newLabel}/>    
+                </Drawer.Section>
+                
+                <Drawer.Section>
+                    <Drawer.Item
+                    icon = 'archive-arrow-down-outline'
+                    label = {strings.Archive}/>
+
+                    <Drawer.Item
+                    icon = 'delete'
+                    label = {strings.Delete}
+                    onPress = {this.handleDeleteButton}/>
+                </Drawer.Section>
 
                 <Drawer.Item
-                icon = 'delete'
-                label = {strings.Delete}/>
-            </Drawer.Section>
+                icon = 'cog-outline'
+                label = {strings.Setting}/>
 
-            <Drawer.Item
-            icon = 'cog-outline'
-            label = {strings.Setting}/>
+                <Drawer.Item
+                icon = 'help-circle'
+                label = {strings.HelpFeed}/>
+                </DrawerContentScrollView>
 
-            <Drawer.Item
-            icon = 'help-circle'
-            label = {strings.HelpFeed}/>
-            </DrawerContentScrollView>
-
-            <Drawer.Item
-            style = {DrawerStyle.footer}
-            icon = 'logout'
-            label = {strings.Logout}/>
-        </View>
-    )
+                <Drawer.Item
+                style = {DrawerStyle.footer}
+                icon = 'logout'
+                label = {strings.Logout}/>
+            </View>
+        )
+   }
 }
 
 const styles = StyleSheet.create({

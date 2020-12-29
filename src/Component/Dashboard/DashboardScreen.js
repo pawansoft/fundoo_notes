@@ -60,10 +60,10 @@ class DashboardScreen extends Component {
                 </View>
                 <View>
                 <Snackbar
-                    style = {{marginBottom : 100}}
+                    style = {{marginBottom : '30%'}}
                     visible={this.state.showEmptyNoteSnackbar}
                     onDismiss={this.snakbarHandler}
-                    duration = {10000}>
+                    duration = {1000}>
                     Empty Note Discarded
                 </Snackbar>
                 </View>

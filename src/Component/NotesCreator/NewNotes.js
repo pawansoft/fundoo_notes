@@ -24,6 +24,7 @@ export default class NewNotes extends Component{
             userid: '',
             isNoteNotAdded: false
         }
+        console.log(props.route);
     }
 
    componentDidMount = async() =>{
@@ -31,18 +32,14 @@ export default class NewNotes extends Component{
         await this.setState({
             userid: userId
         })
-        console.log(this.props.route.params);
+        console.log('parameter'+this.props.route.params);
         if(this.props.route.params != undefined){
             await this.setState({
                 key: this.props.route.params.key,
-                note : this.props.route.params.notes.note,
-                title: this.props.route.params.notes.title
+                note : this.props.route.params.notes.NotesDetail.note,
+                title: this.props.route.params.notes.NotesDetail.title
             })
-            console.log(this.props.route.params.key);
         }
-        console.log("Key from params"+this.props.route.params.key);
-        // console.log("note key"+this.state.key);
-        // console.log(this.state.note);
     }
 
     handleTitle = async(title) => {

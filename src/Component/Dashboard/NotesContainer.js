@@ -28,7 +28,6 @@ export default class NotesContainer extends Component{
                 notes : notes
             })
         })
-        console.log(this.state.notes['-MP_VZvaxb_3aG-EJT82'].NotesDetail);
     }
 
     SigninInsteadNavigationHandler = () => {
@@ -57,11 +56,11 @@ export default class NotesContainer extends Component{
                                 onPress = {() => this.updateNote(key)}>   
                                   <Card.Content>
                                       <Title style = {NotesContainerStyle.container_title}>
-                                          {this.state.notes[key].Title}
+                                          {this.state.notes[key].NotesDetail.title}
                                       </Title>
                 
                                       <Paragraph>
-                                          {this.state.notes[key].Note}
+                                          {this.state.notes[key].NotesDetail.title}
                                       </Paragraph>
                                      
 
