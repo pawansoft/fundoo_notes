@@ -11,7 +11,8 @@ import Textarea from 'react-native-textarea';
 import FirebaseService from '../../../Services/firebase_services/NoteServices';
 import NotesHolderStyle from '../../Style/NotesHolderStyle';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons'
+import NoteServices from '../../../Services/firebase_services/NoteServices';
 
 export default class NewNotes extends Component{
     constructor(props){
@@ -21,7 +22,7 @@ export default class NewNotes extends Component{
             note : '', 
             key : '',
             userid: '',
-            nullValueError : '',
+            isNoteNotAdded: false
         }
     }
 
@@ -73,6 +74,25 @@ export default class NewNotes extends Component{
         this.RBSheet.open();
     }
 
+    handleDeleteButton = async() =>{
+        this.RBSheet.close();
+        if(this.props.route.params == undefined){
+            await this.setState({
+                isNoteNotAdded: true
+            })
+        }
+        else{
+            NoteServices._deleteNotesService(this.state.userid, this.state.key, this.state.title, this.state.note)
+            .then(() => this.props.navigation.push('Home', {screen : 'Notes', params : {isNoteDeleted : true}}))
+            .catch(error => console.log(error))
+        }
+    }
+
+    notAddedNoteDeletionHandler = async() => {
+        await this.setState({
+            isNoteDeleted : false
+        })
+    }
     render(){
         return(
             <View style = {{flex :1}}>
@@ -142,7 +162,7 @@ export default class NewNotes extends Component{
                         },
                     }}>
                         <View>
-                            <Menu.Item icon="delete-outline" onPress={this.handleDeleteButton} title="Delete" />
+                            <Menu.Item icon="delete-outline" title="Delete" onPress = {this.handleDeleteButton}/>
                             <Menu.Item icon="content-copy" title="Make a copy" />
                             <Menu.Item icon="share-variant" title="Send" />
                             <Menu.Item 
@@ -154,6 +174,13 @@ export default class NewNotes extends Component{
                         
                         </View>
                 </RBSheet>
+                <Snackbar
+                    style = {{marginBottom : 100}}
+                    visible={this.state.isNoteNotAdded}
+                    onDismiss={this.notAddedNoteDeletionHandler}
+                    duration = {10000}>
+                    Notes not added can't be deleted
+                </Snackbar>
             </View>
         )
     }

@@ -40,6 +40,21 @@ class FirebaseService{
             .catch(error => reject(error))
         })
     }
+
+    _deleteNotesService = (userId, key, title, note) => {
+        return new Promise((resolve, reject) => {
+            const notes = {
+                title : title,
+                note : note,
+                isDeleted : true
+            }
+            Firebase.database().ref('Notes/' + userId  + '/' + key).set({
+                notes : notes
+            })
+            .then(() => resolve('success'))
+            .catch(error => reject(error))
+        })
+    }
 }
 
 export default new FirebaseService();
