@@ -1,8 +1,10 @@
 import React from 'react';
-import {configure, shallow} from 'enzyme';
+import{configure, shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16'
-import NotesContainer from '../src/Component/Dashboard/NotesContainer';
+import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
+import Delete from '../src/Component/Dashboard/Delete';
 
+jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 configure({adapter: new Adapter()})
 
 jest.mock('react-native-localization', () => class RNLocalization {
@@ -23,15 +25,10 @@ jest.mock('react-native-localization', () => class RNLocalization {
       }
     }
 })
-describe('Test Note Container', () => {
-    it('ProvideNoteContainer_WhenSnapMatches_TestShouldPass', () => {
-        const component = shallow(<NotesContainer/>);
-        expect(component).toMatchSnapshot();
-    })
 
-    it('whenReadingNotesFromDatabase_ShouldStoreAtTheStateNotes', async () => {
-        const component = shallow(<NotesContainer/>);
-        await component.instance().componentDidMount();
-        expect(component.instance().state.notes).not.toBe(null)
+describe('Delete screen', () => {
+    it('ProvideDeleteScreen_WhenSnapshotMatches_ShouldPassTestCase', () =>{
+        const component = shallow(<Delete/>)
+        expect(component).toMatchSnapshot();
     })
 })

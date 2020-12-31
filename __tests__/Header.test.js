@@ -5,6 +5,7 @@ import {Appbar, Avatar, Searchbar} from 'react-native-paper';
 
 import Adapter from 'enzyme-adapter-react-16'
 import DashboardHeader from '../src/Component/Dashboard/DashboardHeader';
+import DashboardScreen from '../src/Component/Dashboard/DashboardScreen';
 
 configure({adapter: new Adapter()})
 
@@ -47,7 +48,7 @@ describe('test DashboardScreen', () => {
 
      it('test list and grid view onpress event', async() => {
         const onPressEvent = jest.fn();
-        const component = shallow(<DashboardHeader onPress = {onPressEvent}/>)
+        const component = shallow(<DashboardScreen onPress = {onPressEvent}/>)
         expect(component.instance().state.listView).toBe(true);
         await component.instance().selectView();
         expect(component.instance().state.listView).toBe(false);

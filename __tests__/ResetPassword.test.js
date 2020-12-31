@@ -2,6 +2,9 @@ import React from 'react';
 import Adapter from 'enzyme-adapter-react-16'
 import {shallow, configure} from 'enzyme'
 import ForgotPassword from '../src/Component/ForgotPassword';
+import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
+
+jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 
 jest.mock('react-native-localization', () => class RNLocalization {
     language = 'en-US'

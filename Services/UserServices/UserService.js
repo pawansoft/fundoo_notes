@@ -28,9 +28,18 @@ class UserService{
         })
     }
 
+    logoutService = async() => {
+        return new Promise((resolve, reject)=>{
+            Firebase.auth()
+            .signOut()
+            .then(() => resolve('LoggedOut'))
+            .catch(error => reject('error'));
+        })
+    }
+
     storeDetailToDatabase = (userId, emailId, firstName, lastName) => {
         return new Promise((resolve, reject) => {
-            Firebase.database().ref('users/' +userId).push({
+            Firebase.database().ref('users/' +userId).set({
                 userName : emailId,
                 first_name: firstName,
                 last_name : lastName
@@ -38,6 +47,16 @@ class UserService{
             .catch(error => reject(error))
         }, 300000)
     }
+
+    _getUserDetailService = async(userId) => {
+        return new Promise((resolve, reject)=> {
+         Firebase.database()
+         .ref("users/" )
+         .once('value', snapshot => {
+             resolve(snapshot.val())
+         }).catch(error => reject(error))
+        })
+     }
 }
 
 export default new UserService();

@@ -9,7 +9,7 @@ import {DrawerContentScrollView} from '@react-navigation/drawer';
 import DrawerStyle from '../../Style/DrawerStyle';
 import { strings } from '../../Localization/Localization';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import UserService from '../../../Services/UserServices/UserService';
 
 class DrawerContent extends Component {
     constructor(props){
@@ -27,7 +27,9 @@ class DrawerContent extends Component {
     handleLogoutButton = async() => {
         await AsyncStorage.setItem('isLoggedIn', 'false');
         await AsyncStorage.setItem('userId', '')
-        this.props.navigationProps.navigation.navigate('Login')
+        UserService.logoutService().then(() => this.props.navigationProps.navigation.navigate('Login'))
+        .catch(error => console.log(error))
+        
     }
     render(){
         return(

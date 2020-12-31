@@ -2,7 +2,9 @@ import React from 'react';
 import{configure, shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16'
 import NoteScreen from '../src/Component/NotesCreator/NoteScreen';
+import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 
+jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 configure({adapter: new Adapter()})
 
 jest.mock('react-native-localization', () => class RNLocalization {

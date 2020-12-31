@@ -37,4 +37,9 @@ describe ('Test User Service',() => {
         const isMailSent = UserService.ResetPasscodeService('pawan@gmail.com');
         return expect(isMailSent).rejects.toBe('error')
     })
+
+    it('WhenSelectLogout_ShouldReturnSuccessPromis', () =>{
+        const isLoggedOut = UserService.logoutService();
+        return expect(isLoggedOut).resolves.toBe('LoggedOut')
+    })
 })

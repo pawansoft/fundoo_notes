@@ -42,4 +42,22 @@ describe('Test Drawer Navigation', () => {
         expect(component.find(Appbar.Item)).toHaveLength(8);
         expect(component.find(Drawer.Section)).toHaveLength(3);
     })
+
+    it('whenPressNoteButton_shouldNavigateToDashboardScreen', async() => {
+      const navigation = { navigate: jest.fn()}
+      const onPressEvent = jest.fn();
+      const component = shallow(<DrawerContent onPress = {onPressEvent} navigation = {navigation}/>);
+
+      await component.instance().handleNoteButton();
+      expect (navigation.navigate).toBeCalledWith(Notes);
+    })
+
+    it('WhenPressDeleteButton_shouldNavigateToDeleteScreen', async () =>{
+      const navigation ={navigate: jest.fn()}
+      const onPressEvent = jest.fn();
+      const component = shallow(<DrawerContent onPress = {onPressEvent} navigation = {navigation}/>);
+
+      await component.instance().handleDeleteButton();
+      expect(navigation.navigate).toBeCalledWith('DeleteScreen')
+    })
 })
