@@ -61,12 +61,12 @@ export default class NewNotes extends Component {
         if (this.state.title != '' || this.state.note != '') {
             if (this.props.route.params != undefined) {
                 FirebaseService._updateNoteService(this.state.userid, this.state.key, this.state.title, this.state.note)
-                    .then(() => this.props.navigation.navigate('Notes'))
+                    .then(() => this.props.navigation.push('Home', {screen : 'Notes'}))
                     .catch(error => console.log(error))
             }
             else if (this.props.route.params == undefined) {
                 FirebaseService._storeNoteService(this.state.userid, this.state.title, this.state.note)
-                    .then(() => this.props.navigation.navigate('Notes'))
+                    .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
                     .catch(error => console.log(error))
             }
         }
@@ -78,7 +78,11 @@ export default class NewNotes extends Component {
     handleDeleteNoteButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
             NoteServices._deleteNotesService(this.state.userid, this.state.key, this.state.title, this.state.note)
-                .then(() => this.props.navigation.navigate('Notes', { isDeleted: true }))
+                .then(() => this.props.navigation.push('Home', { screen: 'Notes', params:{ isDeleted: true,
+                                                    key: this.state.key,
+                                                    title: this.state.title,
+                                                    note: this.state.note,
+                                                    userid: this.state.userid}}))
                 .catch(error => console.log(error))
         }
         else {
@@ -139,7 +143,7 @@ export default class NewNotes extends Component {
                     </View>
                 </ScrollView>
                 <Appbar style={NotesHolderStyle.footerContainer}>
-                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: "space-around" }}>
+                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: "space-around"}}>
                         <Appbar.Action
                             icon='plus-box-outline' />
 

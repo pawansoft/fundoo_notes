@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import {
     View,
     ScrollView,
+    Text,
 } from 'react-native';
 import BottomBar from './dashboardFooter';
 import DashboardHeader from './DashboardHeader';
 import NotesContainer from './NotesContainer';
-import { Portal, Snackbar, Modal, Provider} from 'react-native-paper';
+import { Portal, Snackbar, Modal, Provider, Button} from 'react-native-paper';
 import Profile from './Profile';
 import ProfileStyle from '../../Style/ProfileStyle';
+import NoteServices from '../../../Services/firebase_services/NoteServices';
 
 class DashboardScreen extends Component {
     constructor(props) {
@@ -16,6 +18,7 @@ class DashboardScreen extends Component {
         this.state = {
             listView: true,
             showEmptyNoteSnackbar: false,
+            showDeleteNoteSnackbar:false,
             showDelete: false,
             showProfileScreen: false
         }
@@ -41,7 +44,22 @@ class DashboardScreen extends Component {
                     showEmptyNoteSnackbar: true
                 })
             }
+            else if(this.props.route.params.isDeleted != undefined){
+                await this.setState({
+                    showDeleteNoteSnackbar: true
+                })
+            }
         }
+    }
+
+    restoreNotesHandler = () =>{
+        NoteServices._restoreNoteService(this.props.route.params.userid, 
+                                            this.props.route.params.key, 
+                                            this.props.route.params.title,
+                                            this.props.route.params.note).then(() =>{
+                                                this.props.navigation.push('Home', {screen : 'Notes'})
+                                            }).catch(error => console.log(error))
+
     }
 
     snakbarHandler = async () => {
@@ -51,11 +69,19 @@ class DashboardScreen extends Component {
         this.props.navigation.setParams({ isEmptyNote: false })
     }
 
+    deleteSnakbarHandler = async () => {
+        await this.setState({
+            showDeleteNoteSnackbar: false
+        })
+        this.props.navigation.setParams({ isDeleteNote: false })
+    }
+
     selectView = async () => {
         await this.setState({
             listView: !this.state.listView
         })
     }
+
 
     render() {
         return (
@@ -77,16 +103,30 @@ class DashboardScreen extends Component {
                             style={{ marginBottom: '30%' }}
                             visible={this.state.showEmptyNoteSnackbar}
                             onDismiss={this.snakbarHandler}
-                            duration={1000}>
+                            duration={10000}>
                             Empty Note Discarded
-                    </Snackbar>
-                        {/* <Snackbar
-                            style={{ marginBottom: '30%' }}
-                            visible={this.state.showEmptyNoteSnackbar}
+                        </Snackbar>
+                        <Snackbar
+                        style={{ marginBottom: '30%', flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'grey'}}
+                            visible={this.state.showDeleteNoteSnackbar}
                             onDismiss={this.snakbarHandler}
-                            duration={1000}>
-                            Note Deleted Successfully
-                    </Snackbar> */}
+                            duration={10000}>
+                            <View style = {{flexDirection: 'row', justifyContent: 'space-around'}}>
+                            <View>
+                                <Text style = {{marginTop: 10, color : 'white'}}>
+                                    Note Deleted Successfully
+                                </Text>
+                            </View>
+                            <View style = {{marginLeft: 50}}>
+                            <Button
+                            onPress = {this.restoreNotesHandler}>
+                                <Text style = {{color: '#cca300'}}>UNDO</Text>
+                            </Button> 
+                            </View>
+                            
+                            
+                            </View>  
+                        </Snackbar>
                         <Portal>
                             <Modal
                                 visible={this.state.showProfileScreen}

@@ -20,14 +20,12 @@ export default class Profile extends Component{
             showSubmit : false,
 
             //Image picker
-            filePath: '',
-              fileData: '',
-              fileUri: '',
+            fileUri: '',
         }
     }
 
     async componentDidMount(){
-        const userid = await AsyncStorage.getItem('userId');
+        const userid = JSON.parse(await AsyncStorage.getItem('userId' ));
         await this.setState({
             userid :userid
         })
@@ -38,11 +36,19 @@ export default class Profile extends Component{
             })
         })
         await this.setState({
-            first_name : this.state.userDetail['jg5rWFjB9EO3Id3PeAa6Put59n72'].first_name,
-            last_name : this.state.userDetail['jg5rWFjB9EO3Id3PeAa6Put59n72'].last_name,
-            emailId : this.state.userDetail['jg5rWFjB9EO3Id3PeAa6Put59n72'].userName
+            first_name : this.state.userDetail[userid].first_name,
+            last_name : this.state.userDetail[userid].last_name,
+            emailId : this.state.userDetail[userid].userName
         })
+        console.log(this.state.userid);
+        console.log(this.state.first_name);
 
+        await UserService.getProfileImageService()
+        .then(url => {
+            this.setState({
+                fileUri: url
+            })
+        }).catch(error => console.log(error))
     }
 
     launchCamera = () => {
@@ -53,18 +59,16 @@ export default class Profile extends Component{
           },
         };
 
-        launchCamera(options, (response) => {
+        launchCamera(options, async (response) => {
           console.log('Response = ', response);
     
-          if (response.didCancel) {
-            console.log('User cancelled image picker');
-          } else if (response.error) {
-            console.log('ImagePicker Error: ', response.error);
-          } else if (response.customButton) {
-            console.log('User tapped custom button: ', response.customButton);
-            alert(response.customButton);
-          } else {
-            const source = { uri: response.uri };
+          if (!response.didCancel) {
+            await UserService.uploadProfileImage(response.uri)
+            .then(url => {
+                this.setState({
+                    fileUri: url
+                })
+            })
             console.log('response', JSON.stringify(response));
             this.setState({
               filePath: response,
@@ -102,11 +106,10 @@ export default class Profile extends Component{
               fileUri: response.uri
             });
           }
-        });
-    
+        })
       }
-      handleRBSheetOpenButton = async () => {
-        this.RBSheet.open();
+    handleRBSheetOpenButton = async () => {
+      this.RBSheet.open();
     }
 
     handleCancel = () => {
@@ -120,9 +123,10 @@ export default class Profile extends Component{
         return(
             <View style = {{flex : 1}}>
                 <TouchableOpacity
-                onPress = {this.handleRBSheetOpenButton}>
+                onPress = {this.handleRBSheetOpenButton}
+                Icon = 'delete' >
                 <Avatar.Image style = {ProfileStyle.image} 
-                size = {100} 
+                size = {100}
                 source = {(this.state.fileUri == '') ?require('../../assets/Profile.png'): {uri : this.state.fileUri}}/>
                 </TouchableOpacity>
                 
@@ -130,6 +134,14 @@ export default class Profile extends Component{
                     <Text style = {ProfileStyle.first_name}>First Name : {this.state.first_name}</Text>
                     <Text style = {ProfileStyle.last_name}>Last Name : {this.state.last_name}</Text>
                     <Text style = {ProfileStyle.email}>Email Id : {this.state.emailId}</Text>
+                </View>
+                <View style = {{marginTop: '10%', flexDirection: 'row', justifyContent: 'space-around'}}>
+                  <Button>
+                    Cancle
+                  </Button>
+                  <Button>
+                    Logout
+                  </Button>
                 </View>
                 
                 <RBSheet

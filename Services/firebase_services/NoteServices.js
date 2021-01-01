@@ -55,6 +55,29 @@ class FirebaseService{
             .catch(error => reject(error))
         })
     }
+
+    _restoreNoteService = (userId, key, title, note) => {
+        return new Promise((resolve, reject) => {
+            const notes = {
+                title : title,
+                note : note,
+                isDeleted : false
+            }
+            Firebase.database().ref('Notes/'+userId+ '/'+ key).set({
+                NotesDetail : notes
+            })
+            .then(() => resolve('success'))
+            .catch(error => reject(error))
+        })
+    }
+    _deleteOneNoteService = (userId, key) => {
+        return new Promise((resolve, reject) => {
+            let dataRef = Firebase.database().ref('Notes/'+userId+ '/'+key)
+            dataRef.remove()
+            .then(() => resolve('success'))
+            .catch(error => reject(error))
+        })
+    }
 }
 
 export default new FirebaseService();

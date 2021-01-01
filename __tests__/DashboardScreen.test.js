@@ -2,9 +2,17 @@ import React from 'react';
 import {configure, shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16'
 import DashboardScreen from '../src/Component/Dashboard/DashboardScreen';
-import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
+import MockAsyncStorage from 'mock-async-storage';
 
-jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
+const mockImpl = new MockAsyncStorage();
+jest.mock('@react-native-async-storage/async-storage', () => mockImpl);
+
+jest.mock('react-native-fetch-blob', () => {
+  return {
+    DocumentDir: () => {},
+    polyfill: () => {},
+  }
+});
 
 configure({adapter: new Adapter()})
 

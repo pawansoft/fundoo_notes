@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import {
     View,
     ScrollView,
-    TouchableOpacity
+    Text,
 } from 'react-native';
-import BottomBar from './dashboardFooter';
-import DashboardHeader from './DashboardHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FirebaseService from '../../../Services/firebase_services/NoteServices';
-import { Card, Modal, Paragraph, Portal, Title, Provider } from 'react-native-paper';
+import { Card, Modal, Paragraph, Portal, Title, Provider, Menu, Appbar, Button } from 'react-native-paper';
 import NotesContainerStyle from '../../Style/NotesContainerStyle';
 import ProfileStyle from '../../Style/ProfileStyle';
 import Profile from './Profile';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import dashboardStyle from '../../Style/dashboardStyle';
 
 export default class Delete extends Component {
     constructor(props) {
@@ -63,13 +63,35 @@ export default class Delete extends Component {
         }
     }
 
+    handleRBSheetOpenButton = async () => {
+        this.RBSheet.open();
+    }
+
+    handleCancel = () => {
+        const {onPress} = this.props
+        this.RBSheet.close()
+        //onPress();
+    }
+
+    deleteNoteActionHandler = (key) => {
+        this.props.navigation.navigate('DeleteAction', 
+        { key: key, notes: this.state.notes[key], navigation : this.props.navigation })
+    }
+
     render() {
         let noteKey = Object.keys(this.state.notes);
         return (
             <Provider>
             <View style={{ flex: 1 }}>
                 <View>
-                    <DashboardHeader navigation={this.props.navigation} onPress={this.selectView} listView={this.state.listView} onSelectProfile={this.showProfile}/>
+                <Appbar style = {dashboardStyle.headerContainer}>
+                    <Appbar.Action
+                    icon = 'menu'
+                    onPress = {() => this.props.navigation.openDrawer()}/>
+                <Text>Deleted Notes</Text>            
+                <Appbar.Action
+                    style = {{marginRight : 10}}/>
+                </Appbar>
                 </View>
                 <ScrollView>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
@@ -78,6 +100,7 @@ export default class Delete extends Component {
                                 <React.Fragment key={key}>
                                     {this.state.notes[key].NotesDetail.isDeleted ?
                                         (<Card
+                                            onPress = {() => this.deleteNoteActionHandler(key)}
                                             style={(this.state.listView) ? NotesContainerStyle.container_list : NotesContainerStyle.container}>
                                             <Card.Content style = {{backgroundColor: 'white'}}>
                                                 <Title style = {{color: 'black'}}>
@@ -104,11 +127,8 @@ export default class Delete extends Component {
                         <Profile navigation={this.props.navigation} />
                     </Modal>
                 </Portal>
-                <View >
-                    <BottomBar navigation={this.props.navigation} />
-                </View>
-
             </View>
+            
             </Provider>
         )
     }
