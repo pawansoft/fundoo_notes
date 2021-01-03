@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-firebase/app": "^10.4.0",
     "@react-navigation/drawer": "^5.11.4",
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
@@ -20,6 +21,7 @@
     "link": "^0.1.5",
     "mock-async-storage": "^2.2.0",
     "react": "^16.14.0",
+    "react-base": "^0.2.0",
     "react-dom": "^16.14.0",
     "react-native": "^0.63.4",
     "react-native-dotenv": "^2.4.3",
@@ -33,6 +35,7 @@
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.16.1",
+    "react-native-sqlite-storage": "^5.0.0",
     "react-native-textarea": "^1.0.4",
     "react-native-vector-icons": "^7.1.0",
     "save-dev": "0.0.1-security"

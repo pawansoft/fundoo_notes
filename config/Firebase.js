@@ -15,7 +15,7 @@ const firebaseConfig = {
     authDomain: AUTH_DOMAIN,
     databaseURL: DATABASE_URL,
     projectId: PROJECT_ID,
-    storageBucket: STORAGE_BUCKET,
+    storageBucket:'gs://fundoo-notes-8dd0a.appspot.com',
     messagingSenderId: MESSAGE_SENDER_ID,
     appId: APP_ID
 }

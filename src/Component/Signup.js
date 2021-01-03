@@ -9,6 +9,7 @@ import {
 import UserService from '../../Services/UserServices/UserService';
 import RegisterStyle from '../Style/Register';
 import {strings} from '../Localization/Localization'
+import SQLiteCRUDService from '../../Services/SQLite_service/SQLiteCRUDService';
 export default class Signup extends Component {
 
     constructor(props){
@@ -136,6 +137,9 @@ export default class Signup extends Component {
         this.state.passMatch == ''){
             UserService.SignupService(this.state.userName, this.state.password)
             .then((userDetails) => {
+                SQLiteCRUDService.storeUserDetailToSQLLiteService(this.state.userName, this.state.fname, this.state.lastname).then(() => {
+                    console.log('Success');
+                }).catch(error => console.log(error))
                 UserService.storeDetailToDatabase(userDetails.user.uid, this.state.userName, this.state.fname, this.state.lname)
                 this.props.navigation.navigate('Login')
             }).catch(error => 

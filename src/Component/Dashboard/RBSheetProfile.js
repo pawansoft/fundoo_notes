@@ -11,8 +11,9 @@ export default class RBsheetProfile extends React.Component{
     render(){
         return(
             <View >
-                <View>
+                <View style = {{flexDirection: 'column', justifyContent: 'flex-start'}}>
                     <Button
+                    icon = 'camera'
                     onPress = {this.props.takePhoto}>
                         Take Photo
                     </Button>

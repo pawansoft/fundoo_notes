@@ -1,8 +1,17 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
+import RNFetchBlob from 'react-native-fetch-blob'
+// import RNFetchBlob from 'react-native-fetch-blob';
 import { Appbar, Avatar, Searchbar} from 'react-native-paper';
-import UserService from '../../../Services/UserServices/UserService';
+import Firebase from '../../../config/Firebase';
 import dashboardStyle from '../../Style/dashboardStyle';
+
+// const Blob = RNFetchBlob.polyfill.Blob
+// const fs = RNFetchBlob.fs
+// window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+// window.Blob = Blob
+// const Fetch = RNFetchBlob.polyfill.Fetch
 
 export default class DashboardHeader extends Component{
     constructor(props) {
@@ -12,14 +21,24 @@ export default class DashboardHeader extends Component{
         } 
     }
 
-    // componentDidMount = async() => {
-    //     await UserService.getProfileImageService()
-    //     .then(uri => {
-    //         this.setState({
-    //             imageUri: uri                
-    //         })
-    //     }).catch(error => console.log(error)) 
-    // }
+    componentDidMount = async() => {
+       await this.getProfileImageService()
+        .then(uri =>{
+            console.log(uri);
+            this.setState({
+                imageUri: uri                
+            })
+        }).catch(error => console.log(error)) 
+    }
+
+    getProfileImageService =() => {
+        return new Promise(async (resolve, reject) => {
+            const userid = await AsyncStorage.getItem('userId');
+            Firebase.storage().ref('/' +userid).getDownloadURL()
+            .then(url => resolve(url))
+            .catch(error => reject(error))
+        })
+    }
 
     render(){
         return(
@@ -29,8 +48,9 @@ export default class DashboardHeader extends Component{
                 onPress = {() => this.props.navigation.openDrawer()}/>
                 
                 <Searchbar
+                
                 placeholder = 'Search Notes' 
-                style = {{width : '60%',}}
+                style = {{width : '60%', color: 'black', backgroundColor: 'grey'}}
                 onPress = {this.selectView}/>
                 
                 <Appbar.Action

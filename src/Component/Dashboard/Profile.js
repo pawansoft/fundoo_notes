@@ -7,6 +7,18 @@ import UserService from '../../../Services/UserServices/UserService';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker'
 import RBsheetProfile from './RBSheetProfile';
+import Firebase from '../../../config/Firebase';
+
+// const Blob = RNFetchBlob.polyfill.Blob
+// const fs = RNFetchBlob.fs
+// window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+// window.Blob = Blob
+// const Fetch = RNFetchBlob.polyfill.Fetch
+
+// window.fetch = new Fetch({
+//     auto : true,
+//     binaryContentTypes : ['image/']
+// }).build()
 
 export default class Profile extends Component{
     constructor(props){
@@ -22,6 +34,45 @@ export default class Profile extends Component{
             //Image picker
             fileUri: '',
         }
+    }
+
+    // uploadProfileImage = (uri, mime = 'application/octet-stream') => {
+    //   return new Promise(async (resolve, reject) => {
+    //       const userid = await AsyncStorage.getItem('userId');
+    //       let uploadBlob = null
+    //       const imageRef = Firebase.storage().ref(userid)
+    //       fs.readFile(uri, 'base64')
+    //       .then((data) => {
+    //           return Blob.build(data, { type: `${mime};BASE64` })
+    //       })
+    //       .then((blob) => {
+    //           uploadBlob = blob
+    //           return imageRef.put(blob, { contentType: mime })
+    //       })
+    //       .then(() => {
+    //           uploadBlob.close()
+    //           return imageRef.getDownloadURL()
+    //       })
+    //       .then((url) => {
+    //           resolve(url)
+    //         })
+    //         .catch((error) => {
+    //           reject(error)
+    //       })
+    //     })
+    // }
+  
+    getProfileImageService =() => {
+      return new Promise(async (resolve, reject) => {
+          const userid = await AsyncStorage.getItem('userId');
+          Firebase.storage().ref('/' +userid).getDownloadURL()
+          .then(url => resolve(url))
+          .catch(error => reject(error))
+      })
+    }
+
+    uploadUserProfileImage = (imageUrl) => {
+      Firebase.database().ref('users/')
     }
 
     async componentDidMount(){
@@ -43,7 +94,7 @@ export default class Profile extends Component{
         console.log(this.state.userid);
         console.log(this.state.first_name);
 
-        await UserService.getProfileImageService()
+        await this.getProfileImageService()
         .then(url => {
             this.setState({
                 fileUri: url
@@ -63,7 +114,7 @@ export default class Profile extends Component{
           console.log('Response = ', response);
     
           if (!response.didCancel) {
-            await UserService.uploadProfileImage(response.uri)
+            await this.uploadProfileImage(response.uri)
             .then(url => {
                 this.setState({
                     fileUri: url
@@ -71,8 +122,6 @@ export default class Profile extends Component{
             })
             console.log('response', JSON.stringify(response));
             this.setState({
-              filePath: response,
-              fileData: response.data,
               fileUri: response.uri
             });
           }
@@ -101,8 +150,6 @@ export default class Profile extends Component{
             const source = { uri: response.uri };
             console.log('response', JSON.stringify(response));
             this.setState({
-              filePath: response,
-              fileData: response.data,
               fileUri: response.uri
             });
           }
@@ -131,8 +178,7 @@ export default class Profile extends Component{
                 </TouchableOpacity>
                 
                 <View style = {ProfileStyle.profileDetail}>
-                    <Text style = {ProfileStyle.first_name}>First Name : {this.state.first_name}</Text>
-                    <Text style = {ProfileStyle.last_name}>Last Name : {this.state.last_name}</Text>
+                    <Text style = {ProfileStyle.first_name}>Name : {this.state.first_name} {this.state.last_name}</Text>
                     <Text style = {ProfileStyle.email}>Email Id : {this.state.emailId}</Text>
                 </View>
                 <View style = {{marginTop: '10%', flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -164,6 +210,6 @@ export default class Profile extends Component{
                 </RBSheet>
             
             </View>
-        )
-    }
+         )
+      }
 }

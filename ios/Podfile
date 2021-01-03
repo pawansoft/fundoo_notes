@@ -18,6 +18,8 @@ target 'fundoo_notes' do
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
+  pod 'react-native-sqlite-storage', :path => '../node_modules/react-native-sqlite-storage'
+
   target 'fundoo_notesTests' do
     inherit! :complete
     # Pods for testing

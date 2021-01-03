@@ -12,6 +12,8 @@ import NotesHolderStyle from '../../Style/NotesHolderStyle';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons'
 import NoteServices from '../../../Services/firebase_services/NoteServices';
+import SQLiteCRUDService from '../../../Services/SQLite_service/SQLiteCRUDService';
+import NotesContainerStyle from '../../Style/NotesContainerStyle';
 
 export default class NewNotes extends Component {
     constructor(props) {
@@ -65,9 +67,12 @@ export default class NewNotes extends Component {
                     .catch(error => console.log(error))
             }
             else if (this.props.route.params == undefined) {
-                FirebaseService._storeNoteService(this.state.userid, this.state.title, this.state.note)
-                    .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
-                    .catch(error => console.log(error))
+                SQLiteCRUDService.storeNoteToDB(this.state.userid, this.state.title, this.state.note, 'false')
+                .then(() => console.log('success'))
+                .catch(error => console.log(error))
+                // FirebaseService._storeNoteService(this.state.userid, this.state.title, this.state.note)
+                //     .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
+                //     .catch(error => console.log(error))
             }
         }
         else {
@@ -172,8 +177,9 @@ export default class NewNotes extends Component {
                             backgroundColor: "transparent",
                         },
                     }}>
-                    <View>
+                    <View >
                         <Menu.Item icon="delete-outline" title="Delete"
+                        style = {NotesContainerStyle.snakbarButton}
                             onPress={this.handleDeleteNoteButton} />
                         <Menu.Item icon="content-copy" title="Make a copy" />
                         <Menu.Item icon="share-variant" title="Send" />

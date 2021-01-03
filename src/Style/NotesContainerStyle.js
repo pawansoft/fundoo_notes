@@ -20,6 +20,9 @@ const NotesContainerStyle = StyleSheet.create({
         marginLeft: '2%',
         borderWidth: 1,
         borderColor: '#bbb',
+    },
+    snakbarButton: {
+        width: 500
     }
 })
 
