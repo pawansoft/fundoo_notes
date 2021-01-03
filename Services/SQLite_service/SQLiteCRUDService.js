@@ -23,7 +23,7 @@ class SQLiteCRUDService {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    'INSERT INTO notes_table (email, title, notes, isDeleted) VALUES (?,?,?, ?)',
+                    'INSERT INTO notes_table (userId, title, notes, isDeleted) VALUES (?,?,?, ?)',
                     [userId, title, note, isDeleted],
                     async (tx, results) => {
                         console.log(results);
