@@ -26,6 +26,13 @@ class FirebaseService{
        })
     }
 
+    _cleanRecycleBinService = async(userId) => {
+        return new Promise((resolve, reject) => {
+            Firebase.database()
+            .ref('Notes/' +userId)
+        })
+    }
+
     _updateNoteService = (userId, key, title, note) => {
         return new Promise((resolve, reject) => {
             const notes = {

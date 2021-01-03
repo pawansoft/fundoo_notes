@@ -113,8 +113,6 @@ export default class Profile extends Component{
         };
 
         launchCamera(options, async (response) => {
-          console.log('Response = ', response);
-    
           if (!response.didCancel) {
             await this.uploadProfileImage(response.uri)
             .then(url => {
@@ -138,18 +136,15 @@ export default class Profile extends Component{
             path: 'images',
           },
         };
-        launchImageLibrary(options, (response) => {
+        launchImageLibrary(options, async(response) => {
           console.log('Response = ', response);
-    
-          if (response.didCancel) {
-            console.log('User cancelled image picker');
-          } else if (response.error) {
-            console.log('ImagePicker Error: ', response.error);
-          } else if (response.customButton) {
-            console.log('User tapped custom button: ', response.customButton);
-            alert(response.customButton);
-          } else {
-            const source = { uri: response.uri };
+          if (!response.didCancel) {
+            await this.uploadProfileImage(response.uri)
+            .then(url => {
+                this.setState({
+                    fileUri: url
+                })
+            })
             console.log('response', JSON.stringify(response));
             this.setState({
               fileUri: response.uri

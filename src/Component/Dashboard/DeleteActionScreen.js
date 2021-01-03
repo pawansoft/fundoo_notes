@@ -4,7 +4,7 @@ import {
     Text,
     View
 } from 'react-native';
-import { Appbar, Button, Menu } from 'react-native-paper';
+import { Appbar, Button, Menu, Snackbar } from 'react-native-paper';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import dashboardStyle from '../../Style/dashboardStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,7 +19,7 @@ export class DeleteActionScreen extends Component {
             note: '',
             key: '',
             userid: '',
-            isEmpty: false
+            isDeletable: false
         }
     }
 
@@ -53,6 +53,32 @@ export class DeleteActionScreen extends Component {
             .catch(error => console.log(error))
     }
 
+    handleRBSheetOpenButton = async () => {
+        this.RBSheet.open();
+    }
+
+    onDismissSnakbarHandler = async () => {
+        await this.setState({
+            isDeletable: false
+        })
+    }
+
+    handleOpenSnakBar = async() => {
+        await this.setState({
+            isDeletable: true
+        })
+    }
+
+    restoreNotesHandler = () =>{
+        NoteServices._restoreNoteService(this.state.userid, 
+                                            this.state.key, 
+                                            this.state.title,
+                                            this.state.note).then(() =>{
+                                                this.props.navigation.push('Home', {screen : 'Notes'})
+                                            }).catch(error => console.log(error))
+
+    }
+
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -64,7 +90,8 @@ export class DeleteActionScreen extends Component {
                 </Appbar>
                 <ScrollView>
                     <View style={NotesHolderStyle.Title}>
-                        <Text style={NotesHolderStyle.TitleFont}>
+                        <Text style={NotesHolderStyle.TitleFont}
+                        onPress = {this.handleOpenSnakBar}>
                             {this.state.title}
                         </Text>
                     </View>
@@ -77,11 +104,11 @@ export class DeleteActionScreen extends Component {
                 <View>
                     <Appbar style={{ backgroundColor: 'white', justifyContent: 'space-around' }}>
                         <Appbar.Action
-                            icon='plus-box-outline' />
+                            icon = 'plus-box-outline' />
                         <Appbar.Action
-                            title='Deleted note' />
+                            title = 'Deleted note' />
                         <Appbar.Action
-                            icon='dots-vertical'
+                            icon = 'dots-vertical'
                             onPress={this.handleRBSheetOpenButton} />
                     </Appbar>
                 </View>
@@ -110,6 +137,27 @@ export class DeleteActionScreen extends Component {
                             
                     </View>
                 </RBSheet>
+                <Snackbar
+                    style={{ marginBottom: '30%', flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'grey'}}
+                    style={{ marginBottom: 100 }}
+                    visible={this.state.isDeletable}
+                    onDismiss={this.onDismissSnakbarHandler}
+                    duration={5000}>
+                    <View style = {{flexDirection: 'row', justifyContent: 'space-around'}}>
+                        <View>
+                            <Text style = {{marginTop: 10, color : 'white'}}>
+                                Note Deleted Successfully
+                            </Text>
+                        </View>
+
+                        <View style = {{marginLeft: 50}}>
+                            <Button
+                            onPress = {this.restoreNotesHandler}>
+                                <Text style = {{color: '#cca300'}}>Restore</Text>
+                            </Button> 
+                        </View> 
+                    </View>
+                </Snackbar>
             </View>
         )
     }

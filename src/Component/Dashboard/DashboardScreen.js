@@ -7,7 +7,7 @@ import {
 import BottomBar from './dashboardFooter';
 import DashboardHeader from './DashboardHeader';
 import NotesContainer from './NotesContainer';
-import { Portal, Snackbar, Modal, Provider, Button} from 'react-native-paper';
+import { Portal, Snackbar, Modal, Provider, Button, Appbar} from 'react-native-paper';
 import Profile from './Profile';
 import ProfileStyle from '../../Style/ProfileStyle';
 import NoteServices from '../../../Services/firebase_services/NoteServices';
@@ -118,13 +118,11 @@ class DashboardScreen extends Component {
                                 </Text>
                             </View>
                             <View style = {{marginLeft: 50}}>
-                            <Button
-                            onPress = {this.restoreNotesHandler}>
-                                <Text style = {{color: '#cca300'}}>UNDO</Text>
-                            </Button> 
-                            </View>
-                            
-                            
+                                <Button
+                                onPress = {this.restoreNotesHandler}>
+                                    <Text style = {{color: '#cca300'}}>UNDO</Text>
+                                </Button>
+                            </View> 
                             </View>  
                         </Snackbar>
                         <Portal>

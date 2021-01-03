@@ -15,6 +15,10 @@ import NoteServices from '../../../Services/firebase_services/NoteServices';
 import SQLiteCRUDService from '../../../Services/SQLite_service/SQLiteCRUDService';
 import NotesContainerStyle from '../../Style/NotesContainerStyle';
 
+import {openDatabase} from 'react-native-sqlite-storage';
+
+const db = openDatabase({name: 'fundoo_notes.db' });
+
 export default class NewNotes extends Component {
     constructor(props) {
         super(props)
@@ -25,6 +29,16 @@ export default class NewNotes extends Component {
             userid: '',
             isEmpty: false
         }
+        db.transaction(transect => {
+            transect.executeSql(
+                'select * from Notes',
+                [],
+                (results) => {
+                    console.log(results);
+                },
+                error => console.log(error)
+            );
+        });
     }
 
     componentDidMount = async () => {
@@ -70,9 +84,9 @@ export default class NewNotes extends Component {
                 SQLiteCRUDService.storeNoteToDB(this.state.userid, this.state.title, this.state.note, 'false')
                 .then(() => console.log('success'))
                 .catch(error => console.log(error))
-                // FirebaseService._storeNoteService(this.state.userid, this.state.title, this.state.note)
-                //     .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
-                //     .catch(error => console.log(error))
+                FirebaseService._storeNoteService(this.state.userid, this.state.title, this.state.note)
+                    .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
+                    .catch(error => console.log(error))
             }
         }
         else {
