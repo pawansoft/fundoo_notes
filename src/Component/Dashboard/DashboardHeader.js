@@ -1,43 +1,39 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { Component } from 'react';
 import { TouchableOpacity } from 'react-native';
-import RNFetchBlob from 'react-native-fetch-blob'
-// import RNFetchBlob from 'react-native-fetch-blob';
 import { Appbar, Avatar, Searchbar} from 'react-native-paper';
 import Firebase from '../../../config/Firebase';
 import dashboardStyle from '../../Style/dashboardStyle';
-
-// const Blob = RNFetchBlob.polyfill.Blob
-// const fs = RNFetchBlob.fs
-// window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
-// window.Blob = Blob
-// const Fetch = RNFetchBlob.polyfill.Fetch
+import UserService from '../../../Services/UserServices/UserService';
 
 export default class DashboardHeader extends Component{
     constructor(props) {
         super(props) 
         this.state ={
+            userid: '',
+            userDetail: [],
             imageUri: ''
         } 
     }
 
     componentDidMount = async() => {
-       await this.getProfileImageService()
-        .then(uri =>{
-            console.log(uri);
-            this.setState({
-                imageUri: uri                
-            })
-        }).catch(error => console.log(error)) 
-    }
+       const userId = JSON.parse(await AsyncStorage.getItem('userId'))
+       await this.setState({
+            userid: userId
+       })
+       console.log(this.state.userid);
 
-    getProfileImageService =() => {
-        return new Promise(async (resolve, reject) => {
-            const userid = await AsyncStorage.getItem('userId');
-            Firebase.storage().ref('/' +userid).getDownloadURL()
-            .then(url => resolve(url))
-            .catch(error => reject(error))
+       await UserService._getUserDetailService(this.state.userid).then(async data => {
+        let userDetail = data ? data : {}
+            await this.setState({
+                userDetail: userDetail
+            })
+       })
+
+        await this.setState({
+            imageUri : this.state.userDetail[this.state.userid].photo,
         })
+       console.log(this.state.imageUri);
     }
 
     render(){
@@ -61,7 +57,7 @@ export default class DashboardHeader extends Component{
                 onPress = {this.props.onSelectProfile}>
                 <Avatar.Image style = {{flexDirection: "row", justifyContent: "space-between", alignItems: "center"  }} 
                 size = {40} 
-                source = {(this.state.imageUri == '') ?require('../../assets/Profile.png'): {uri : this.state.fileUri}}/>
+                source = {(this.state.imageUri == '') ?require('../../assets/Profile.png'): {uri : this.state.imageUri}}/>
                 </TouchableOpacity>
             </Appbar>
         )

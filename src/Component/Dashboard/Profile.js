@@ -8,17 +8,18 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker'
 import RBsheetProfile from './RBSheetProfile';
 import Firebase from '../../../config/Firebase';
+import RNFetchBlob from 'react-native-fetch-blob'
 
-// const Blob = RNFetchBlob.polyfill.Blob
-// const fs = RNFetchBlob.fs
-// window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
-// window.Blob = Blob
-// const Fetch = RNFetchBlob.polyfill.Fetch
+const Blob = RNFetchBlob.polyfill.Blob
+const fs = RNFetchBlob.fs
+window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+window.Blob = Blob
+const Fetch = RNFetchBlob.polyfill.Fetch
 
-// window.fetch = new Fetch({
-//     auto : true,
-//     binaryContentTypes : ['image/']
-// }).build()
+window.fetch = new Fetch({
+    auto : true,
+    binaryContentTypes : ['image/']
+}).build()
 
 export default class Profile extends Component{
     constructor(props){
@@ -36,31 +37,32 @@ export default class Profile extends Component{
         }
     }
 
-    // uploadProfileImage = (uri, mime = 'application/octet-stream') => {
-    //   return new Promise(async (resolve, reject) => {
-    //       const userid = await AsyncStorage.getItem('userId');
-    //       let uploadBlob = null
-    //       const imageRef = Firebase.storage().ref(userid)
-    //       fs.readFile(uri, 'base64')
-    //       .then((data) => {
-    //           return Blob.build(data, { type: `${mime};BASE64` })
-    //       })
-    //       .then((blob) => {
-    //           uploadBlob = blob
-    //           return imageRef.put(blob, { contentType: mime })
-    //       })
-    //       .then(() => {
-    //           uploadBlob.close()
-    //           return imageRef.getDownloadURL()
-    //       })
-    //       .then((url) => {
-    //           resolve(url)
-    //         })
-    //         .catch((error) => {
-    //           reject(error)
-    //       })
-    //     })
-    // }
+    uploadProfileImage = (uri, mime = 'application/octet-stream') => {
+      return new Promise(async (resolve, reject) => {
+          const userid = await AsyncStorage.getItem('userId');
+          let uploadBlob = null
+          const imageRef = Firebase.storage().ref(userid)
+          fs.readFile(uri, 'base64')
+          .then((data) => {
+              return Blob.build(data, { type: `${mime};BASE64` })
+          })
+          .then((blob) => {
+              uploadBlob = blob
+              return imageRef.put(blob, { contentType: mime })
+          })
+          .then(() => {
+              uploadBlob.close()
+              return imageRef.getDownloadURL()
+          })
+          .then((url) => {
+              UserService._updateImageUrlService(this.state.userid, url)
+              resolve(url)
+            })
+            .catch((error) => {
+              reject(error)
+          })
+        })
+    }
   
     getProfileImageService =() => {
       return new Promise(async (resolve, reject) => {
