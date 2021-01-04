@@ -11,6 +11,9 @@ import { Portal, Snackbar, Modal, Provider, Button, Appbar} from 'react-native-p
 import Profile from './Profile';
 import ProfileStyle from '../../Style/ProfileStyle';
 import NoteServices from '../../../Services/firebase_services/NoteServices';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import FirebaseService from '../../../Services/firebase_services/NoteServices';
+import NotesServiceController from '../../../Services/data_flow_controller/NotesServiceController';
 
 class DashboardScreen extends Component {
     constructor(props) {
@@ -20,8 +23,11 @@ class DashboardScreen extends Component {
             showEmptyNoteSnackbar: false,
             showDeleteNoteSnackbar:false,
             showDelete: false,
-            showProfileScreen: false
+            showProfileScreen: false,
+            notes: [],
+            textToSearch: ''
         }
+        console.log(this.state.textToSearch);
     }
 
     showProfile = async () => {
@@ -50,16 +56,23 @@ class DashboardScreen extends Component {
                 })
             }
         }
+        const userid = await AsyncStorage.getItem('userId');
+        await FirebaseService._getNoteService(userid).then(async data => {
+            let notes = data ? data : {}
+
+            await this.setState({
+                notes: notes
+            })
+        })
     }
 
     restoreNotesHandler = () =>{
-        NoteServices._restoreNoteService(this.props.route.params.userid, 
-                                            this.props.route.params.key, 
+        NotesServiceController.updateNote(this.props.route.params.key, 
                                             this.props.route.params.title,
-                                            this.props.route.params.note).then(() =>{
+                                            this.props.route.params.note)
+                                            .then(() => {
                                                 this.props.navigation.push('Home', {screen : 'Notes'})
                                             }).catch(error => console.log(error))
-
     }
 
     snakbarHandler = async () => {
@@ -88,11 +101,11 @@ class DashboardScreen extends Component {
             <Provider>
                 <View style={{ flex: 1, justifyContent: "space-between" }}>
                     <View>
-                        <DashboardHeader navigation={this.props.navigation} onPress={this.selectView} listView={this.state.listView} onSelectProfile={this.showProfile} />
+                        <DashboardHeader navigation={this.props.navigation} onPress={this.selectView} listView={this.state.listView} onSelectProfile={this.showProfile} testToSearch = {this.state.textToSearch}/>
                     </View>
                     <ScrollView>
                         <View>
-                            <NotesContainer navigation={this.props.navigation} listview={this.state.listView} />
+                            <NotesContainer navigation={this.props.navigation} listview={this.state.listView} notes = {this.state.notes}/>
                         </View>
                     </ScrollView>
                     <View>

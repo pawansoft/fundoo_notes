@@ -204,8 +204,7 @@ export default class Profile extends Component{
                     chooseFromLiberary = {this.launchImageLibrary}
                     takePhoto = {this.launchCamera}
                     cancle = {this.handleCancel}/>
-                </RBSheet>
-            
+                </RBSheet>           
             </View>
          )
       }

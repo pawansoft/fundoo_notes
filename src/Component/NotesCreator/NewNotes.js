@@ -16,8 +16,9 @@ import SQLiteCRUDService from '../../../Services/SQLite_service/SQLiteCRUDServic
 import NotesContainerStyle from '../../Style/NotesContainerStyle';
 
 import {openDatabase} from 'react-native-sqlite-storage';
+import NotesServiceController from '../../../Services/data_flow_controller/NotesServiceController';
 
-const db = openDatabase({name: 'fundoo_notes.db' });
+const db = openDatabase({name: 'fundoo_notes.db', createFromLocation: '~data/fundoo_notes.db'});
 
 export default class NewNotes extends Component {
     constructor(props) {
@@ -27,18 +28,8 @@ export default class NewNotes extends Component {
             note: '',
             key: '',
             userid: '',
-            isEmpty: false
+            isEmpty: false,
         }
-        db.transaction(transect => {
-            transect.executeSql(
-                'select * from Notes',
-                [],
-                (results) => {
-                    console.log(results);
-                },
-                error => console.log(error)
-            );
-        });
     }
 
     componentDidMount = async () => {
@@ -59,6 +50,7 @@ export default class NewNotes extends Component {
         }
     }
 
+
     handleTitle = async (title) => {
         await this.setState({
             title: title
@@ -76,17 +68,13 @@ export default class NewNotes extends Component {
     handleBackButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
             if (this.props.route.params != undefined) {
-                FirebaseService._updateNoteService(this.state.userid, this.state.key, this.state.title, this.state.note)
-                    .then(() => this.props.navigation.push('Home', {screen : 'Notes'}))
-                    .catch(error => console.log(error))
+                NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note)
+                .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
             }
             else if (this.props.route.params == undefined) {
-                SQLiteCRUDService.storeNoteToDB(this.state.userid, this.state.title, this.state.note, 'false')
-                .then(() => console.log('success'))
+                NotesServiceController.addNote(this.state.title, this.state.note)
+                .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
                 .catch(error => console.log(error))
-                FirebaseService._storeNoteService(this.state.userid, this.state.title, this.state.note)
-                    .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
-                    .catch(error => console.log(error))
             }
         }
         else {
@@ -96,13 +84,16 @@ export default class NewNotes extends Component {
 
     handleDeleteNoteButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
-            NoteServices._deleteNotesService(this.state.userid, this.state.key, this.state.title, this.state.note)
-                .then(() => this.props.navigation.push('Home', { screen: 'Notes', params:{ isDeleted: true,
-                                                    key: this.state.key,
-                                                    title: this.state.title,
-                                                    note: this.state.note,
-                                                    userid: this.state.userid}}))
-                .catch(error => console.log(error))
+            NotesServiceController.moveToRecycleBin(this.state.key, this.state.title, this.state.note)
+            .then(() => this.props.navigation.push('Home', {screen: 'Notes', params : {
+                key : this.state.key,
+                userid : this.state.userid,
+                title : this.state.title,
+                note : this.state.note,
+                isDeleted : true
+            }
+        }))
+            .catch(error => console.log(error))
         }
         else {
             await this.setState({

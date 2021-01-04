@@ -1,18 +1,22 @@
-import React, { Component } from 'react';
-import {
-    View,
-    ScrollView,
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { Component } from 'react'
+import{
+    TextInput,
+    View
 } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Appbar, Card, Paragraph, Searchbar, Title } from 'react-native-paper'
+import dashboardStyle from '../../Style/dashboardStyle'
 import FirebaseService from '../../../Services/firebase_services/NoteServices';
-import { Card, Paragraph, Title } from 'react-native-paper'
-import NotesContainerStyle from '../../Style/NotesContainerStyle';
+import { ScrollView } from 'react-native-gesture-handler'
+import NotesContainerStyle from '../../Style/NotesContainerStyle'
 
-export default class NotesContainer extends Component {
-    constructor(props) {
+export default class SearchNote extends Component{
+    constructor(props){
         super(props)
         this.state = {
-            notes: []
+            notes: [],
+            usersFilterdNotes : [],
+            search: ''
         }
     }
 
@@ -22,29 +26,49 @@ export default class NotesContainer extends Component {
             let notes = data ? data : {}
 
             await this.setState({
-                notes: notes
+                notes: notes,
+                usersFilterdNotes : notes
             })
         })
     }
 
-    updateNote = (key) => {
-        this.props.navigation.push('NewNotes', 
-        { key: key, notes: this.state.notes[key] })
+   searchUserText =  async (search) =>{
+        await this.setState({
+            // usersFilterdNotes: this.state.notes.filter((data) => {
+            //     data.title.includes(search)
+            // })
+            usersFilterdNotes: this.state.notes.title.includes(search)
+        })
+
     }
 
-    render() {
-        let noteKey = Object.keys(this.state.notes);
-        return (
+    render(){
+        let noteKey = Object.keys(this.state.usersFilterdNotes);
+        return(
+            <View>
+            <View style = {{justifyContent : 'space-around'}}>
+                <Appbar style={dashboardStyle.headerContainer}>
+                    <Appbar.Action
+                     icon='keyboard-backspace'
+                     onPress={() => this.props.navigation.push('Home', { screen: 'Notes' })}
+                    />
+                    <TextInput
+                    placeholder = 'Search your note'
+                    style = {{width : '70%'}}
+                        value = {this.state.search}
+                    onChangeText = {this.searchUserText}/>
+                </Appbar>
+            </View>
             <View>
                 <ScrollView>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                         {noteKey.length > 0 ?
                             noteKey.reverse().map(key => (
                                 <React.Fragment key={key}>
-                                    {this.state.notes[key].NotesDetail.isDeleted == false ?
+                                    {this.state.usersFilterdNotes[key].NotesDetail.isDeleted == false ?
                                         (<Card  style ={{backgroundColor: 'white'}}
                                             onPress = {() => this.updateNote(key)}
-                                            style={(this.props.listview) ? NotesContainerStyle.container_list : NotesContainerStyle.container}>
+                                            style={NotesContainerStyle.container_list}>
                                             <Card.Content style = {{backgroundColor: 'white'}}>
                                                 <Title style = {{color: 'black'}}>
                                                     {this.state.notes[key].NotesDetail.title}
@@ -61,6 +85,7 @@ export default class NotesContainer extends Component {
                         }
                     </View>
                 </ScrollView>
+            </View>
             </View>
         )
     }

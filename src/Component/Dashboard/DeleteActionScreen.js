@@ -10,6 +10,7 @@ import dashboardStyle from '../../Style/dashboardStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NotesHolderStyle from '../../Style/NotesHolderStyle';
 import NoteServices from '../../../Services/firebase_services/NoteServices';
+import NotesServiceController from '../../../Services/data_flow_controller/NotesServiceController';
 
 export class DeleteActionScreen extends Component {
     constructor(props) {
@@ -42,15 +43,16 @@ export class DeleteActionScreen extends Component {
     }
 
     handleRestoreService = () => {
-        NoteServices._restoreNoteService(this.state.userid, this.state.key, this.state.title, this.state.note)
-            .then(() => this.props.navigation.push('Home', { screen: 'Delete' }))
-            .catch(error => console.log(error))
+        NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note)
+        .then(() => {
+            this.props.navigation.push('Home', {screen : 'Delete'})
+        }).catch(error => console.log(error))
     }
 
     handleDeleteNoteForEver = () => {
-        NoteServices._deleteOneNoteService(this.state.userid, this.state.key)
-            .then(() => this.props.navigation.push('Home', { screen: 'Delete' }))
-            .catch(error => console.log(error))
+        NotesServiceController.deleteNoteFromBin(this.state.key)
+        .then(() => this.props.navigation.push('Home', {screen: 'Delete'}))
+        .catch(error => console.log(error))
     }
 
     handleRBSheetOpenButton = async () => {
@@ -63,20 +65,17 @@ export class DeleteActionScreen extends Component {
         })
     }
 
-    handleOpenSnakBar = async() => {
+    handleOpenSnakBar = async () => {
         await this.setState({
             isDeletable: true
         })
     }
 
-    restoreNotesHandler = () =>{
-        NoteServices._restoreNoteService(this.state.userid, 
-                                            this.state.key, 
-                                            this.state.title,
-                                            this.state.note).then(() =>{
-                                                this.props.navigation.push('Home', {screen : 'Notes'})
-                                            }).catch(error => console.log(error))
-
+    restoreNotesHandler = () => {
+        NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note)
+        .then(() => {
+            this.props.navigation.push('Home', {screen : 'Notes'})
+        }).catch(error => console.log(error))
     }
 
     render() {
@@ -91,7 +90,7 @@ export class DeleteActionScreen extends Component {
                 <ScrollView>
                     <View style={NotesHolderStyle.Title}>
                         <Text style={NotesHolderStyle.TitleFont}
-                        onPress = {this.handleOpenSnakBar}>
+                            onPress={this.handleOpenSnakBar}>
                             {this.state.title}
                         </Text>
                     </View>
@@ -104,11 +103,11 @@ export class DeleteActionScreen extends Component {
                 <View>
                     <Appbar style={{ backgroundColor: 'white', justifyContent: 'space-around' }}>
                         <Appbar.Action
-                            icon = 'plus-box-outline' />
+                            icon='plus-box-outline' />
                         <Appbar.Action
-                            title = 'Deleted note' />
+                            title='Deleted note' />
                         <Appbar.Action
-                            icon = 'dots-vertical'
+                            icon='dots-vertical'
                             onPress={this.handleRBSheetOpenButton} />
                     </Appbar>
                 </View>
@@ -127,35 +126,35 @@ export class DeleteActionScreen extends Component {
                     }}>
                     <View style={{ marginTop: '10%' }}>
                         <Menu.Item
-                        icon = 'autorenew'
+                            icon='autorenew'
                             onPress={this.handleRestoreService}
-                            title = ' Restore'/>
+                            title=' Restore' />
                         <Menu.Item
-                            title = 'Delete forever'
-                            icon = 'delete-outline'
-                            onPress={this.handleDeleteNoteForEver}/>
-                            
+                            title='Delete forever'
+                            icon='delete-outline'
+                            onPress={this.handleDeleteNoteForEver} />
+
                     </View>
                 </RBSheet>
                 <Snackbar
-                    style={{ marginBottom: '30%', flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'grey'}}
+                    style={{ marginBottom: '30%', flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'grey' }}
                     style={{ marginBottom: 100 }}
                     visible={this.state.isDeletable}
                     onDismiss={this.onDismissSnakbarHandler}
                     duration={5000}>
-                    <View style = {{flexDirection: 'row', justifyContent: 'space-around'}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                         <View>
-                            <Text style = {{marginTop: 10, color : 'white'}}>
+                            <Text style={{ marginTop: 10, color: 'white' }}>
                                 Note Deleted Successfully
                             </Text>
                         </View>
 
-                        <View style = {{marginLeft: 50}}>
+                        <View style={{ marginLeft: 50 }}>
                             <Button
-                            onPress = {this.restoreNotesHandler}>
-                                <Text style = {{color: '#cca300'}}>Restore</Text>
-                            </Button> 
-                        </View> 
+                                onPress={this.restoreNotesHandler}>
+                                <Text style={{ color: '#cca300' }}>Restore</Text>
+                            </Button>
+                        </View>
                     </View>
                 </Snackbar>
             </View>

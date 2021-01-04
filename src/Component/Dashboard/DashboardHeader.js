@@ -36,6 +36,10 @@ export default class DashboardHeader extends Component{
        console.log(this.state.imageUri);
     }
 
+    handleSearch = () => {
+        this.props.navigation.push('Home', {screen : 'Search'})
+    }
+
     render(){
         return(
             <Appbar style = {dashboardStyle.headerContainer}>
@@ -43,12 +47,12 @@ export default class DashboardHeader extends Component{
                 icon = 'menu'
                 onPress = {() => this.props.navigation.openDrawer()}/>
                 
-                <Searchbar
-                
-                placeholder = 'Search Notes' 
-                style = {{width : '60%', color: 'black', backgroundColor: 'grey'}}
-                onPress = {this.selectView}/>
-                
+                <Appbar.Action      
+                title = "Search Notes"
+                style = {{width : '60%', color: 'white', backgroundColor: 'grey'}}
+                title = {'Search Notes'}
+                onPress = {() => this.props.navigation.push('Home', {screen : 'Search'})}/>
+                    
                 <Appbar.Action
                     style = {{marginRight : 10}}
                     icon = {(this.props.listView) ? 'view-grid-outline' : 'view-agenda-outline'}

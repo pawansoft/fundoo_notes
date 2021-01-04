@@ -5,6 +5,7 @@ import Reminder from '../src/Component/Dashboard/Reminder';
 import DrawerContent from '../src/Component/Dashboard/DrawerContent';
 import Delete from '../src/Component/Dashboard/Delete';
 import { DeleteActionScreen } from '../src/Component/Dashboard/DeleteActionScreen';
+import SearchNote from '../src/Component/Dashboard/SearchNotes';
 
 const Drawer = createDrawerNavigator();
 
@@ -14,6 +15,7 @@ function DrawerNavigator (){
             <Drawer.Screen name = 'Notes' component = {DashboardScreen}/>
             <Drawer.Screen name = 'Delete' component = {Delete}/>
             <Drawer.Screen name = 'Reminder' component = {Reminder}/>
+            <Drawer.Screen name = 'Search' component = {SearchNote}/>
             <Drawer.Screen name = 'DeleteAction' component = {DeleteActionScreen}/>
         </Drawer.Navigator>
     )

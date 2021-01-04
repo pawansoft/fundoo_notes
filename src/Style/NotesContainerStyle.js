@@ -18,8 +18,9 @@ const NotesContainerStyle = StyleSheet.create({
         width : '96%',
         marginTop: '2%',
         marginLeft: '2%',
-        borderWidth: 1,
+        borderBottomWidth: 1,
         borderColor: '#bbb',
+        backgroundColor: 'rgba(52, 52, 52, 0.8)'
     },
     snakbarButton: {
         width: 500
