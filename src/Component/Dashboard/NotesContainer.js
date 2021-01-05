@@ -27,9 +27,9 @@ export default class NotesContainer extends Component {
         })
     }
 
-    updateNote = (key) => {
+    updateNote = (key, title, note) => {
         this.props.navigation.push('NewNotes', 
-        { key: key, notes: this.state.notes[key] })
+        { key: key, title : title, note : note })
     }
 
     render() {
@@ -42,8 +42,9 @@ export default class NotesContainer extends Component {
                             noteKey.reverse().map(key => (
                                 <React.Fragment key={key}>
                                     {this.state.notes[key].NotesDetail.isDeleted == false ?
-                                        (<Card  style ={{backgroundColor: 'white'}}
-                                            onPress = {() => this.updateNote(key)}
+                                        (<Card
+                                            onPress = {() => this.updateNote(key, this.state.notes[key].NotesDetail.title,
+                                                                                 this.state.notes[key].NotesDetail.note)}
                                             style={(this.props.listview) ? NotesContainerStyle.container_list : NotesContainerStyle.container}>
                                             <Card.Content style = {{backgroundColor: 'white'}}>
                                                 <Title style = {{color: 'black'}}>

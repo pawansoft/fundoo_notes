@@ -74,7 +74,7 @@ export default class Delete extends Component {
 
     deleteNoteActionHandler = (key) => {
         this.props.navigation.navigate('DeleteAction',
-            { key: key, notes: this.state.notes[key], navigation: this.props.navigation })
+            { key: key, notes: this.state.notes[key], navigation: this.props.navigation})
     }
 
     render() {

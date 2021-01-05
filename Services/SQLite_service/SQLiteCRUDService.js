@@ -1,7 +1,7 @@
 import {openDatabase} from 'react-native-sqlite-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const db = openDatabase({name: 'fundoo_notes.db', createFromLocation: '~data/fundoo_notes.db'});
+const db = openDatabase({name: 'fundoo_notes.db', createFromLocation: '~data/fundoo_notes.db', createFromLocation: 1});
 
 class SQLiteCRUDService {   
 
@@ -65,7 +65,7 @@ class SQLiteCRUDService {
             db.transaction((transect) => {
                 transect.executeSql(`SELECT * FROM ${userid}`, [], (transect, results) => {
                     resolve(results)
-                }, error => console.log(error))
+                }, error => reject(error))
             })
         })
     }
@@ -100,6 +100,7 @@ class SQLiteCRUDService {
             })
         })
     }
+    
 }
 
 export default new SQLiteCRUDService();

@@ -20,19 +20,19 @@ class NotesServiceController {
 
     updateNote = (noteKey, title, note) => {
         return new Promise((resolve, reject) => {
-            SQLiteCRUDService.updateNoteDetailInSQLiteService(noteKey, title, note, 'true').then(
-                (data) => resolve(data))
+            SQLiteCRUDService.updateNoteDetailInSQLiteService(noteKey, title, note, 'false').then(
+                (data) => NoteServices._updateNoteService(noteKey, title, note).then(
+                        resolve(data)
+                    )
+                    .catch((error) => console.log(error)))
                 .catch(error => reject(error))
 
-            NoteServices._updateNoteService(noteKey, title, note).then(
-                console.log('updated to firebase'))
-                .catch((error) => console.log(error))
         })
     }
 
     moveToRecycleBin = (noteKey, title, note) => {
         return new Promise((resolve, reject) => {
-            SQLiteCRUDService.updateNoteDetailInSQLiteService(noteKey, title, note, 'false').then(
+            SQLiteCRUDService.updateNoteDetailInSQLiteService(noteKey, title, note, 'true').then(
                 (data) => resolve(data))
                 .catch(error => reject(error))
 

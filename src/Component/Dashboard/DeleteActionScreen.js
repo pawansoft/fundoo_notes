@@ -6,10 +6,8 @@ import {
 } from 'react-native';
 import { Appbar, Button, Menu, Snackbar } from 'react-native-paper';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import dashboardStyle from '../../Style/dashboardStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NotesHolderStyle from '../../Style/NotesHolderStyle';
-import NoteServices from '../../../Services/firebase_services/NoteServices';
 import NotesServiceController from '../../../Services/data_flow_controller/NotesServiceController';
 
 export class DeleteActionScreen extends Component {

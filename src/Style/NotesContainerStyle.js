@@ -8,7 +8,8 @@ const NotesContainerStyle = StyleSheet.create({
         marginLeft: '3%',
         borderWidth: 1,
         borderColor: '#bbb',
-        width : '45%'
+        width : '45%',
+        backgroundColor: 'white'
     },
     container_title: {
         marginBottom : 5,

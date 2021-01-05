@@ -100,15 +100,11 @@ export default class Login extends Component {
                     this._setLogingStatusAndDeatil(userDetail.user.uid);
                     this.props.navigation.navigate('Home')
                 }).catch((error) => 
-                    this.props.navigation.navigate('dialog', {
-                        error : error
-                    }));
+                    console.log(error));
             
         }
         else {
-            this.props.navigation.navigate('dialog', {
-                error: 'Please fill all the details'
-            })
+            alert('Please fill al the details')
         }
     }
 
@@ -124,10 +120,8 @@ export default class Login extends Component {
             this.props.navigation.navigate('Home');
         })
         .catch(error => {
-            this.props.navigation.navigate('dialog', {
-                error
+            console.log(error);
             })
-        })
        
     }
     

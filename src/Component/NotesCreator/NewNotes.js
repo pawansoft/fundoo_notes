@@ -39,14 +39,11 @@ export default class NewNotes extends Component {
         })
 
         if (this.props.route.params != undefined) {
-            console.log('inrender method');
-            console.log(this.props.route.params.notes);
             await this.setState({
                 key: this.props.route.params.key,
-                note: this.props.route.params.notes.NotesDetail.note,
-                title: this.props.route.params.notes.NotesDetail.title
+                note: this.props.route.params.note,
+                title: this.props.route.params.title
             })
-            console.log(this.state.key);
         }
     }
 

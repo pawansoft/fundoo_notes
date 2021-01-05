@@ -8,7 +8,11 @@ import { Appbar, Card, Paragraph, Searchbar, Title } from 'react-native-paper'
 import dashboardStyle from '../../Style/dashboardStyle'
 import FirebaseService from '../../../Services/firebase_services/NoteServices';
 import { ScrollView } from 'react-native-gesture-handler'
+import Highlighter from 'react-native-highlight-words';
 import NotesContainerStyle from '../../Style/NotesContainerStyle'
+import NotesServiceController from '../../../Services/data_flow_controller/NotesServiceController'
+import SQLiteCRUDService from '../../../Services/SQLite_service/SQLiteCRUDService'
+import searchNoteStyle from '../../Style/searchNotestyle'
 
 export default class SearchNote extends Component{
     constructor(props){
@@ -16,76 +20,90 @@ export default class SearchNote extends Component{
         this.state = {
             notes: [],
             usersFilterdNotes : [],
-            search: ''
+            text: ''
         }
     }
 
-    async componentDidMount() {
-        const userid = await AsyncStorage.getItem('userId');
-        await FirebaseService._getNoteService(userid).then(async data => {
-            let notes = data ? data : {}
+    componentDidMount = async() => {
 
-            await this.setState({
-                notes: notes,
-                usersFilterdNotes : notes
-            })
+        await SQLiteCRUDService.getDetailsFromSQLiteDatabase()
+        .then(async (data) => {
+            var temp = []
+            if(data.rows.length != 0){
+                for (let i = 0; i < data.rows.length; ++i)
+                    temp.push(data.rows.item(i));
+                await this.setState({
+                    notes : temp,
+                    usersFilterdNotes: temp
+                })    
+            }
         })
     }
 
-   searchUserText =  async (search) =>{
-        await this.setState({
-            // usersFilterdNotes: this.state.notes.filter((data) => {
-            //     data.title.includes(search)
-            // })
-            usersFilterdNotes: this.state.notes.title.includes(search)
-        })
+   searchUserText =  async (text) =>{
+       let temArray = []
+       for(let i = 0 ; i < this.state.notes.length; ++i){
+           if(this.state.notes[i].Title.toLowerCase().includes(text.toLowerCase()) && text != '' || this.state.notes[i].Notes.toLowerCase().includes(text.toLowerCase()) && text != ''){
+               temArray.push(this.state.notes[i])
+           }
+       }
+       await this.setState({
+           usersFilterdNotes : temArray,
+           text: text
+       })
+    }
 
+    handleUpdateNote = (key, title, note) => {
+        this.props.navigation.push('NewNotes', {key : key,
+            note : note, title : title})
+    }
+
+    handleBackButton = () => {
+        this.props.navigation.push('Home', {screen : 'Notes'})
     }
 
     render(){
-        let noteKey = Object.keys(this.state.usersFilterdNotes);
         return(
             <View>
-            <View style = {{justifyContent : 'space-around'}}>
-                <Appbar style={dashboardStyle.headerContainer}>
-                    <Appbar.Action
-                     icon='keyboard-backspace'
-                     onPress={() => this.props.navigation.push('Home', { screen: 'Notes' })}
+                <Appbar style = {searchNoteStyle.headerContainer}>
+                    <Appbar.Action 
+                        icon = 'keyboard-backspace'
+                        onPress = {this.handleBackButton}/>
+                    <TextInput  
+                        autoFocus = {true}
+                        placeholder = {'Search Your Notes'}
+                        onChangeText = {this.searchUserText}
                     />
-                    <TextInput
-                    placeholder = 'Search your note'
-                    style = {{width : '70%'}}
-                        value = {this.state.search}
-                    onChangeText = {this.searchUserText}/>
                 </Appbar>
-            </View>
-            <View>
                 <ScrollView>
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                        {noteKey.length > 0 ?
-                            noteKey.reverse().map(key => (
-                                <React.Fragment key={key}>
-                                    {this.state.usersFilterdNotes[key].NotesDetail.isDeleted == false ?
-                                        (<Card  style ={{backgroundColor: 'white'}}
-                                            onPress = {() => this.updateNote(key)}
-                                            style={NotesContainerStyle.container_list}>
-                                            <Card.Content style = {{backgroundColor: 'white'}}>
-                                                <Title style = {{color: 'black'}}>
-                                                    {this.state.notes[key].NotesDetail.title}
-                                                </Title>
-                                                <Paragraph style = {{color: 'black'}}>
-                                                    {this.state.notes[key].NotesDetail.note}
-                                                </Paragraph>
-                                            </Card.Content>
-                                        </Card>)
-                                        : null}
-                                </React.Fragment>
-                            ))
-                            :null
-                        }
-                    </View>
+                    <View>
+                        {this.state.usersFilterdNotes.map(val => (
+                            <React.Fragment key = {val.NoteKey}>
+                                {val.isDeleted == "false" ? (
+                                    <Card
+                                        style = {searchNoteStyle.container_list}
+                                        onPress = {() => this.handleUpdateNote(val.NoteKey, val.Title, val.Notes) 
+                                        }>
+                                        <Card.Content>
+                                            <Title>
+                                                <Highlighter
+                                                    highlightStyle = {{backgroundColor: 'yellow'}}
+                                                    searchWords = {[this.state.text]}
+                                                    textToHighlight = {val.Title}/>
+                                            </Title>
+                                            <Paragraph>
+                                                <Highlighter
+                                                    highlightStyle = {{backgroundColor: 'yellow'}}
+                                                    searchWords = {[this.state.text]}
+                                                    textToHighlight = {val.Notes}/>
+                                            </Paragraph>
+                                        </Card.Content>  
+                                    </Card>)
+                                : null}
+                            </React.Fragment>
+                        ))}
+                    </View>  
                 </ScrollView>
-            </View>
             </View>
         )
     }
