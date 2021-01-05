@@ -47,12 +47,9 @@ export default class DashboardHeader extends Component{
                 icon = 'menu'
                 onPress = {() => this.props.navigation.openDrawer()}/>
                 
-                <Appbar.Action      
-                title = "Search Notes"
-                style = {{width : '60%', color: 'white', backgroundColor: 'grey'}}
-                title = {'Search Notes'}
-                onPress = {() => this.props.navigation.push('Home', {screen : 'Search'})}/>
-                    
+                <Appbar.Content title ="Search your note" 
+                icon="magnify" onPress = {() => this.props.navigation.push('Home', {screen : 'Search'})}/>
+
                 <Appbar.Action
                     style = {{marginRight : 10}}
                     icon = {(this.props.listView) ? 'view-grid-outline' : 'view-agenda-outline'}

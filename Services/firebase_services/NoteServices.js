@@ -68,6 +68,29 @@ class FirebaseService{
         })
     }
 
+//Level function start from here 
+    _addLevelService = async (label) => {
+        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
+        return new Promise((resolve, reject) => {
+            Firebase.database().ref('Labels/'+userid).push({
+                label : label
+            })
+            .then(() => resolve('success'))
+            .catch(error => reject (error))
+        })
+    }
+    
+    _getLevelService = async() => {
+        const userid = JSON.parse(await AsyncStorage.getItem('userId'));
+        return new Promise((resolve, reject)=> {
+         Firebase.database()
+         .ref('Labels/'+userid)
+         .once('value', snapshot => {
+             resolve(snapshot.val())
+         }).catch(error => reject(error))
+        })
+    }
+
     _restoreNoteService = async(key, title, note) => {
         const userid = JSON.parse(AsyncStorage.getItem('userId'))
         return new Promise((resolve, reject) => {

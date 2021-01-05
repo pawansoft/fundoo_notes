@@ -20,6 +20,9 @@ const DrawerStyle = StyleSheet.create({
     drawerSection: {
         borderWidth : 0.5,
         marginTop : 20
+    },
+    label:{
+        marginLeft : '5%'
     }
 })
 

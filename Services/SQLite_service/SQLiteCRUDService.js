@@ -1,7 +1,7 @@
 import {openDatabase} from 'react-native-sqlite-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const db = openDatabase({name: 'fundoo_notes.db', createFromLocation: '~data/fundoo_notes.db', createFromLocation: 1});
+const db = openDatabase({name: 'fundoo_notes.db', createFromLocation: 1});
 
 class SQLiteCRUDService {   
 

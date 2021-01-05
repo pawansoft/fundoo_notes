@@ -10,10 +10,23 @@ import DrawerStyle from '../../Style/DrawerStyle';
 import { strings } from '../../Localization/Localization';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserService from '../../../Services/UserServices/UserService';
+import NoteServices from '../../../Services/firebase_services/NoteServices';
 
 class DrawerContent extends Component {
     constructor(props){
         super(props)
+        this.state ={
+            label_detail: [],
+        }
+    }
+    componentDidMount = async() => {
+        await NoteServices._getLevelService().then(
+            async (data) => {
+                await this.setState({
+                    label_detail : data
+                })
+            }
+        ).catch(error => console.log(error));
     }
 
     handleNoteButton = () => {
@@ -31,7 +44,13 @@ class DrawerContent extends Component {
         .catch(error => console.log(error))
         
     }
+
+    handleCreateLabel = () => {
+        this.props.navigationProps.navigation.push('Home', {screen : 'Label'})
+    }
+
     render(){
+        let labelKey = Object.keys(this.state.label_detail);
         return(
             <View style = {{flex : 1}}>
                 <Text style = {DrawerStyle.headerText}>{strings.fundoo}</Text>
@@ -45,12 +64,22 @@ class DrawerContent extends Component {
                     <Drawer.Item
                     icon = "bell-outline"
                     label = {strings.Reminder}/> 
+                    <Text style = {DrawerStyle.label}>Labels</Text>
                 </Drawer.Section>
                 
                 <Drawer.Section>
+                    {labelKey.length > 0 ?
+                    labelKey.reverse().map(key => (
+                        <React.Fragment key={key}>
+                            <Drawer.Item
+                            icon ={'label-outline'}
+                            label = {this.state.label_detail[key].label}/>
+                        </React.Fragment>
+                    )) :null}
                     <Drawer.Item
                     icon = 'plus'
-                    label = {strings.newLabel}/>    
+                    label = {strings.newLabel}
+                    onPress = {this.handleCreateLabel}/>    
                 </Drawer.Section>
                 
                 <Drawer.Section>

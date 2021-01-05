@@ -20,13 +20,12 @@ class NotesServiceController {
 
     updateNote = (noteKey, title, note) => {
         return new Promise((resolve, reject) => {
-            SQLiteCRUDService.updateNoteDetailInSQLiteService(noteKey, title, note, 'false').then(
-                (data) => NoteServices._updateNoteService(noteKey, title, note).then(
-                        resolve(data)
-                    )
-                    .catch((error) => console.log(error)))
+            SQLiteCRUDService.updateNoteDetailInSQLiteService(noteKey, title, note, 'false')
+                .then((data) => 
+                    NoteServices._updateNoteService(noteKey, title, note)
+                        .then(resolve(data))
+                        .catch((error) => console.log(error)))
                 .catch(error => reject(error))
-
         })
     }
 
