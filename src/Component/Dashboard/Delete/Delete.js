@@ -3,6 +3,7 @@ import {
     View,
     ScrollView,
     Text,
+    Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FirebaseService from '../../../../Services/firebase_services/NoteServices';
@@ -11,13 +12,13 @@ import NotesContainerStyle from '../../../Style/NotesContainerStyle';
 import dashboardStyle from '../../../Style/dashboardStyle';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDService';
+import backgroundImageStyle from '../../../Style/backgroundImageStyle';
 
 export default class Delete extends Component {
     constructor(props) {
         super(props)
         this.state = {
             listView: true,
-            notes: [],
             notesFromSQLite: [],
             showProfileScreen: false,
             isEditable: false
@@ -85,15 +86,17 @@ export default class Delete extends Component {
         //onPress();
     }
 
-    deleteNoteActionHandler = (key) => {
+    deleteNoteActionHandler = (value) => {
         this.props.navigation.navigate('DeleteAction',
-            { key: key, notes: this.state.notes[key] })
+            { notes: value })
     }
 
     render() {
         return (
             <Provider>
                 <View style={{ flex: 1 }}>
+                <Image style= { backgroundImageStyle.backgroundImage } source= {require('../../../assets/background1.jpg')}>
+                </Image> 
                     <View>
                         <Appbar style={dashboardStyle.headerContainer}>
                             <Appbar.Action
@@ -110,9 +113,9 @@ export default class Delete extends Component {
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                             {this.state.notesFromSQLite.reverse().map(val => (
                                     <React.Fragment key={val.NoteKey}>
-                                        {val.isDeleted == "true" && val.isArchive == "false" ?
+                                        {val.isDeleted == "true"?
                                             (<Card
-                                                onPress={() => this.deleteNoteActionHandler(val.NoteKey)}
+                                                onPress={() => this.deleteNoteActionHandler(val)}
                                                 style={(this.state.listView) ? NotesContainerStyle.container_list : NotesContainerStyle.container}>
                                                 <Card.Content style={{ backgroundColor: 'white' }}>
                                                     <Title style={{ color: 'black' }}>

@@ -63,7 +63,7 @@ class DrawerContent extends Component {
 
     render(){
         return(
-            <View style = {{flex : 1, backgroundColor : 'rgb(80, 80, 73)'}}>
+            <View style = {{flex : 1, backgroundColor : '#FFFFEF'}}>
                 <Text style = {DrawerStyle.headerText}>{strings.fundoo}</Text>
                 <DrawerContentScrollView>
                 <Drawer.Section style = {DrawerStyle.dr}>

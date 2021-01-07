@@ -3,7 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     ScrollView,
     TextInput,
-    View
+    View,
+    Image
 } from 'react-native';
 import { Appbar, Menu, Snackbar } from 'react-native-paper';
 import Textarea from 'react-native-textarea';
@@ -13,6 +14,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import NotesContainerStyle from '../../Style/NotesContainerStyle';
 import { openDatabase } from 'react-native-sqlite-storage';
 import NotesServiceController from '../../../Services/data_flow_controller/NotesServiceController';
+import backgroundImageStyle from '../../Style/backgroundImageStyle';
 
 const db = openDatabase({ name: 'fundoo_notes.db', createFromLocation: '~data/fundoo_notes.db' });
 
@@ -83,8 +85,18 @@ export default class NewNotes extends Component {
             this.props.navigation.push('Home', { screen: 'Notes', params: { isEmpty: true } })
         }
     }
+    handleCancel = () => {
+        const { onPress } = this.props
+        this.RBSheet.close()
+        //onPress();
+      }
+    handleSelectLabel = () => {
+        this.handleCancel()
+        this.props.navigation.push('Home', {screen: 'SelectLabel'})
+    }
 
     handleDeleteNoteButton = async () => {
+        this.handleCancel()
         if (this.state.title != '' || this.state.note != '') {
             NotesServiceController.moveToRecycleBin(this.state.key, this.state.title, this.state.note)
                 .then(() => this.props.navigation.push('Home', {
@@ -118,6 +130,8 @@ export default class NewNotes extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
+                <Image style= { backgroundImageStyle.backgroundImage } source= {require('../../assets/background1.jpg')}>
+                </Image> 
 
                 <Appbar style={NotesHolderStyle.headerContainer}>
                     <View style={{ flexDirection: 'row', width: '100%', justifyContent: "space-around" }}>
@@ -127,7 +141,6 @@ export default class NewNotes extends Component {
                         />
 
                         <Appbar.Action
-                        onPress = {this.handleArchiveButton}
                             icon='pin-outline'
                         />
 
@@ -197,7 +210,8 @@ export default class NewNotes extends Component {
                                 <Icon name="person-add-outline" size={size} color={color} />
                             )}
                             title="Collaborator" />
-                        <Menu.Item icon="label-outline" title="Labels" />
+                        <Menu.Item icon="label-outline" title="Labels"
+                        onPress = {this.handleSelectLabel} />
                     </View>
                 </RBSheet>
                 <Snackbar

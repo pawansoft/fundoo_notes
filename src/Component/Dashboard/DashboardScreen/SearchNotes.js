@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import React, { Component } from 'react'
 import {
+    Image,
     TextInput,
     View
 } from 'react-native'
@@ -9,6 +10,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import Highlighter from 'react-native-highlight-words';
 import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDService'
 import searchNoteStyle from '../../../Style/searchNotestyle'
+import backgroundImageStyle from '../../../Style/backgroundImageStyle'
 
 export default class SearchNote extends Component {
     constructor(props) {
@@ -62,6 +64,8 @@ export default class SearchNote extends Component {
     render() {
         return (
             <View>
+                <Image style= { backgroundImageStyle.backgroundImage } source= {require('../../../assets/background1.jpg')}>
+                </Image> 
                 <Appbar style={searchNoteStyle.headerContainer}>
                     <Appbar.Action
                         icon='keyboard-backspace'

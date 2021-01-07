@@ -3,10 +3,12 @@ import {
     View,
     Text,
     TouchableOpacity,
-    ScrollView
+    ScrollView,
+    Image
 } from 'react-native'
 import { Appbar, Card, Paragraph, Title } from 'react-native-paper'
 import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDService'
+import backgroundImageStyle from '../../../Style/backgroundImageStyle'
 import dashboardStyle from '../../../Style/dashboardStyle'
 import NotesContainerStyle from '../../../Style/NotesContainerStyle'
 
@@ -53,6 +55,8 @@ export default class ArchiveScreen extends Component {
     render() {
         return (
             <View>
+                 <Image style= { backgroundImageStyle.backgroundImage } source= {require('../../../assets/background1.jpg')}>
+                </Image> 
                 <Appbar style={dashboardStyle.headerContainer}>
                     <Appbar.Action
                         icon='menu'

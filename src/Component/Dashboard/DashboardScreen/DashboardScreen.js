@@ -3,6 +3,7 @@ import {
     View,
     ScrollView,
     Text,
+    Image
 } from 'react-native';
 import BottomBar from './dashboardFooter';
 import DashboardHeader from './DashboardHeader';
@@ -13,6 +14,7 @@ import ProfileStyle from '../../../Style/ProfileStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FirebaseService from '../../../../Services/firebase_services/NoteServices';
 import NotesServiceController from '../../../../Services/data_flow_controller/NotesServiceController';
+import backgroundImageStyle from '../../../Style/backgroundImageStyle';
 
 class DashboardScreen extends Component {
     constructor(props) {
@@ -96,8 +98,11 @@ class DashboardScreen extends Component {
 
     render() {
         return (
-            <Provider>
-                <View style={{ flex: 1, justifyContent: "space-between" }}>
+            <Provider >
+                
+                <View style={{ flex: 1, justifyContent: "space-between" ,backgroundColor: '#FAEBD7'}}>
+                <Image style= { backgroundImageStyle.backgroundImage } source= {require('../../../assets/background1.jpg')}>
+                    </Image> 
                     <View>
                         <DashboardHeader navigation={this.props.navigation} onPress={this.selectView} listView={this.state.listView} onSelectProfile={this.showProfile} testToSearch={this.state.textToSearch} />
                     </View>

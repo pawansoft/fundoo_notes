@@ -10,6 +10,7 @@ import { storeLabelContent, storeNoteKeys } from '../../../redux/actions/CreateN
 import LabelActionStyle from '../../../Style/LabelActionStyle';
 import CreateNewLabelStyles from '../../../Style/CreateNewLabelStyle';
 
+
 class LevelActions extends Component {
     constructor(props) {
         super(props)

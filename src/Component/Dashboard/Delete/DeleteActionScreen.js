@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    Image,
     ScrollView,
     Text,
     View
@@ -9,6 +10,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NotesHolderStyle from '../../../Style/NotesHolderStyle';
 import NotesServiceController from '../../../../Services/data_flow_controller/NotesServiceController';
+import backgroundImageStyle from '../../../Style/backgroundImageStyle';
 
 export class DeleteActionScreen extends Component {
     constructor(props) {
@@ -29,13 +31,15 @@ export class DeleteActionScreen extends Component {
         })
 
         if (this.props.route.params != undefined) {
+            console.log(this.state.key);
             await this.setState({
-                key: this.props.route.params.key,
-                note: this.props.route.params.notes.NotesDetail.note,
-                title: this.props.route.params.notes.NotesDetail.title
+                key : this.props.route.params.notes.NoteKey,
+                note : this.props.route.params.notes.Notes,
+                title : this.props.route.params.notes.Title
             })
         }
     }
+
     handleRBSheetOpenButton = async () => {
         this.RBSheet.open();
     }
@@ -79,6 +83,8 @@ export class DeleteActionScreen extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
+                <Image style= { backgroundImageStyle.backgroundImage } source= {require('../../../assets/background1.jpg')}>
+                </Image> 
                 <Appbar style={{ backgroundColor: 'white', width: '20%' }}>
                     <Appbar.Action
                         icon='keyboard-backspace'

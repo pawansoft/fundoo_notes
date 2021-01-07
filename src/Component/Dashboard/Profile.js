@@ -118,6 +118,7 @@ export default class Profile extends Component {
     };
 
     launchCamera(options, async (response) => {
+      this.handleCancel();
       if (!response.didCancel) {
         await this.uploadProfileImage(response.uri)
           .then(url => {
@@ -142,6 +143,7 @@ export default class Profile extends Component {
       },
     };
     launchImageLibrary(options, async (response) => {
+      this.handleCancel();
       console.log('Response = ', response);
       if (!response.didCancel) {
         await this.uploadProfileImage(response.uri)

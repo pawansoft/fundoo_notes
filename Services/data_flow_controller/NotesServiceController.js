@@ -22,7 +22,7 @@ class NotesServiceController {
     addArchive = (title, note) => {
         return new Promise(async (resolve, reject) => {
             var noteKey = await this.generateRandomKey();
-            SQLiteCRUDService.storeArchiveNoteToSQLiteService()
+            SQLiteCRUDService.storeArchiveNoteToSQLiteService(noteKey, title, note, 'false', 'true')
                 .then((data) => {
                     NoteServices.storeArchiveToDatabase(noteKey, title, note)
                     .then (() => resolve('success'))
