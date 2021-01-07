@@ -9,7 +9,7 @@ class SQLiteCRUDService {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise((resolve, reject) => {
             db.transaction((transect) => {
-                transect.executeSql(`CREATE TABLE IF NOT EXISTS ${userid} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" TEXT, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
+                transect.executeSql(`CREATE TABLE IF NOT EXISTS ${userid} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" TEXT, "isArchive" TEXT, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
                     resolve(results)
                 },
                 error => reject(error)
@@ -18,7 +18,7 @@ class SQLiteCRUDService {
         })
     }
 
-    storeNoteToSQLiteService = async (noteKey, title, notes, deletedStatus) => {
+    storeNoteToSQLiteService = async (noteKey, title, notes, deletedStatus, isArchive) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise(async (resolve, reject) => {
             //checking to create table
@@ -26,8 +26,27 @@ class SQLiteCRUDService {
             //adding data logic
             db.transaction((transect) => {
                 transect.executeSql(
-                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted) VALUES (?,?,?,?)`,
-                    [noteKey, title, notes, deletedStatus],
+                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted, isArchive) VALUES (?,?,?,?,?)`,
+                    [noteKey, title, notes, deletedStatus, isArchive],
+                    async (transect, results) => {
+                        resolve(results)
+                    },
+                    error => reject(error)
+                );
+            })
+        })
+    }
+//Archive function start from here 
+    storeArchiveNoteToSQLiteService = async (noteKey, title, notes, deletedStatus, isArchive) => {
+        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
+        return new Promise(async (resolve, reject) => {
+            //checking to create table
+            await this.createTableService();
+            //adding data logic
+            db.transaction((transect) => {
+                transect.executeSql(
+                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted, isArchive) VALUES (?,?,?,?,?)`,
+                    [noteKey, title, notes, deletedStatus, isArchive],
                     async (transect, results) => {
                         resolve(results)
                     },
@@ -88,6 +107,7 @@ class SQLiteCRUDService {
             })
         })
     }
+    
     deleteNoteForever = async (noteKey) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise(async (resolve, reject) => {

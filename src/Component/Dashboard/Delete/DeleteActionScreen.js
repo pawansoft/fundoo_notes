@@ -7,8 +7,8 @@ import {
 import { Appbar, Button, Menu, Snackbar } from 'react-native-paper';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import NotesHolderStyle from '../../Style/NotesHolderStyle';
-import NotesServiceController from '../../../Services/data_flow_controller/NotesServiceController';
+import NotesHolderStyle from '../../../Style/NotesHolderStyle';
+import NotesServiceController from '../../../../Services/data_flow_controller/NotesServiceController';
 
 export class DeleteActionScreen extends Component {
     constructor(props) {
@@ -42,15 +42,15 @@ export class DeleteActionScreen extends Component {
 
     handleRestoreService = () => {
         NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note)
-        .then(() => {
-            this.props.navigation.push('Home', {screen : 'Delete'})
-        }).catch(error => console.log(error))
+            .then(() => {
+                this.props.navigation.push('Home', { screen: 'Delete' })
+            }).catch(error => console.log(error))
     }
 
     handleDeleteNoteForEver = () => {
         NotesServiceController.deleteNoteFromBin(this.state.key)
-        .then(() => this.props.navigation.push('Home', {screen: 'Delete'}))
-        .catch(error => console.log(error))
+            .then(() => this.props.navigation.push('Home', { screen: 'Delete' }))
+            .catch(error => console.log(error))
     }
 
     handleRBSheetOpenButton = async () => {
@@ -71,9 +71,9 @@ export class DeleteActionScreen extends Component {
 
     restoreNotesHandler = () => {
         NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note)
-        .then(() => {
-            this.props.navigation.push('Home', {screen : 'Notes'})
-        }).catch(error => console.log(error))
+            .then(() => {
+                this.props.navigation.push('Home', { screen: 'Notes' })
+            }).catch(error => console.log(error))
     }
 
     render() {

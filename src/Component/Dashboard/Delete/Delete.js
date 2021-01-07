@@ -5,11 +5,12 @@ import {
     Text,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import FirebaseService from '../../../Services/firebase_services/NoteServices';
-import { Card, Paragraph, Portal, Title, Provider, Menu, Appbar, Button, Snackbar } from 'react-native-paper';
-import NotesContainerStyle from '../../Style/NotesContainerStyle';
-import dashboardStyle from '../../Style/dashboardStyle';
+import FirebaseService from '../../../../Services/firebase_services/NoteServices';
+import { Card, Paragraph, Title, Provider, Appbar, Button } from 'react-native-paper';
+import NotesContainerStyle from '../../../Style/NotesContainerStyle';
+import dashboardStyle from '../../../Style/dashboardStyle';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDService';
 
 export default class Delete extends Component {
     constructor(props) {
@@ -17,6 +18,7 @@ export default class Delete extends Component {
         this.state = {
             listView: true,
             notes: [],
+            notesFromSQLite: [],
             showProfileScreen: false,
             isEditable: false
         }
@@ -35,6 +37,18 @@ export default class Delete extends Component {
     }
 
     async componentDidMount() {
+
+        await SQLiteCRUDService.getDetailsFromSQLiteDatabase()
+            .then(async (data) => {
+                var temp = []
+                if (data.rows.length != 0) {
+                    for (let i = 0; i < data.rows.length; ++i)
+                        temp.push(data.rows.item(i));
+                    await this.setState({
+                        notesFromSQLite: temp
+                    })
+                }
+            })
         const userid = await AsyncStorage.getItem('userId');
         await FirebaseService._getNoteService(userid).then(async data => {
             let notes = data ? data : {}
@@ -49,7 +63,6 @@ export default class Delete extends Component {
         await this.setState({
             listView: !this.state.listView
         })
-        console.log(this.state.listView);
     }
 
     showDeleteSnackbar = async () => {
@@ -74,11 +87,10 @@ export default class Delete extends Component {
 
     deleteNoteActionHandler = (key) => {
         this.props.navigation.navigate('DeleteAction',
-            { key: key, notes: this.state.notes[key], navigation: this.props.navigation})
+            { key: key, notes: this.state.notes[key] })
     }
 
     render() {
-        let noteKey = Object.keys(this.state.notes);
         return (
             <Provider>
                 <View style={{ flex: 1 }}>
@@ -96,27 +108,24 @@ export default class Delete extends Component {
                     </View>
                     <ScrollView>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                            {noteKey.length > 0 ?
-                                noteKey.reverse().map(key => (
-                                    <React.Fragment key={key}>
-                                        {this.state.notes[key].NotesDetail.isDeleted ?
+                            {this.state.notesFromSQLite.reverse().map(val => (
+                                    <React.Fragment key={val.NoteKey}>
+                                        {val.isDeleted == "true" && val.isArchive == "false" ?
                                             (<Card
-                                                onPress={() => this.deleteNoteActionHandler(key)}
+                                                onPress={() => this.deleteNoteActionHandler(val.NoteKey)}
                                                 style={(this.state.listView) ? NotesContainerStyle.container_list : NotesContainerStyle.container}>
                                                 <Card.Content style={{ backgroundColor: 'white' }}>
                                                     <Title style={{ color: 'black' }}>
-                                                        {this.state.notes[key].NotesDetail.title}
+                                                        {val.Title}
                                                     </Title>
                                                     <Paragraph style={{ color: 'black' }}>
-                                                        {this.state.notes[key].NotesDetail.note}
+                                                        {val.Notes}
                                                     </Paragraph>
                                                 </Card.Content>
                                             </Card>)
                                             : null}
                                     </React.Fragment>
                                 ))
-                                :
-                                null
                             }
                         </View>
                     </ScrollView>
@@ -132,7 +141,7 @@ export default class Delete extends Component {
                                 backgroundColor: "transparent",
                             },
                         }}>
-                        <View style={{width: '80%', marginLeft: '10%', marginTop: '10%', borderRadius: 10 }}>
+                        <View style={{ width: '80%', marginLeft: '10%', marginTop: '10%', borderRadius: 10 }}>
                             <Button
                                 icon='delete-outline'>
                                 <Text style={{ color: 'Red', fontWeight: 'bold', fontSize: 18 }}>

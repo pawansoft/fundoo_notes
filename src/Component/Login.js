@@ -6,10 +6,10 @@ import {
     Text,
     Image,
     ScrollView,
-    
+
 } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
-import {strings} from '../Localization/Localization'
+import { strings } from '../Localization/Localization'
 import login_style from '../Style/login_style';
 import UserService from '../../Services/UserServices/UserService';
 import SocialService from '../../Services/UserServices/SocialService';
@@ -27,7 +27,7 @@ export default class Login extends Component {
             emailId: '',
             passwordValid: '',
             passcode: '',
-            isLoggedIn : false,
+            isLoggedIn: false,
         }
     }
 
@@ -44,10 +44,10 @@ export default class Login extends Component {
         }
     }
 
-    async componentDidMount(){
+    async componentDidMount() {
         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
         const userId = await AsyncStorage.getItem('userId');
-        if(isLoggedIn == 'true'){  
+        if (isLoggedIn == 'true') {
             this.props.navigation.navigate('Home')
         }
     }
@@ -60,11 +60,11 @@ export default class Login extends Component {
             await AsyncStorage.setItem('isLoggedIn', JSON.stringify(this.state.isLoggedIn));
             await AsyncStorage.setItem('userId', JSON.stringify(userId));
         }
-        catch(error) {
+        catch (error) {
             console.log(error);
         }
     }
-    
+
     validatePassword = async () => {
         const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[*.!@#$%^&(){}:'<>,.>/~`_+=|].).{8,}$/
         if (regex.test(this.state.passcode) == false) {
@@ -95,13 +95,13 @@ export default class Login extends Component {
             this.state.passcode != '' &&
             this.state.passwordValid == '' &&
             this.state.userNameValid == '') {
-                UserService.LoginService(this.state.emailId, this.state.passcode)
+            UserService.LoginService(this.state.emailId, this.state.passcode)
                 .then((userDetail) => {
                     this._setLogingStatusAndDeatil(userDetail.user.uid);
                     this.props.navigation.navigate('Home')
-                }).catch((error) => 
+                }).catch((error) =>
                     console.log(error));
-            
+
         }
         else {
             alert('Please fill al the details')
@@ -114,17 +114,17 @@ export default class Login extends Component {
 
     handleFacebookButton = () => {
         SocialService.facebookLogin()
-        .then(UserCredential =>{
-            SocialService._storeFBDetailIntoFirebase(UserCredential);
-            this._setLogingStatusAndDeatil(userDetails.user.uid);
-            this.props.navigation.navigate('Home');
-        })
-        .catch(error => {
-            console.log(error);
+            .then(UserCredential => {
+                SocialService._storeFBDetailIntoFirebase(UserCredential);
+                this._setLogingStatusAndDeatil(userDetails.user.uid);
+                this.props.navigation.navigate('Home');
             })
-       
+            .catch(error => {
+                console.log(error);
+            })
+
     }
-    
+
     render() {
         return (
             <View>
@@ -177,16 +177,16 @@ export default class Login extends Component {
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                        <View style = {login_style.facebook_button}>
-                            <Button icon={'facebook'} mode= "contained" 
-                                onPress = {this.handleFacebookButton}>
-                                    {strings.facebook}
+                        <View style={login_style.facebook_button}>
+                            <Button icon={'facebook'} mode="contained"
+                                onPress={this.handleFacebookButton}>
+                                {strings.facebook}
                             </Button>
                         </View>
                     </View>
-              
+
                 </ScrollView>
-                
+
             </View>
         )
     }

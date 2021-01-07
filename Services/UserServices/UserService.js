@@ -16,7 +16,7 @@ class UserService{
             Firebase.auth()
             .signInWithEmailAndPassword(email, password)
             .then(userDetail => resolve(userDetail))
-            .catch(error => reject('error'))
+            .catch(error => reject(error))
         })
     }
 

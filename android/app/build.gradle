@@ -138,7 +138,9 @@ android {
 
         //Adding to check error
         multiDexEnabled true
+
     }
+    
     splits {
         abi {
             reset()

@@ -1,0 +1,4 @@
+export const STORE_USERID = 'STORE_USERID';
+export const STORE_LABEL_CONTENT = 'STORE_LABEL_CONTENT';
+export const NOTE_KEYS = 'NOTE_KEYS';
+export const STORE_LABELS = 'STORE_LABELS';

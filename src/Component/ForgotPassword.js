@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { strings } from '../Localization/Localization';
 
-import UserService, { ResetPasscodeService } from '../../Services/UserServices/UserService';
+import UserService from '../../Services/UserServices/UserService';
 import login_style from '../Style/login_style';
 import reset_component_style from '../Style/reset_component_style';
 export default class ForgotPassword extends Component {
@@ -45,13 +45,13 @@ export default class ForgotPassword extends Component {
         if (
             this.state.emailId != '' &&
             this.state.isEmailValid == '') {
-                UserService.ResetPasscodeService(this.state.emailId).then(() => {
-                    alert('Password reset mail has sent to you please check your mail')
-                })
-                .catch(error => 
+            UserService.ResetPasscodeService(this.state.emailId).then(() => {
+                alert('Password reset mail has sent to you please check your mail')
+            })
+                .catch(error =>
                     this.props.navigation.navigate('dialog', {
                         error
-                    }))     
+                    }))
         }
         else {
             this.props.navigation.navigate('dialog', {
@@ -76,35 +76,35 @@ export default class ForgotPassword extends Component {
                         <Text style={{ alignSelf: 'center', fontWeight: 'bold' }}>
                             {strings.Resetpass}
                         </Text>
-                        
-                    <View style={reset_component_style.text_container}>
-                        <TextInput
-                            value={this.state.emailId}
-                            onChangeText={this.handleEmailId}
-                            placeholder={strings.emailId}
-                            onEndEditing={this.findValidEmail} />
-                        <Text style={login_style.error_text}>{this.state.isEmailValid}</Text>
+
+                        <View style={reset_component_style.text_container}>
+                            <TextInput
+                                value={this.state.emailId}
+                                onChangeText={this.handleEmailId}
+                                placeholder={strings.emailId}
+                                onEndEditing={this.findValidEmail} />
+                            <Text style={login_style.error_text}>{this.state.isEmailValid}</Text>
+                        </View>
+
+                        <View style={{ flexDirection: 'row' }}>
+                            <TouchableOpacity
+                                style={login_style.signup_button_container}
+                                onPress={this.handleResetButton}>
+                                <Text style={login_style.button_text}>
+                                    {strings.next}
+                                </Text>
+                            </TouchableOpacity>
+
+
+                            <TouchableOpacity
+                                style={{ marginLeft: '30%', marginTop: '7%' }}
+                                onPress={this.handleLoginButton}>
+                                <Text style={login_style.button_text}>
+                                    {strings.signin}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-
-                    <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity
-                            style={login_style.signup_button_container}
-                            onPress={this.handleResetButton}>
-                            <Text style={login_style.button_text}>
-                                {strings.next}
-                            </Text>
-                        </TouchableOpacity>
-
-
-                        <TouchableOpacity
-                            style={{ marginLeft: '30%', marginTop: '7%' }}
-                            onPress={this.handleLoginButton}>
-                            <Text style={login_style.button_text}>
-                                {strings.signin}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
                 </ScrollView>
             </View>
         )

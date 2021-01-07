@@ -8,51 +8,62 @@ import { Drawer } from 'react-native-paper';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import DrawerStyle from '../../Style/DrawerStyle';
 import { strings } from '../../Localization/Localization';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import UserService from '../../../Services/UserServices/UserService';
+import { connect } from 'react-redux'
+import {storeLabelContent, storeNoteKeys, storeLabels} from '../../redux/actions/CreateNewLabelActions'
+
 import NoteServices from '../../../Services/firebase_services/NoteServices';
 
 class DrawerContent extends Component {
     constructor(props){
         super(props)
-        this.state ={
-            label_detail: [],
+        this.state = {
+            labelsContent: [],
+            labelNoteKeys: []
         }
     }
-    componentDidMount = async() => {
-        await NoteServices._getLevelService().then(
-            async (data) => {
-                await this.setState({
-                    label_detail : data
-                })
-            }
-        ).catch(error => console.log(error));
+
+    componentDidMount = async () => {
+        await NoteServices.getLabelFromDatabase()
+        .then(async (labelContent) => {
+            let tempKey = await Object.keys(labelContent)
+            let labels = []
+            tempKey.map(key => {
+                labels.push(labelContent[key].labelName)
+            })
+            await this.setState({
+                labelNoteKeys : tempKey,
+                labelsContent: labelContent
+            })
+            await this.props.storeLabelContent(this.state.labelsContent);
+            await this.props.storeNoteKeys(this.state.labelNoteKeys);
+            await this.props.storeLabels(this.state.labelNoteKeys);
+        })
+        .catch(error => console.log(error))
+        console.log(this.state.labelsContent);
     }
 
     handleNoteButton = () => {
+        this.props.navigationProps.navigation.closeDrawer();
         this.props.navigationProps.navigation.push('Home', {screen : 'Notes'})
     }
 
     handleDeleteButton = () => {
+        this.props.navigationProps.navigation.closeDrawer()
         this.props.navigationProps.navigation.push('Home', {screen : 'Delete'})
     }
 
-    handleLogoutButton = async() => {
-        await AsyncStorage.setItem('isLoggedIn', 'false');
-        await AsyncStorage.setItem('userId', '')
-        UserService.logoutService().then(() => this.props.navigationProps.navigation.navigate('Login'))
-        .catch(error => console.log(error))
-        
+    handleCreateNewLabelButton = () => {
+
+        this.props.navigationProps.navigation.push('Home', {screen : 'Createlabel'})
     }
 
-    handleCreateLabel = () => {
-        this.props.navigationProps.navigation.push('Home', {screen : 'Label'})
+    handleArchiveButton = () => {
+        this.props.navigationProps.navigation.push('Home', {screen: 'Archive'})
     }
 
     render(){
-        let labelKey = Object.keys(this.state.label_detail);
         return(
-            <View style = {{flex : 1}}>
+            <View style = {{flex : 1, backgroundColor : 'rgb(80, 80, 73)'}}>
                 <Text style = {DrawerStyle.headerText}>{strings.fundoo}</Text>
                 <DrawerContentScrollView>
                 <Drawer.Section style = {DrawerStyle.dr}>
@@ -64,28 +75,27 @@ class DrawerContent extends Component {
                     <Drawer.Item
                     icon = "bell-outline"
                     label = {strings.Reminder}/> 
-                    <Text style = {DrawerStyle.label}>Labels</Text>
                 </Drawer.Section>
                 
                 <Drawer.Section>
-                    {labelKey.length > 0 ?
-                    labelKey.reverse().map(key => (
-                        <React.Fragment key={key}>
-                            <Drawer.Item
-                            icon ={'label-outline'}
-                            label = {this.state.label_detail[key].label}/>
-                        </React.Fragment>
-                    )) :null}
+                    {this.state.labelNoteKeys.map (key => (
+                        <Drawer.Item 
+                        key = {key} 
+                        icon = 'label-outline' 
+                        label = {this.state.labelsContent[key].labelName} 
+                        onPress = {this.handleCreateNewLabelButton}/>
+                    ))}
                     <Drawer.Item
                     icon = 'plus'
                     label = {strings.newLabel}
-                    onPress = {this.handleCreateLabel}/>    
+                    onPress = {this.handleCreateNewLabelButton}/>    
                 </Drawer.Section>
                 
                 <Drawer.Section>
                     <Drawer.Item
                     icon = 'archive-arrow-down-outline'
-                    label = {strings.Archive}/>
+                    label = {strings.Archive}
+                    onPress = {() => this.handleArchiveButton()}/>
 
                     <Drawer.Item
                     icon = 'delete'
@@ -101,12 +111,6 @@ class DrawerContent extends Component {
                 icon = 'help-circle'
                 label = {strings.HelpFeed}/>
                 </DrawerContentScrollView>
-
-                <Drawer.Item
-                style = {DrawerStyle.footer}
-                icon = 'logout'
-                label = {strings.Logout}
-                onPress = {this.handleLogoutButton}/>
             </View>
         )
    }
@@ -120,4 +124,21 @@ const styles = StyleSheet.create({
     }
 })
 
-export default DrawerContent;
+const mapStateToProps = state => {
+    return {
+        userId : state.createLabelReducer.userId,
+        labelsContent : state.createLabelReducer.labelsContent,
+        labelNoteKeys : state.createLabelReducer.labelNoteKeys,
+        labels : state.createLabelReducer.labels 
+    }
+}
+  
+const mapDispatchToProps = dispatch => {
+    return {
+        storeLabelContent : (labelsContent) => dispatch(storeLabelContent(labelsContent)),
+        storeNoteKeys : (labelNoteKeys) => dispatch(storeNoteKeys(labelNoteKeys)),
+        storeLabels : (labels) => dispatch(storeLabels(labels))
+    }
+}
+  
+export default connect(mapStateToProps,mapDispatchToProps)(DrawerContent)

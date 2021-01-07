@@ -7,18 +7,14 @@ import {
 } from 'react-native';
 import { Appbar, Menu, Snackbar } from 'react-native-paper';
 import Textarea from 'react-native-textarea';
-import FirebaseService from '../../../Services/firebase_services/NoteServices';
 import NotesHolderStyle from '../../Style/NotesHolderStyle';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons'
-import NoteServices from '../../../Services/firebase_services/NoteServices';
-import SQLiteCRUDService from '../../../Services/SQLite_service/SQLiteCRUDService';
 import NotesContainerStyle from '../../Style/NotesContainerStyle';
-
-import {openDatabase} from 'react-native-sqlite-storage';
+import { openDatabase } from 'react-native-sqlite-storage';
 import NotesServiceController from '../../../Services/data_flow_controller/NotesServiceController';
 
-const db = openDatabase({name: 'fundoo_notes.db', createFromLocation: '~data/fundoo_notes.db'});
+const db = openDatabase({ name: 'fundoo_notes.db', createFromLocation: '~data/fundoo_notes.db' });
 
 export default class NewNotes extends Component {
     constructor(props) {
@@ -52,27 +48,36 @@ export default class NewNotes extends Component {
         await this.setState({
             title: title
         })
-        console.log(this.state.title);
     }
 
     handleNote = async (note) => {
         await this.setState({
             note: note
         })
-        console.log(this.state.note);
     }
 
     handleBackButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
             if (this.props.route.params != undefined) {
                 NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note)
-                .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
+                    .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
             }
             else if (this.props.route.params == undefined) {
                 NotesServiceController.addNote(this.state.title, this.state.note)
-                .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
-                .catch(error => console.log(error))
+                    .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
+                    .catch(error => console.log(error))
             }
+        }
+        else {
+            this.props.navigation.push('Home', { screen: 'Notes', params: { isEmpty: true } })
+        }
+    }
+
+    handleArchiveButton = async() => {
+        if (this.state.title != '' || this.state.note != '')
+        {
+            NotesServiceController.addArchive(this.state.title, this.state.note)
+                .then(() => this.props.navigation.push('Home', {screen: 'Archive'}))
         }
         else {
             this.props.navigation.push('Home', { screen: 'Notes', params: { isEmpty: true } })
@@ -82,15 +87,16 @@ export default class NewNotes extends Component {
     handleDeleteNoteButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
             NotesServiceController.moveToRecycleBin(this.state.key, this.state.title, this.state.note)
-            .then(() => this.props.navigation.push('Home', {screen: 'Notes', params : {
-                key : this.state.key,
-                userid : this.state.userid,
-                title : this.state.title,
-                note : this.state.note,
-                isDeleted : true
-            }
-        }))
-            .catch(error => console.log(error))
+                .then(() => this.props.navigation.push('Home', {
+                    screen: 'Notes', params: {
+                        key: this.state.key,
+                        userid: this.state.userid,
+                        title: this.state.title,
+                        note: this.state.note,
+                        isDeleted: true
+                    }
+                }))
+                .catch(error => console.log(error))
         }
         else {
             await this.setState({
@@ -121,6 +127,7 @@ export default class NewNotes extends Component {
                         />
 
                         <Appbar.Action
+                        onPress = {this.handleArchiveButton}
                             icon='pin-outline'
                         />
 
@@ -150,7 +157,7 @@ export default class NewNotes extends Component {
                     </View>
                 </ScrollView>
                 <Appbar style={NotesHolderStyle.footerContainer}>
-                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: "space-around"}}>
+                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: "space-around" }}>
                         <Appbar.Action
                             icon='plus-box-outline' />
 
@@ -181,7 +188,7 @@ export default class NewNotes extends Component {
                     }}>
                     <View >
                         <Menu.Item icon="delete-outline" title="Delete"
-                        style = {NotesContainerStyle.snakbarButton}
+                            style={NotesContainerStyle.snakbarButton}
                             onPress={this.handleDeleteNoteButton} />
                         <Menu.Item icon="content-copy" title="Make a copy" />
                         <Menu.Item icon="share-variant" title="Send" />

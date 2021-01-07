@@ -8,7 +8,24 @@ class FirebaseService{
             const notes = {
                 title : title,
                 note : note,
-                isDeleted: false
+                isDeleted: false,
+                isArchive: false
+            }
+            Firebase.database().ref('Notes/' +userid+'/' +notekey).set({
+                NotesDetail : notes
+            }).then(() => resolve('success'))
+            .catch(error => reject(error))
+        })
+    }
+
+    storeArchiveToDatabase = async(notekey, title, note) => {
+        const userid = JSON.parse(await AsyncStorage.getItem('userId')) 
+        return new Promise((resolve, reject) => {
+            const notes = {
+                title : title,
+                note : note,
+                isDeleted: false,
+                isArchive: true
             }
             Firebase.database().ref('Notes/' +userid+'/' +notekey).set({
                 NotesDetail : notes
@@ -42,7 +59,8 @@ class FirebaseService{
             const notes = {
                 title : title,
                 note : note,
-                isDeleted : false
+                isDeleted : false,
+                isArchive: false
             }
             Firebase.database().ref('Notes/'+userid+ '/'+key).set({
                 NotesDetail : notes
@@ -58,7 +76,8 @@ class FirebaseService{
             const notes = {
                 title : title,
                 note : note,
-                isDeleted : true
+                isDeleted : true,
+                isArchive: false
             }
             Firebase.database().ref('Notes/'+userid+ '/'+ key).set({
                 NotesDetail : notes
@@ -68,28 +87,7 @@ class FirebaseService{
         })
     }
 
-//Level function start from here 
-    _addLevelService = async (label) => {
-        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
-        return new Promise((resolve, reject) => {
-            Firebase.database().ref('Labels/'+userid).push({
-                label : label
-            })
-            .then(() => resolve('success'))
-            .catch(error => reject (error))
-        })
-    }
-    
-    _getLevelService = async() => {
-        const userid = JSON.parse(await AsyncStorage.getItem('userId'));
-        return new Promise((resolve, reject)=> {
-         Firebase.database()
-         .ref('Labels/'+userid)
-         .once('value', snapshot => {
-             resolve(snapshot.val())
-         }).catch(error => reject(error))
-        })
-    }
+//Level function start from here
 
     _restoreNoteService = async(key, title, note) => {
         const userid = JSON.parse(AsyncStorage.getItem('userId'))
@@ -97,7 +95,8 @@ class FirebaseService{
             const notes = {
                 title : title,
                 note : note,
-                isDeleted : false
+                isDeleted : false,
+                isArchive: false
             }
             Firebase.database().ref('Notes/'+userid+ '/'+ key).set({
                 NotesDetail : notes
@@ -116,6 +115,58 @@ class FirebaseService{
             .catch(error => reject(error))
         })
     }
+
+    addLabelInDatabase = async(userId, labelName) => {
+        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
+        var today = new Date()
+        var labelId = ''
+        labelId = today.getFullYear() 
+                + String((today.getMonth() + 1) < 10 ? (0 + String(today.getMonth() + 1)) : today.getMonth) 
+                + String(today.getDate() < 10 ? (0 + String(today.getDate())) : today.getDate()) 
+                + String(today.getHours() < 10 ? '0' + today.getHours() : today.getHours())
+                + String(today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes()) 
+                + String(today.getSeconds() < 10 ? '0' + today.getSeconds() : today.getSeconds())
+
+        return new Promise((resolve, reject) => {
+            Firebase.database().ref('Labels/'+userid+ '/' +labelId).set({
+                labelName: labelName
+            })
+            .then(() => resolve('success'))
+            .catch(error => reject (error))
+        })
+    }
+
+    getLabelFromDatabase = async() => {
+        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
+        return new Promise((resolve, reject) => {
+            Firebase.database().ref('Labels/' + userid)
+            .once('value', snapshot => {
+                resolve(snapshot.val())
+            })
+            .catch(error => reject(error))
+        })
+    }
+
+    updateLabelInFirebase = async(labelNoteKey, labelName) => {
+        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
+        return new Promise((resolve, reject) => {
+            Firebase.database().ref('Labels/' + userid  + '/' + labelNoteKey).set({
+                labelName : labelName
+            })
+            .then(() => resolve('success'))
+            .catch(error => reject(error))
+        })
+    }
+
+    deleteLabelInFirebase = async(labelKey) => {
+        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
+        return new Promise((resolve, reject) => {
+            Firebase.database().ref('Labels/' + userid  + '/' + labelKey).remove()
+            .then(() => resolve('success'))
+            .catch(error => reject(error))
+        })
+    }
+
 }
 
 export default new FirebaseService();

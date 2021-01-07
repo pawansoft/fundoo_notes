@@ -1,12 +1,13 @@
 import React from 'react';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import DashboardScreen from '../src/Component/Dashboard/DashboardScreen';
+import {createDrawerNavigator} from '@react-navigation/drawer';import DashboardScreen from '../src/Component/Dashboard/DashboardScreen/DashboardScreen';
+import Delete from '../src/Component/Dashboard/Delete/Delete';
 import Reminder from '../src/Component/Dashboard/Reminder';
+import SearchNote from '../src/Component/Dashboard/DashboardScreen/SearchNotes';
+import CreateNewLabelScreen from '../src/Component/Dashboard/Label/CreateNewLabelScreen';
+import { DeleteActionScreen } from '../src/Component/Dashboard/Delete/DeleteActionScreen';
+import ArchiveScreen from '../src/Component/Dashboard/Archive/ArchiveScreen';
 import DrawerContent from '../src/Component/Dashboard/DrawerContent';
-import Delete from '../src/Component/Dashboard/Delete';
-import { DeleteActionScreen } from '../src/Component/Dashboard/DeleteActionScreen';
-import SearchNote from '../src/Component/Dashboard/SearchNotes';
-import CreateLabelScreen from '../src/Component/Dashboard/CreateLabelScreen';
+;
 
 const Drawer = createDrawerNavigator();
 
@@ -17,8 +18,9 @@ function DrawerNavigator (){
             <Drawer.Screen name = 'Delete' component = {Delete}/>
             <Drawer.Screen name = 'Reminder' component = {Reminder}/>
             <Drawer.Screen name = 'Search' component = {SearchNote}/>
+            <Drawer.Screen name = 'Createlabel' component = {CreateNewLabelScreen}/>
             <Drawer.Screen name = 'DeleteAction' component = {DeleteActionScreen}/>
-            <Drawer.Screen name = 'Label' component = {CreateLabelScreen}/>
+            <Drawer.Screen name = 'Archive' component = {ArchiveScreen}/>
         </Drawer.Navigator>
     )
 }

@@ -1,4 +1,3 @@
-import Recat from 'react';
 import {
     StyleSheet
 } from 'react-native';
