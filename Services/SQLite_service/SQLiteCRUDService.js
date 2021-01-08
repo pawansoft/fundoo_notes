@@ -4,8 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const db = openDatabase({name: 'fundoo_notes.db', createFromLocation: 1});
 
 class SQLiteCRUDService {   
-    
-//Note Service for sqlite start from here 
+
     createTableService = async() => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise((resolve, reject) => {
