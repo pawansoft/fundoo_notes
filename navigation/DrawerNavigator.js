@@ -7,7 +7,7 @@ import CreateNewLabelScreen from '../src/Component/Dashboard/Label/CreateNewLabe
 import { DeleteActionScreen } from '../src/Component/Dashboard/Delete/DeleteActionScreen';
 import ArchiveScreen from '../src/Component/Dashboard/Archive/ArchiveScreen';
 import DrawerContent from '../src/Component/Dashboard/DrawerContent';
-import SearchLabel from '../src/Component/Dashboard/Label/SearchLabel';
+import PopulatedLabel from '../src/Component/Dashboard/Label/PopulatedLabel';
 ;
 
 const Drawer = createDrawerNavigator();
@@ -22,7 +22,7 @@ function DrawerNavigator (){
             <Drawer.Screen name = 'Createlabel' component = {CreateNewLabelScreen}/>
             <Drawer.Screen name = 'DeleteAction' component = {DeleteActionScreen}/>
             <Drawer.Screen name = 'Archive' component = {ArchiveScreen}/>
-            <Drawer.Screen name = 'SelectLabel' component = {SearchLabel}/>
+            <Drawer.Screen name = 'SelectLabel' component = {PopulatedLabel}/>
         </Drawer.Navigator>
     )
 }

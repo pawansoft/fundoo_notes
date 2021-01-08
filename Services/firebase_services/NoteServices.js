@@ -2,30 +2,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Firebase from '../../config/Firebase';
 
 class FirebaseService{
-    _storeNoteService = async (notekey, title, note) =>{
+    _storeNoteService = async (notekey, title, note, labels) =>{
         const userid = JSON.parse(await AsyncStorage.getItem('userId')) 
         return new Promise((resolve, reject) => {
             const notes = {
                 title : title,
                 note : note,
+                labels: labels,
                 isDeleted: false,
                 isArchive: false
-            }
-            Firebase.database().ref('Notes/' +userid+'/' +notekey).set({
-                NotesDetail : notes
-            }).then(() => resolve('success'))
-            .catch(error => reject(error))
-        })
-    }
-
-    storeArchiveToDatabase = async(notekey, title, note) => {
-        const userid = JSON.parse(await AsyncStorage.getItem('userId')) 
-        return new Promise((resolve, reject) => {
-            const notes = {
-                title : title,
-                note : note,
-                isDeleted: false,
-                isArchive: true
             }
             Firebase.database().ref('Notes/' +userid+'/' +notekey).set({
                 NotesDetail : notes
@@ -53,12 +38,13 @@ class FirebaseService{
         })
     }
 
-    _updateNoteService = async(key, title, note) => {
+    _updateNoteService = async(key, title, note, labels) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'));
         return new Promise((resolve, reject) => {
             const notes = {
                 title : title,
                 note : note,
+                labels: labels,
                 isDeleted : false,
                 isArchive: false
             }
@@ -70,14 +56,15 @@ class FirebaseService{
         })
     }
 
-    _deleteNotesService = async(key, title, note) => {
+    _deleteNotesService = async(key, title, note, labels) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise((resolve, reject) => {
             const notes = {
                 title : title,
                 note : note,
                 isDeleted : true,
-                isArchive: false
+                isArchive: false,
+                labels : labels,
             }
             Firebase.database().ref('Notes/'+userid+ '/'+ key).set({
                 NotesDetail : notes
@@ -86,9 +73,6 @@ class FirebaseService{
             .catch(error => reject(error))
         })
     }
-
-//Level function start from here
-
     _restoreNoteService = async(key, title, note) => {
         const userid = JSON.parse(AsyncStorage.getItem('userId'))
         return new Promise((resolve, reject) => {
@@ -104,8 +88,8 @@ class FirebaseService{
             .then(() => resolve('success'))
             .catch(error => reject(error))
         })
-    }
-
+    }    
+    
     _deleteOneNoteService = async(key) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise((resolve, reject) => {
@@ -115,6 +99,8 @@ class FirebaseService{
             .catch(error => reject(error))
         })
     }
+
+//Level function start from here
 
     addLabelInDatabase = async(userId, labelName) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
@@ -166,6 +152,25 @@ class FirebaseService{
             .catch(error => reject(error))
         })
     }
+
+//Archive service funtions start from here 
+    storeArchiveToDatabase = async(notekey, title, note, labels) => {
+        const userid = JSON.parse(await AsyncStorage.getItem('userId')) 
+        return new Promise((resolve, reject) => {
+            const notes = {
+                title : title,
+                note : note,
+                isDeleted: false,
+                isArchive: true,
+                labels : labels
+            }
+            Firebase.database().ref('Notes/' +userid+'/' +notekey).set({
+                NotesDetail : notes
+            }).then(() => resolve('success'))
+            .catch(error => reject(error))
+        })
+    }
+
 
 }
 

@@ -18,7 +18,8 @@ class DrawerContent extends Component {
         super(props)
         this.state = {
             labelsContent: [],
-            labelNoteKeys: []
+            labelNoteKeys: [],
+            labels:[]
         }
     }
 
@@ -32,7 +33,8 @@ class DrawerContent extends Component {
             })
             await this.setState({
                 labelNoteKeys : tempKey,
-                labelsContent: labelContent
+                labelsContent: labelContent,
+                labels : labels
             })
             await this.props.storeLabelContent(this.state.labelsContent);
             await this.props.storeNoteKeys(this.state.labelNoteKeys);

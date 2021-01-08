@@ -4,12 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const db = openDatabase({name: 'fundoo_notes.db', createFromLocation: 1});
 
 class SQLiteCRUDService {   
-
+    
+//Note Service for sqlite start from here 
     createTableService = async() => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise((resolve, reject) => {
             db.transaction((transect) => {
-                transect.executeSql(`CREATE TABLE IF NOT EXISTS ${userid} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" TEXT, "isArchive" TEXT, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
+                transect.executeSql(`CREATE TABLE IF NOT EXISTS ${userid} ("NoteKey" TEXT, "Title" TEXT, "Notes" TEXT, "isDeleted" TEXT, "isArchive" TEXT ,"Labels" Text, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
                     resolve(results)
                 },
                 error => reject(error)
@@ -18,7 +19,7 @@ class SQLiteCRUDService {
         })
     }
 
-    storeNoteToSQLiteService = async (noteKey, title, notes, deletedStatus, isArchive) => {
+    storeNoteToSQLiteService = async (noteKey, title, notes, deletedStatus, isArchive, labels) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise(async (resolve, reject) => {
             //checking to create table
@@ -26,27 +27,8 @@ class SQLiteCRUDService {
             //adding data logic
             db.transaction((transect) => {
                 transect.executeSql(
-                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted, isArchive) VALUES (?,?,?,?,?)`,
-                    [noteKey, title, notes, deletedStatus, isArchive],
-                    async (transect, results) => {
-                        resolve(results)
-                    },
-                    error => reject(error)
-                );
-            })
-        })
-    }
-//Archive function start from here 
-    storeArchiveNoteToSQLiteService = async (noteKey, title, notes, deletedStatus, isArchive) => {
-        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
-        return new Promise(async (resolve, reject) => {
-            //checking to create table
-            await this.createTableService();
-            //adding data logic
-            db.transaction((transect) => {
-                transect.executeSql(
-                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted, isArchive) VALUES (?,?,?,?,?)`,
-                    [noteKey, title, notes, deletedStatus, isArchive],
+                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted, isArchive, Labels) VALUES (?,?,?,?,?)`,
+                    [noteKey, title, notes, deletedStatus, isArchive, labels],
                     async (transect, results) => {
                         resolve(results)
                     },
@@ -56,7 +38,7 @@ class SQLiteCRUDService {
         })
     }
 
-    updateNoteDetailInSQLiteService = async (key, title, notes, deletedStatus) => {
+    updateNoteDetailInSQLiteService = async (key, title, notes, deletedStatus, labels) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise(async (resolve, reject) => {
             //checking that table is created or not
@@ -64,8 +46,8 @@ class SQLiteCRUDService {
 
             db.transaction(async (transect) => {
                 transect.executeSql(
-                    `UPDATE ${userid} set Title = ? , Notes = ?,isDeleted = ?  where NoteKey = ?`,
-                    [title, notes, deletedStatus, key],
+                    `UPDATE ${userid} set Title = ? , Notes = ?,isDeleted = ?, Labels = ?  where NoteKey = ?`,
+                    [title, notes, deletedStatus, key, labels],
                     async (transect, results) => {
                         resolve(results)
                     },
@@ -89,6 +71,39 @@ class SQLiteCRUDService {
         })
     }
 
+    deleteNoteForever = async (noteKey) => {
+        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
+        return new Promise(async (resolve, reject) => {
+            db.transaction((transect) => {
+                transect.executeSql(
+                    `DELETE FROM ${userid} WHERE NoteKey = ?`, [noteKey], (transect, results) =>
+                        resolve('success'),
+                        error => reject(error)
+                )
+            })
+        })
+    }
+
+//Archive function start from here 
+    storeArchiveNoteToSQLiteService = async (noteKey, title, notes, deletedStatus, isArchive) => {
+        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
+        return new Promise(async (resolve, reject) => {
+            //checking to create table
+            await this.createTableService();
+            //adding data logic
+            db.transaction((transect) => {
+                transect.executeSql(
+                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted, isArchive) VALUES (?,?,?,?,?)`,
+                    [noteKey, title, notes, deletedStatus, isArchive],
+                    async (transect, results) => {
+                        resolve(results)
+                    },
+                    error => reject(error)
+                );
+            })
+        })
+    }
+
     addNotesFromFirebaseToSQLite = async (noteKey, title, notes, deletedStatus) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise(async (resolve, reject) => {
@@ -108,18 +123,6 @@ class SQLiteCRUDService {
         })
     }
     
-    deleteNoteForever = async (noteKey) => {
-        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
-        return new Promise(async (resolve, reject) => {
-            db.transaction((transect) => {
-                transect.executeSql(
-                    `DELETE FROM ${userid} WHERE NoteKey = ?`, [noteKey], (transect, results) =>
-                        resolve('success'),
-                        error => reject(error)
-                )
-            })
-        })
-    }
     
 }
 

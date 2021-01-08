@@ -57,4 +57,4 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
-android/java_*.hprof
+/android/java_*.hprof

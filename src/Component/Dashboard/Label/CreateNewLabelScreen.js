@@ -118,7 +118,7 @@ class CreateNewLabelScreen extends Component {
                             {this.state.createNewLabelTextboxActive ? 
                                 <View style = {{flexDirection :'column', width : '65%'}}>
                                 <TextInput
-                                    style = {{ backgroundColor : 'transparent', paddingBottom : 0,}}
+                                    style = {{ backgroundColor : 'transparent', paddingBottom : 0}}
                                     placeholder = {'Create new Label'}
                                     autoFocus = {this.state.createNewLabelTextboxActive}
                                     onChangeText = {this.handleText}
@@ -134,7 +134,7 @@ class CreateNewLabelScreen extends Component {
                             : 
                             <TouchableOpacity 
                                 onPress = {this.changeToCreateLabel} 
-                                style = {{width: '65%'}}>
+                                style = {{width: '100%'}}>
                                 <Text 
                                     style = {{color: 'gray'}}>
                                         Create new Label

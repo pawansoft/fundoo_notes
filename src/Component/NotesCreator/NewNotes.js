@@ -92,7 +92,7 @@ export default class NewNotes extends Component {
       }
     handleSelectLabel = () => {
         this.handleCancel()
-        this.props.navigation.push('Home', {screen: 'SelectLabel'})
+        this.props.navigation.push('Home', {screen: 'SelectLabel', params: {noteKey : this.state.key}})
     }
 
     handleDeleteNoteButton = async () => {
@@ -150,6 +150,7 @@ export default class NewNotes extends Component {
 
                         <Appbar.Action
                             icon='archive-arrow-down-outline'
+                            onPress = {this.handleArchiveButton}
                         />
                     </View>
                 </Appbar>

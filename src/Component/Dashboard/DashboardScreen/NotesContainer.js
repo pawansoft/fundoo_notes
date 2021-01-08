@@ -11,7 +11,6 @@ export default class NotesContainer extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            notes: [],
             notesFromSQLite: []
         }
     }
@@ -42,7 +41,7 @@ export default class NotesContainer extends Component {
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                         {this.state.notesFromSQLite.reverse().map(val => (                   
                             <React.Fragment key={val.NoteKey}>
-                                {console.log(val)}
+                                {console.log(val.Notes)}
                                 {val.isDeleted == "false" && val.isArchive == "false"?
                                     (
                                         <Card
