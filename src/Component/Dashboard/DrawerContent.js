@@ -63,6 +63,10 @@ class DrawerContent extends Component {
         this.props.navigationProps.navigation.push('Home', {screen: 'Archive'})
     }
 
+    handleLabelButton = (labelId, labelName) => {
+        this.props.navigationProps.navigation.push('Home', {screen: 'LabelScreen', params : {labelId : labelId, labelName : labelName}})
+    }
+
     render(){
         return(
             <View style = {{flex : 1, backgroundColor : '#FFFFEF'}}>
@@ -85,7 +89,8 @@ class DrawerContent extends Component {
                         key = {key} 
                         icon = 'label-outline' 
                         label = {this.state.labelsContent[key].labelName} 
-                        onPress = {this.handleCreateNewLabelButton}/>
+                        onPress = {() => this.handleLabelButton(key, this.state.labelsContent[key].labelName )}
+                        />
                     ))}
                     <Drawer.Item
                     icon = 'plus'

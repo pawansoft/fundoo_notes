@@ -4,7 +4,8 @@ import {
     ScrollView,
     TextInput,
     View,
-    Image
+    Image,
+    Text
 } from 'react-native';
 import { Appbar, Menu, Snackbar } from 'react-native-paper';
 import Textarea from 'react-native-textarea';
@@ -15,6 +16,7 @@ import NotesContainerStyle from '../../Style/NotesContainerStyle';
 import { openDatabase } from 'react-native-sqlite-storage';
 import NotesServiceController from '../../../Services/data_flow_controller/NotesServiceController';
 import backgroundImageStyle from '../../Style/backgroundImageStyle';
+import SQLiteLabelServices from '../../../Services/SQLite_service/SQLiteLabelServices';
 
 const db = openDatabase({ name: 'fundoo_notes.db', createFromLocation: '~data/fundoo_notes.db' });
 
@@ -27,6 +29,8 @@ export default class NewNotes extends Component {
             key: '',
             userid: '',
             isEmpty: false,
+            SelectedLabels: [],
+            labelDetails : []
         }
     }
 
@@ -36,11 +40,30 @@ export default class NewNotes extends Component {
             userid: userId
         })
 
-        if (this.props.route.params != undefined) {
+        // if (this.props.route.params.newNote == undefined ) {
+        //     await this.setState({
+        //         key: this.props.route.params.key,
+        //         note: this.props.route.params.note,
+        //         title: this.props.route.params.title,
+        //         labels : this.props.route.params.labels,
+        //     })
+        // }
+
+        if(this.props.route.params.newNote == true){
             await this.setState({
-                key: this.props.route.params.key,
-                note: this.props.route.params.note,
-                title: this.props.route.params.title
+                note : this.props.route.params.note,
+                title : this.props.route.params.title,
+                SelectedLabels : this.props.route.params.selectedLabel,
+                labelDetails : this.props.route.params.available_labels
+            })
+        }
+        else if(this.props.route.params.updateNote == true){
+            console.log('in update block');
+            await this.setState({
+                key : this.props.route.params.key,
+                note : this.props.route.params.note,
+                title : this.props.route.params.title,
+                SelectedLabels : JSON.parse(this.props.route.params.selectedLabel)
             })
         }
     }
@@ -60,14 +83,18 @@ export default class NewNotes extends Component {
 
     handleBackButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
-            if (this.props.route.params != undefined) {
-                NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note)
-                    .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
+            
+            if(this.props.route.params.newNote == true){
+                await NotesServiceController.addNote(this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels))
+                .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
+                .catch(error => console.log(error))
             }
-            else if (this.props.route.params == undefined) {
-                NotesServiceController.addNote(this.state.title, this.state.note)
-                    .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
-                    .catch(error => console.log(error))
+            else if (this.props.route.params.updateNote == true){
+                await NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels))
+                .then(() => {
+                    this.props.navigation.push('Home', {screen : 'Notes'})
+                }).catch(error => console.log(error))
+
             }
         }
         else {
@@ -92,13 +119,21 @@ export default class NewNotes extends Component {
       }
     handleSelectLabel = () => {
         this.handleCancel()
-        this.props.navigation.push('Home', {screen: 'SelectLabel', params: {noteKey : this.state.key}})
+        if(this.props.route.params.newNote == true){
+            this.props.navigation.push('Home', {screen: 'SelectLabel', params : {newNote : true, title : this.state.title, note : this.state.note, label : this.state.SelectedLabels}})
+        }
+        if(this.props.route.params.updateNote == true){
+            this.props.navigation.push('Home', {screen: 'SelectLabel', params : {
+                key : this.state.key, title : this.state.title, note : this.state.note, SelectedLabels : this.state.SelectedLabels, updateNote : true
+            }})
+        }
+        // this.props.navigation.push('Home', {screen: 'SelectLabel', params: {noteKey : this.state.key, note: this.state.note, title: this.state.title, label: this.state.labels, userid : this.state.userid}})
     }
 
     handleDeleteNoteButton = async () => {
         this.handleCancel()
         if (this.state.title != '' || this.state.note != '') {
-            NotesServiceController.moveToRecycleBin(this.state.key, this.state.title, this.state.note)
+            NotesServiceController.moveToRecycleBin(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels))
                 .then(() => this.props.navigation.push('Home', {
                     screen: 'Notes', params: {
                         key: this.state.key,
@@ -168,6 +203,16 @@ export default class NewNotes extends Component {
                             placeholder='Notes'
                             value={this.state.note}
                             onChangeText={this.handleNote} />
+                    </View>
+                    <View>
+                        {(this.state.SelectedLabels != undefined) ?
+                            this.state.SelectedLabels.map(data => (    
+                                <React.Fragment key = {data.label_id}>
+                                    <Text>{data}</Text>
+                                </React.Fragment>
+                            ))
+                            :null
+                        }
                     </View>
                 </ScrollView>
                 <Appbar style={NotesHolderStyle.footerContainer}>

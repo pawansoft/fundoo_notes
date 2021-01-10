@@ -26,7 +26,7 @@ class SQLiteCRUDService {
             //adding data logic
             db.transaction((transect) => {
                 transect.executeSql(
-                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted, isArchive, Labels) VALUES (?,?,?,?,?)`,
+                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted, isArchive, Labels) VALUES (?,?,?,?,?,?)`,
                     [noteKey, title, notes, deletedStatus, isArchive, labels],
                     async (transect, results) => {
                         resolve(results)
@@ -46,7 +46,7 @@ class SQLiteCRUDService {
             db.transaction(async (transect) => {
                 transect.executeSql(
                     `UPDATE ${userid} set Title = ? , Notes = ?,isDeleted = ?, Labels = ?  where NoteKey = ?`,
-                    [title, notes, deletedStatus, key, labels],
+                    [title, notes, deletedStatus, labels, key],
                     async (transect, results) => {
                         resolve(results)
                     },

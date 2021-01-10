@@ -11,8 +11,10 @@ export default class NotesContainer extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            notesFromSQLite: []
+            notesFromSQLite: [],
+            labels : []
         }
+        // SQLiteLabelServices.dropTable();
     }
 
     async componentDidMount() {
@@ -27,11 +29,16 @@ export default class NotesContainer extends Component {
                     })
                 }
             })
+            this.state.notesFromSQLite.map(async value => {
+                this.setState({
+                    
+                })
+            })
     }
 
-    updateNote = (key, title, note) => {
+    updateNote = (key, title, note, labels) => {
         this.props.navigation.push('NewNotes',
-            { key: key, title: title, note: note })
+            { key: key, title: title, note: note, selectedLabel: labels, updateNote: true })
     }
 
     render() {
@@ -39,13 +46,11 @@ export default class NotesContainer extends Component {
             <View>
                 <ScrollView>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                        {this.state.notesFromSQLite.reverse().map(val => (                   
+                        {this.state.notesFromSQLite.reverse().map(val => (                  
                             <React.Fragment key={val.NoteKey}>
-                                {console.log(val.Notes)}
                                 {val.isDeleted == "false" && val.isArchive == "false"?
-                                    (
-                                        <Card
-                                            onPress={() => this.updateNote(val.NoteKey, val.Title, val.Notes)}
+                                    (<Card
+                                            onPress={() => this.updateNote(val.NoteKey, val.Title, val.Notes, val.Labels)}
                                             style={(this.props.listview) ? NotesContainerStyle.container_list : NotesContainerStyle.container}>
                                             <Card.Content style={{ backgroundColor: 'white' }}>
                                                 <Title style={{ color: 'black' }}>
@@ -53,6 +58,9 @@ export default class NotesContainer extends Component {
                                                 </Title>
                                                 <Paragraph style={{ color: 'black' }}>
                                                     {val.Notes}
+                                                </Paragraph>
+                                                <Paragraph style={{ color: 'black' }}>
+                                                    {JSON.parse(val.Labels)}
                                                 </Paragraph>
                                             </Card.Content>
                                         </Card>)

@@ -102,17 +102,8 @@ class FirebaseService{
 
 //Level function start from here
 
-    addLabelInDatabase = async(userId, labelName) => {
+    addLabelInDatabase = async(labelId, labelName) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
-        var today = new Date()
-        var labelId = ''
-        labelId = today.getFullYear() 
-                + String((today.getMonth() + 1) < 10 ? (0 + String(today.getMonth() + 1)) : today.getMonth) 
-                + String(today.getDate() < 10 ? (0 + String(today.getDate())) : today.getDate()) 
-                + String(today.getHours() < 10 ? '0' + today.getHours() : today.getHours())
-                + String(today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes()) 
-                + String(today.getSeconds() < 10 ? '0' + today.getSeconds() : today.getSeconds())
-
         return new Promise((resolve, reject) => {
             Firebase.database().ref('Labels/'+userid+ '/' +labelId).set({
                 labelName: labelName

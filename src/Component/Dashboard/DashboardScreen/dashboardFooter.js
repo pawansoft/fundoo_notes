@@ -9,7 +9,7 @@ export default class BottomBar extends Component {
     }
 
     handleNewNoteCreateButton = () => {
-        this.props.navigation.push('NewNotes')
+        this.props.navigation.push('NewNotes', {newNote: true})
     }
 
     render() {

@@ -114,9 +114,11 @@ export default class Delete extends Component {
                             {this.state.notesFromSQLite.reverse().map(val => (
                                     <React.Fragment key={val.NoteKey}>
                                         {val.isDeleted == "true"?
+                                        
                                             (<Card
                                                 onPress={() => this.deleteNoteActionHandler(val)}
                                                 style={(this.state.listView) ? NotesContainerStyle.container_list : NotesContainerStyle.container}>
+                                                
                                                 <Card.Content style={{ backgroundColor: 'white' }}>
                                                     <Title style={{ color: 'black' }}>
                                                         {val.Title}
@@ -124,6 +126,7 @@ export default class Delete extends Component {
                                                     <Paragraph style={{ color: 'black' }}>
                                                         {val.Notes}
                                                     </Paragraph>
+                                                    <Text>{JSON.parse(val.Labels)}</Text>
                                                 </Card.Content>
                                             </Card>)
                                             : null}

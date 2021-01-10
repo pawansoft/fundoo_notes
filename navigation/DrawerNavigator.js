@@ -8,6 +8,7 @@ import { DeleteActionScreen } from '../src/Component/Dashboard/Delete/DeleteActi
 import ArchiveScreen from '../src/Component/Dashboard/Archive/ArchiveScreen';
 import DrawerContent from '../src/Component/Dashboard/DrawerContent';
 import PopulatedLabel from '../src/Component/Dashboard/Label/PopulatedLabel';
+import LabelScreen from '../src/Component/Dashboard/Label/LabelScreen';
 ;
 
 const Drawer = createDrawerNavigator();
@@ -23,6 +24,7 @@ function DrawerNavigator (){
             <Drawer.Screen name = 'DeleteAction' component = {DeleteActionScreen}/>
             <Drawer.Screen name = 'Archive' component = {ArchiveScreen}/>
             <Drawer.Screen name = 'SelectLabel' component = {PopulatedLabel}/>
+            <Drawer.Screen name = 'LabelScreen' component = {LabelScreen}/>
         </Drawer.Navigator>
     )
 }

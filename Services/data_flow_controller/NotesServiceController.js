@@ -3,14 +3,14 @@ import SQLiteCRUDService from '../SQLite_service/SQLiteCRUDService';
 import SQLiteLabelServices from '../SQLite_service/SQLiteLabelServices';
 
 class NotesServiceController {
-    addNote = (title, note) => {
+    addNote = (title, note, labels) => {
         return new Promise(async (resolve, reject) => {
             //calling method to random generate note key
             var noteKey = await this.generateRandomKey();
 
-            SQLiteCRUDService.storeNoteToSQLiteService(noteKey, title, note, 'false', 'false').then(
+            SQLiteCRUDService.storeNoteToSQLiteService(noteKey, title, note, 'false', 'false', labels).then(
                 (data) => {
-                    NoteServices._storeNoteService(noteKey, title, note).then(
+                    NoteServices._storeNoteService(noteKey, title, note, labels).then(
                         () => console.log('Uploaded to firebase'))
                         .catch((error) => console.log(error))
                         resolve(data)
@@ -32,20 +32,20 @@ class NotesServiceController {
         })
     }
 
-    updateNote = (noteKey, title, note) => {
+    updateNote = (noteKey, title, note, labels) => {
         return new Promise((resolve, reject) => {
-            SQLiteCRUDService.updateNoteDetailInSQLiteService(noteKey, title, note, 'false')
+            SQLiteCRUDService.updateNoteDetailInSQLiteService(noteKey, title, note, 'false', labels)
                 .then((data) => 
-                    NoteServices._updateNoteService(noteKey, title, note)
+                    NoteServices._updateNoteService(noteKey, title, note, labels)
                         .then(resolve(data))
                         .catch((error) => console.log(error)))
                 .catch(error => reject(error))
         })
     }
 
-    moveToRecycleBin = (noteKey, title, note) => {
+    moveToRecycleBin = (noteKey, title, note, labels) => {
         return new Promise((resolve, reject) => {
-            SQLiteCRUDService.updateNoteDetailInSQLiteService(noteKey, title, note, 'true').then(
+            SQLiteCRUDService.updateNoteDetailInSQLiteService(noteKey, title, note, 'true', labels).then(
                 (data) => resolve(data))
                 .catch(error => reject(error))
 
@@ -55,7 +55,8 @@ class NotesServiceController {
         })
     }
 //Label function start from here 
-    storeLabel = (labelId, label) => {
+    storeLabel = (label) => {
+        var labelId = this.generateRandomKey();
         return new Promise((resolve) => {
             SQLiteLabelServices.storeLabelInSQliteStorage(labelId, label)
                 .then(() => {
@@ -107,18 +108,7 @@ class NotesServiceController {
     }
 
     generateRandomKey = () => {
-        const sampelValue = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
-        var today = new Date();
-        var noteKey = today.getFullYear() 
-                        + String((today.getMonth() + 1) < 10 ? (0 + String(today.getMonth() + 1)) : today.getMonth) 
-                        + String(today.getDate() < 10 ? (0 + String(today.getDate())) : today.getDate()) 
-                        + String(today.getHours() < 10 ? '0' + today.getHours() : today.getHours())
-                        + String(today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes()) 
-                        + String(today.getSeconds() < 10 ? '0' + today.getSeconds() : today.getSeconds())
-        for(let i=0; i < 6; i++){
-            noteKey += sampelValue.charAt(Math.floor(Math.random) * sampelValue.length)
-        }
-        return noteKey;
+        return Date.now()
     }
 }
 

@@ -17,6 +17,29 @@ class SQLiteLabelServices{
         })
     }
 
+    dropTable = async() =>{
+        const userId = JSON.parse(await AsyncStorage.getItem('userId'))
+        db.transaction(tx => {
+            tx.executeSql(
+                `DROP TABLE ${userId};`, [],
+                (tx, results) => {
+                    if (results && results.rows && results.rows._array) {
+                      /* do something with the items */
+                      // results.rows._array holds all the results.
+                      console.log(JSON.stringify(results.rows._array));
+                      console.log('table dropped')
+                    } else {
+                      console.log('no results')
+                    }
+                  },
+                  (tx, error) => {
+                    console.log(error);
+                  }
+                
+            )
+        })
+    }
+
     storeLabelInSQliteStorage = async( labelId, label) => {
         const userId = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise((resolve, reject) => {

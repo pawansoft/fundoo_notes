@@ -7,6 +7,7 @@ import CreateNewLabelStyles from '../../../Style/CreateNewLabelStyle';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import LevelActions from './LabelActions';
 import NoteServices from '../../../../Services/firebase_services/NoteServices';
+import NotesServiceController from '../../../../Services/data_flow_controller/NotesServiceController';
 
 class CreateNewLabelScreen extends Component {
     constructor(props) {
@@ -86,7 +87,10 @@ class CreateNewLabelScreen extends Component {
 
     createLabel = async () => {
         if(this.state.enteredLabel != '' && !this.state.labelExistErrorMessage) {
-            await NoteServices.addLabelInDatabase(this.props.userId, this.state.enteredLabel)
+            await NotesServiceController.storeLabel(this.state.enteredLabel)
+            .then(() => console.log("Added Successfully"))
+            .catch(error => console.log(error))
+            // await NoteServices.addLabelInDatabase(this.props.userId, this.state.enteredLabel)
         }
         this.setState({
             createNewLabelTextboxActive: !this.state.createNewLabelTextboxActive,
