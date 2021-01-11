@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
 import {
     View,
-    Text,
-    TouchableOpacity,
-    ScrollView,
-    Image
+    Image,
+    FlatList
 } from 'react-native'
-import { Appbar, Card, Paragraph, Title } from 'react-native-paper'
+import { Appbar} from 'react-native-paper'
 import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDService'
 import backgroundImageStyle from '../../../Style/backgroundImageStyle'
 import dashboardStyle from '../../../Style/dashboardStyle'
-import NotesContainerStyle from '../../../Style/NotesContainerStyle'
+import NoteCard from '../DashboardScreen/NoteCard'
 
 export default class ArchiveScreen extends Component {
 
@@ -18,12 +16,15 @@ export default class ArchiveScreen extends Component {
         super(props)
         this.state = {
             listView: true,
-            notesFromSQLite: []
+            notesFromSQLite: [],
+            index: 0,
+            endReached : false,
+            showNotes: []
         }
     }
 
     async componentDidMount() {
-        await SQLiteCRUDService.getDetailsFromSQLiteDatabase()
+        await SQLiteCRUDService.getConditionalDetailsFromSQLiteDatabase("true", "false")
             .then(async (data) => {
                 var temp = []
                 if (data.rows.length != 0) {
@@ -33,6 +34,16 @@ export default class ArchiveScreen extends Component {
                         notesFromSQLite: temp
                     })
                 }
+            }
+        )
+        let tempNotes = []
+            let loadingIndex
+            for(loadingIndex = 0; loadingIndex < 10 && loadingIndex < this.state.notesFromSQLite.length; loadingIndex++){
+                tempNotes.push(this.state.notesFromSQLite[loadingIndex])
+            }
+            await this.setState({
+                showNotes : tempNotes,
+                index : loadingIndex
             })
     }
 
@@ -43,59 +54,76 @@ export default class ArchiveScreen extends Component {
         console.log(this.state.listView);
     }
 
-    updateNote = (key, title, note) => {
+    updateNote = (key, title, note, labels) => {
         this.props.navigation.push('NewNotes',
-            { key: key, title: title, note: note })
+            { key: key, title: title, note: note, selectedLabel: labels,  updateNote: true})
     }
 
     handleSearch = () => {
         this.props.navigation.push('Home', { screen: 'Search'})
     }
 
+
+    loadData = async (addIndex) => {
+        for(let i = 0; i < addIndex; i++) {
+            if(this.state.index == this.state.notesFromSQLite.length) {
+                await this.setState({
+                    index: 0,
+                })
+            }
+            this.state.showNotes.push(this.state.notesFromSQLite[this.state.index])
+            this.state.index ++
+        }
+    }
+
     render() {
         return (
             <View>
-                 <Image style= { backgroundImageStyle.backgroundImage } source= {require('../../../assets/background1.jpg')}>
+                 <Image style = { backgroundImageStyle.backgroundImage } source = {require('../../../assets/background1.jpg')}>
                 </Image> 
-                <Appbar style={dashboardStyle.headerContainer}>
+                <Appbar style = {dashboardStyle.headerContainer}>
                     <Appbar.Action
-                        icon='menu'
-                        onPress={() => this.props.navigation.openDrawer()} />
+                        icon = 'menu'
+                        onPress = {() => this.props.navigation.openDrawer()} />
 
-                    <Appbar.Content title="Archive" />
-                    <Appbar.Action icon='magnify' 
+                    <Appbar.Content title = "Archive" />
+                    <Appbar.Action icon = 'magnify' 
                     onPress = {this.handleSearch}/>
 
                     <Appbar.Action
-                        style={{ marginRight: 10 }}
-                        icon={(this.state.listView) ? 'view-grid-outline' : 'view-agenda-outline'}
-                        onPress={this.selectView} />
+                        style = {{ marginRight: 10 }}
+                        icon = {(this.state.listView) ? 'view-grid-outline' : 'view-agenda-outline'}
+                        onPress = {this.selectView} />
                 </Appbar>
-
-                <ScrollView>
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                        {this.state.notesFromSQLite.reverse().map(val => (
-                            <React.Fragment key={val.NoteKey}>
-                                {console.log(val)}
-                                {val.isDeleted == "false" && val.isArchive == "true" ?
-                                    (<Card
-                                        onPress={() => this.updateNote(val.NoteKey, val.Title, val.Notes)}
-                                        style={(this.state.listView) ? NotesContainerStyle.container_list : NotesContainerStyle.container}>
-                                        <Card.Content style={{ backgroundColor: 'white' }}>
-                                            <Title style={{ color: 'black' }}>
-                                                {val.Title}
-                                            </Title>
-                                            <Paragraph style={{ color: 'black' }}>
-                                                {val.Notes}
-                                            </Paragraph>
-                                        </Card.Content>
-                                    </Card>)
-                                    : null}
-                            </React.Fragment>
-                        ))
+                <FlatList
+                    numColumns = {this.state.listView ? 1 : 2}
+                    keyExtractor = {(item, index) => JSON.stringify(index)}
+                    key = {this.state.listView ? 1 : 2}
+                    data = {this.state.showNotes}
+                    onEndReached = {async () => {
+                        await this.setState({
+                            endReached : true
+                        })
+                    }}
+                    onScroll = {async () => {
+                        if(this.state.endReached){
+                            this.loadData(5)
+                            await this.setState({
+                                endReached : false
+                            })
                         }
-                    </View>
-                </ScrollView>
+                    }}
+
+                    onEndReachedThreshold = {0.1}
+                    renderItem = {({item}) => (
+                        <NoteCard
+                            listView = {this.state.listView}
+                            notes = {item}
+                            noteKey = {item.note_id}
+                            isArchive = {'true'}
+                            navigation = {this.props.navigation}/>   
+                    )}
+                    />
             </View>
         )
     }

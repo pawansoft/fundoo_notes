@@ -11,7 +11,7 @@ export default class DashboardHeader extends Component {
         this.state = {
             userid: '',
             userDetail: [],
-            imageUri: ''
+            imageUri: '',
         }
     }
 

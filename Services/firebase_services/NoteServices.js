@@ -73,14 +73,15 @@ class FirebaseService{
             .catch(error => reject(error))
         })
     }
-    _restoreNoteService = async(key, title, note) => {
+    _restoreNoteService = async(key, title, note, labels) => {
         const userid = JSON.parse(AsyncStorage.getItem('userId'))
         return new Promise((resolve, reject) => {
             const notes = {
                 title : title,
                 note : note,
                 isDeleted : false,
-                isArchive: false
+                isArchive: false,
+                labels : labels,
             }
             Firebase.database().ref('Notes/'+userid+ '/'+ key).set({
                 NotesDetail : notes
@@ -161,7 +162,6 @@ class FirebaseService{
             .catch(error => reject(error))
         })
     }
-
 
 }
 

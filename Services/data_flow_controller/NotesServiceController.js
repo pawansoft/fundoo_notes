@@ -19,17 +19,31 @@ class NotesServiceController {
         })
     }
 
-    addArchive = (title, note) => {
+    addArchive = (title, note, labels) => {
         return new Promise(async (resolve, reject) => {
             var noteKey = await this.generateRandomKey();
-            SQLiteCRUDService.storeArchiveNoteToSQLiteService(noteKey, title, note, 'false', 'true')
+            SQLiteCRUDService.storeArchiveNoteToSQLiteService(noteKey, title, note, 'false', 'true', labels)
                 .then((data) => {
-                    NoteServices.storeArchiveToDatabase(noteKey, title, note)
+                    NoteServices.storeArchiveToDatabase(noteKey, title, note, labels)
                     .then (() => resolve('success'))
                     .catch(error => reject(error))
                 })
             .catch(error => reject(error))
         })
+    }
+
+    removeArchive = (noteKey, title, note, labels) =>
+    {
+        return new Promise(async (resolve, reject) => {
+            SQLiteCRUDService.RestoreArchive(noteKey)
+                .then((data) => {
+                    NoteServices._restoreNoteService(noteKey, title, note, labels)
+                    .then (() => resolve('success'))
+                    .catch(error => reject(error))
+                })
+            .catch(error => reject(error))
+        })
+
     }
 
     updateNote = (noteKey, title, note, labels) => {

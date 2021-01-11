@@ -13,6 +13,8 @@ import dashboardStyle from '../../../Style/dashboardStyle';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDService';
 import backgroundImageStyle from '../../../Style/backgroundImageStyle';
+import SQLiteLabelServices from '../../../../Services/SQLite_service/SQLiteLabelServices';
+import NotesHolderStyle from '../../../Style/NotesHolderStyle';
 
 export default class Delete extends Component {
     constructor(props) {
@@ -21,7 +23,8 @@ export default class Delete extends Component {
             listView: true,
             notesFromSQLite: [],
             showProfileScreen: false,
-            isEditable: false
+            isEditable: false,
+            labelDetails: []
         }
     }
 
@@ -39,7 +42,7 @@ export default class Delete extends Component {
 
     async componentDidMount() {
 
-        await SQLiteCRUDService.getDetailsFromSQLiteDatabase()
+        await SQLiteCRUDService.getConditionalDetailsFromSQLiteDatabase('false', 'true')
             .then(async (data) => {
                 var temp = []
                 if (data.rows.length != 0) {
@@ -50,14 +53,17 @@ export default class Delete extends Component {
                     })
                 }
             })
-        const userid = await AsyncStorage.getItem('userId');
-        await FirebaseService._getNoteService(userid).then(async data => {
-            let notes = data ? data : {}
-
-            await this.setState({
-                notes: notes
+        await SQLiteLabelServices.selectLabelFromSQliteStorage()
+            .then(async result => {
+                var temp = [];
+                if (result.rows.length != 0) {
+                    for (let i = 0; i < result.rows.length; ++i)
+                        temp.push(result.rows.item(i));
+                    this.setState({
+                        labelDetails: temp
+                    })
+                }
             })
-        })
     }
 
     selectView = async () => {
@@ -95,8 +101,8 @@ export default class Delete extends Component {
         return (
             <Provider>
                 <View style={{ flex: 1 }}>
-                <Image style= { backgroundImageStyle.backgroundImage } source= {require('../../../assets/background1.jpg')}>
-                </Image> 
+                    <Image style={backgroundImageStyle.backgroundImage} source={require('../../../assets/background1.jpg')}>
+                    </Image>
                     <View>
                         <Appbar style={dashboardStyle.headerContainer}>
                             <Appbar.Action
@@ -109,29 +115,41 @@ export default class Delete extends Component {
                                 onPress={this.handleRBSheetOpenButton} />
                         </Appbar>
                     </View>
+
                     <ScrollView>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                             {this.state.notesFromSQLite.reverse().map(val => (
-                                    <React.Fragment key={val.NoteKey}>
-                                        {val.isDeleted == "true"?
-                                        
-                                            (<Card
-                                                onPress={() => this.deleteNoteActionHandler(val)}
-                                                style={(this.state.listView) ? NotesContainerStyle.container_list : NotesContainerStyle.container}>
-                                                
-                                                <Card.Content style={{ backgroundColor: 'white' }}>
-                                                    <Title style={{ color: 'black' }}>
-                                                        {val.Title}
-                                                    </Title>
-                                                    <Paragraph style={{ color: 'black' }}>
-                                                        {val.Notes}
-                                                    </Paragraph>
-                                                    <Text>{JSON.parse(val.Labels)}</Text>
-                                                </Card.Content>
-                                            </Card>)
-                                            : null}
-                                    </React.Fragment>
-                                ))
+                                <React.Fragment key={val.NoteKey}>
+                                    {val.isDeleted == "true" ?
+
+                                        (<Card
+                                            onPress={() => this.deleteNoteActionHandler(val)}
+                                            style={NotesContainerStyle.container_list}>
+
+                                            <Card.Content style={{ backgroundColor: 'white' }}>
+                                                <Title style={{ color: 'black' }}>
+                                                    {val.Title}
+                                                </Title>
+                                                <Paragraph style={{ color: 'black' }}>
+                                                    {val.Notes}
+                                                </Paragraph>
+                                                <View style = {NotesHolderStyle.label_text_container}>
+                                                    {(val.Labels != undefined) ?
+                                                        this.state.labelDetails.map(data =>
+                                                            val.Labels.includes(data.label_id) ?
+                                                                <React.Fragment key={data.label_id}>
+                                                                    <Text style={NotesHolderStyle.label_text}>{data.label}</Text>
+                                                                </React.Fragment>
+                                                                : null
+                                                        )
+                                                        : null
+                                                    }
+                                                </View>
+                                            </Card.Content>
+                                        </Card>)
+                                        : null}
+                                </React.Fragment>
+                            ))
                             }
                         </View>
                     </ScrollView>

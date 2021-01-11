@@ -43,6 +43,12 @@ const dashboardStyle = StyleSheet.create({
         marginLeft: 5,
         marginRight: 5,
         marginTop: 10,
+    },
+    footer:{
+        width: '100%', 
+        height: 50,  
+        position: 'absolute',
+        bottom: 0
     }
 })
 

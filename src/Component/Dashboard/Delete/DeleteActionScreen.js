@@ -11,6 +11,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import NotesHolderStyle from '../../../Style/NotesHolderStyle';
 import NotesServiceController from '../../../../Services/data_flow_controller/NotesServiceController';
 import backgroundImageStyle from '../../../Style/backgroundImageStyle';
+import SQLiteLabelServices from '../../../../Services/SQLite_service/SQLiteLabelServices';
+import NotesContainerStyle from '../../../Style/NotesContainerStyle';
 
 export class DeleteActionScreen extends Component {
     constructor(props) {
@@ -20,8 +22,11 @@ export class DeleteActionScreen extends Component {
             note: '',
             key: '',
             userid: '',
-            isDeletable: false
+            isDeletable: false,
+            selectedLabel: [],
+            labelDetails: []
         }
+        console.log(this.props);
     }
 
     componentDidMount = async () => {
@@ -35,9 +40,22 @@ export class DeleteActionScreen extends Component {
             await this.setState({
                 key : this.props.route.params.notes.NoteKey,
                 note : this.props.route.params.notes.Notes,
-                title : this.props.route.params.notes.Title
+                title : this.props.route.params.notes.Title,
+                selectedLabel : this.props.route.params.notes.Labels
             })
         }
+
+        await SQLiteLabelServices.selectLabelFromSQliteStorage()
+            .then(async result => {
+                var temp = [];
+                if(result.rows.length != 0) {
+                    for (let i = 0; i < result.rows.length; ++i)
+                        temp.push(result.rows.item(i));
+                    this.setState({
+                        labelDetails: temp
+                    })
+                }                
+            })
     }
 
     handleRBSheetOpenButton = async () => {
@@ -102,6 +120,17 @@ export class DeleteActionScreen extends Component {
                         <Text>
                             {this.state.note}
                         </Text>
+                    </View>
+                    <View style = {NotesHolderStyle.label_text_container}>
+                    {(this.state.selectedLabel != undefined)? 
+                            this.state.labelDetails.map(data =>
+                                this.state.selectedLabel.includes(data.label_id) ?
+                                    <React.Fragment key = {data.label_id}>
+                                        <Text style = {NotesHolderStyle.label_text}>{data.label}</Text>
+                                    </React.Fragment>
+                                :null
+                                                        
+                            ):null}
                     </View>
                 </ScrollView>
                 <View>

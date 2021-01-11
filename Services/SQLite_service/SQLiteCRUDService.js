@@ -70,6 +70,20 @@ class SQLiteCRUDService {
         })
     }
 
+    getConditionalDetailsFromSQLiteDatabase = async(isArchive, isDeleted) => {
+        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
+        return new Promise(async (resolve, reject) => {
+            //checking table is created or not
+            this.createTableService();
+            
+            db.transaction((transect) => {
+                transect.executeSql(`SELECT * FROM ${userid} WHERE isArchive = ? AND isDeleted = ?`, [isArchive, isDeleted], (transect, results) => {
+                    resolve(results)
+                }, error => reject(error))
+            })
+        })
+    }
+
     deleteNoteForever = async (noteKey) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise(async (resolve, reject) => {
@@ -99,6 +113,24 @@ class SQLiteCRUDService {
                     },
                     error => reject(error)
                 );
+            })
+        })
+    }
+
+    RestoreArchive = async(noteKey) =>{
+        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
+        return new Promise(async (resolve, reject) => {
+            //checking to create table
+            await this.createTableService();
+            db.transaction((transect) => {
+                transect.executeSql(
+                    `UPDATE ${userid} set isArchive = ? where noteKey = ?`
+                    ["true", noteKey],
+                    async (transect, results) => {
+                        resolve(results)
+                    },
+                    error => reject(error)
+                )
             })
         })
     }
