@@ -1,7 +1,6 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';import DashboardScreen from '../src/Component/Dashboard/DashboardScreen/DashboardScreen';
 import Delete from '../src/Component/Dashboard/Delete/Delete';
-import Reminder from '../src/Component/Dashboard/Reminder';
 import SearchNote from '../src/Component/Dashboard/DashboardScreen/SearchNotes';
 import CreateNewLabelScreen from '../src/Component/Dashboard/Label/CreateNewLabelScreen';
 import { DeleteActionScreen } from '../src/Component/Dashboard/Delete/DeleteActionScreen';
@@ -9,6 +8,7 @@ import ArchiveScreen from '../src/Component/Dashboard/Archive/ArchiveScreen';
 import DrawerContent from '../src/Component/Dashboard/DrawerContent';
 import PopulatedLabel from '../src/Component/Dashboard/Label/PopulatedLabel';
 import LabelScreen from '../src/Component/Dashboard/Label/LabelScreen';
+import Reminder from '../src/Component/Dashboard/Reminder/Reminder';
 ;
 
 const Drawer = createDrawerNavigator();

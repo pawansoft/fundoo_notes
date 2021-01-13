@@ -67,6 +67,10 @@ class DrawerContent extends Component {
         this.props.navigationProps.navigation.push('Home', {screen: 'LabelScreen', params : {labelId : labelId, labelName : labelName}})
     }
 
+    handleReminderButton = () => {
+        this.props.navigationProps.navigation.push('Home', {screen: 'Reminder'})
+    }
+
     render(){
         return(
             <View style = {{flex : 1, backgroundColor : '#FFFFEF'}}>
@@ -80,6 +84,7 @@ class DrawerContent extends Component {
                     
                     <Drawer.Item
                     icon = "bell-outline"
+                    onPress = {this.handleReminderButton}
                     label = {strings.Reminder}/> 
                 </Drawer.Section>
                 

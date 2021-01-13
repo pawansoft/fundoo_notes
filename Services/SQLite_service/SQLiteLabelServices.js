@@ -9,33 +9,10 @@ class SQLiteLabelServices{
         const userId = JSON.parse(await AsyncStorage.getItem('userId'))
         db.transaction(tx => {
             tx.executeSql(
-                `CREATE TABLE IF NOT EXISTS '${userId}_label' (label_id TEXT PRIMARY KEY, label TEXT)`,
+                `CREATE TABLE IF NOT EXISTS '${userId}_label' ("label_id" TEXT PRIMARY KEY, "label" TEXT, "NoteKey" Text)`,
                 [],
                 (tx, results) => console.log('success'),
                 error => console.log(error)
-            )
-        })
-    }
-
-    dropTable = async() =>{
-        const userId = JSON.parse(await AsyncStorage.getItem('userId'))
-        db.transaction(tx => {
-            tx.executeSql(
-                `DROP TABLE ${userId};`, [],
-                (tx, results) => {
-                    if (results && results.rows && results.rows._array) {
-                      /* do something with the items */
-                      // results.rows._array holds all the results.
-                      console.log(JSON.stringify(results.rows._array));
-                      console.log('table dropped')
-                    } else {
-                      console.log('no results')
-                    }
-                  },
-                  (tx, error) => {
-                    console.log(error);
-                  }
-                
             )
         })
     }
@@ -66,6 +43,38 @@ class SQLiteLabelServices{
                 tx.executeSql(
                     `SELECT * FROM '${userId}_label'`,
                     [],
+                    (tx, results) => resolve(results),
+                    error => reject(error)
+                );
+            });
+        })
+    }
+
+    selectNoteKeyFromSQliteTable = async(labelId) => {
+        const userId = JSON.parse(await AsyncStorage.getItem('userId'))
+         //checking to create the table
+         this.createTableInSQliteStorage()
+
+         db.transaction(tx => {
+            tx.executeSql(
+                `select NoteKey from ${userId}_label where label_id =? `,
+                [labelId],
+                (tx, results) => resolve(results),
+                error => reject(error)
+            )
+         })
+    }
+
+    updateNoteKeyToLabel = async(NoteKey, labelId) => {
+        const userId = JSON.parse(await AsyncStorage.getItem('userId'))
+        //checking to create the table
+        this.createTableInSQliteStorage()
+
+        return new Promise((resolve, reject) => {
+            db.transaction(tx => {
+                tx.executeSql(
+                    `UPDATE '${userId}_label' set NoteKey = ? where label_id = ?`,
+                    [NoteKey, labelId],
                     (tx, results) => resolve(results),
                     error => reject(error)
                 );

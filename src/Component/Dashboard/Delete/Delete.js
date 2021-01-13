@@ -133,7 +133,7 @@ export default class Delete extends Component {
                                                 <Paragraph style={{ color: 'black' }}>
                                                     {val.Notes}
                                                 </Paragraph>
-                                                <View style = {NotesHolderStyle.label_text_container}>
+                                                <View style={NotesHolderStyle.label_text_container}>
                                                     {(val.Labels != undefined) ?
                                                         this.state.labelDetails.map(data =>
                                                             val.Labels.includes(data.label_id) ?

@@ -41,13 +41,15 @@ export default class PopulatedLabel extends Component{
         if(this.props.route.params.newNote == true){
             let title = this.props.route.params.title;
             let note = this.props.route.params.note;
-            this.props.navigation.push('NewNotes', {note : note, title : title, selectedLabel : this.state.selectedLabel, newNote : true, available_labels : this.state.available_labels})
+            let reminder = this.props.route.params.reminder
+            this.props.navigation.push('NewNotes', {note : note, title : title, selectedLabel : this.state.selectedLabel, newNote : true, available_labels : this.state.available_labels, reminder : reminder})
         }
         else if(this.props.route.params.updateNote == true){
             let key = this.props.route.params.key;
             let title = this.props.route.params.title;
             let note = this.props.route.params.note;
-            this.props.navigation.push('NewNotes', {note: note, key : key, title: title, selectedLabel : JSON.stringify(this.state.selectedLabel), updateNote : true})
+            let reminder = this.props.route.params.reminder
+            this.props.navigation.push('NewNotes', {note: note, key : key, title: title, selectedLabel : JSON.stringify(this.state.selectedLabel), updateNote : true, reminder : reminder})
         }
     }
 

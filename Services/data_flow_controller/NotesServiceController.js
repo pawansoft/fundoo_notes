@@ -3,54 +3,52 @@ import SQLiteCRUDService from '../SQLite_service/SQLiteCRUDService';
 import SQLiteLabelServices from '../SQLite_service/SQLiteLabelServices';
 
 class NotesServiceController {
-    addNote = (title, note, labels) => {
+    addNote = (noteKey, title, note, labels, reminder) => {
         return new Promise(async (resolve, reject) => {
             //calling method to random generate note key
             var noteKey = await this.generateRandomKey();
 
-            SQLiteCRUDService.storeNoteToSQLiteService(noteKey, title, note, 'false', 'false', labels).then(
+            SQLiteCRUDService.storeNoteToSQLiteService(noteKey, title, note, 'false', 'false', labels, reminder).then(
                 (data) => {
-                    NoteServices._storeNoteService(noteKey, title, note, labels).then(
+                    NoteServices._storeNoteService(noteKey, title, note, labels, reminder).then(
                         () => console.log('Uploaded to firebase'))
                         .catch((error) => console.log(error))
-                        resolve(data)
+                    resolve(data)
                 })
                 .catch(error => reject(error))
         })
     }
 
-    addArchive = (title, note, labels) => {
+    addArchive = (noteKey, title, note, labels, reminder) => {
         return new Promise(async (resolve, reject) => {
-            var noteKey = await this.generateRandomKey();
-            SQLiteCRUDService.storeArchiveNoteToSQLiteService(noteKey, title, note, 'false', 'true', labels)
+            SQLiteCRUDService.storeArchiveNoteToSQLiteService(noteKey, title, note, 'false', 'true', labels, reminder)
                 .then((data) => {
-                    NoteServices.storeArchiveToDatabase(noteKey, title, note, labels)
-                    .then (() => resolve('success'))
-                    .catch(error => reject(error))
+                    NoteServices.storeArchiveToDatabase(noteKey, title, note, labels, reminder)
+                        .then(() => resolve('success'))
+                        .catch(error => reject(error))
                 })
-            .catch(error => reject(error))
+                .catch(error => reject(error))
         })
     }
 
-    removeArchive = (noteKey, title, note, labels) =>
-    {
+    removeArchive = (noteKey, title, note, labels) => {
         return new Promise(async (resolve, reject) => {
             SQLiteCRUDService.RestoreArchive(noteKey)
                 .then((data) => {
                     NoteServices._restoreNoteService(noteKey, title, note, labels)
-                    .then (() => resolve('success'))
-                    .catch(error => reject(error))
+                        .then(() => resolve('success'))
+                        .catch(error => reject(error))
                 })
-            .catch(error => reject(error))
+                .catch(error => reject(error))
         })
 
     }
 
-    updateNote = (noteKey, title, note, labels) => {
+    updateNote = (noteKey, title, note, labels, reminder) => {
         return new Promise((resolve, reject) => {
-            SQLiteCRUDService.updateNoteDetailInSQLiteService(noteKey, title, note, 'false', labels)
-                .then((data) => 
-                    NoteServices._updateNoteService(noteKey, title, note, labels)
+            SQLiteCRUDService.updateNoteDetailInSQLiteService(noteKey, title, note, 'false', labels, reminder)
+                .then((data) =>
+                    NoteServices._updateNoteService(noteKey, title, note, labels, reminder)
                         .then(resolve(data))
                         .catch((error) => console.log(error)))
                 .catch(error => reject(error))
@@ -68,7 +66,7 @@ class NotesServiceController {
                 .catch((error) => console.log(error))
         })
     }
-//Label function start from here 
+    //Label function start from here 
     storeLabel = (label) => {
         var labelId = this.generateRandomKey();
         return new Promise((resolve) => {
@@ -109,15 +107,26 @@ class NotesServiceController {
         })
     }
 
+    updateNoteIdInLabel = (noteKey, LabelId, labelName) => {
+        return new Promise((resolve, reject) => {
+            SQLiteLabelServices.updateNoteKeyToLabel(noteKey, LabelId, labelName)
+                .then(() => {
+                    NoteServices.storeNoteIdIntoLabels(LabelId, noteKey, labelName).then
+                        (() => resolve('success'))
+                })
+                .catch(error => reject(error))
+        })
+    }
+
     deleteNoteFromBin = (noteKey) => {
         return new Promise((resolve, reject) => {
             SQLiteCRUDService.deleteNoteForever(noteKey)
-            .then((data) => resolve(data))
-            .catch(error => reject(error))
+                .then((data) => resolve(data))
+                .catch(error => reject(error))
 
             NoteServices._deleteOneNoteService(noteKey)
-            .then(() => console.log('deleted from firebase'))
-            .catch((error) => console.log(error))
+                .then(() => console.log('deleted from firebase'))
+                .catch((error) => console.log(error))
         })
     }
 

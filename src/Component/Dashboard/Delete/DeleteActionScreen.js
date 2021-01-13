@@ -38,23 +38,23 @@ export class DeleteActionScreen extends Component {
         if (this.props.route.params != undefined) {
             console.log(this.state.key);
             await this.setState({
-                key : this.props.route.params.notes.NoteKey,
-                note : this.props.route.params.notes.Notes,
-                title : this.props.route.params.notes.Title,
-                selectedLabel : this.props.route.params.notes.Labels
+                key: this.props.route.params.notes.NoteKey,
+                note: this.props.route.params.notes.Notes,
+                title: this.props.route.params.notes.Title,
+                selectedLabel: this.props.route.params.notes.Labels
             })
         }
 
         await SQLiteLabelServices.selectLabelFromSQliteStorage()
             .then(async result => {
                 var temp = [];
-                if(result.rows.length != 0) {
+                if (result.rows.length != 0) {
                     for (let i = 0; i < result.rows.length; ++i)
                         temp.push(result.rows.item(i));
                     this.setState({
                         labelDetails: temp
                     })
-                }                
+                }
             })
     }
 
@@ -101,8 +101,8 @@ export class DeleteActionScreen extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <Image style= { backgroundImageStyle.backgroundImage } source= {require('../../../assets/background1.jpg')}>
-                </Image> 
+                <Image style={backgroundImageStyle.backgroundImage} source={require('../../../assets/background1.jpg')}>
+                </Image>
                 <Appbar style={{ backgroundColor: 'white', width: '20%' }}>
                     <Appbar.Action
                         icon='keyboard-backspace'
@@ -121,33 +121,33 @@ export class DeleteActionScreen extends Component {
                             {this.state.note}
                         </Text>
                     </View>
-                    <View style = {NotesHolderStyle.label_text_container}>
-                    {(this.state.selectedLabel != undefined)? 
+                    <View style={NotesHolderStyle.label_text_container}>
+                        {(this.state.selectedLabel != undefined) ?
                             this.state.labelDetails.map(data =>
                                 this.state.selectedLabel.includes(data.label_id) ?
-                                    <React.Fragment key = {data.label_id}>
-                                        <Text style = {NotesHolderStyle.label_text}>{data.label}</Text>
+                                    <React.Fragment key={data.label_id}>
+                                        <Text style={NotesHolderStyle.label_text}>{data.label}</Text>
                                     </React.Fragment>
-                                :null
-                                                        
-                            ):null}
+                                    : null
+
+                            ) : null}
                     </View>
                 </ScrollView>
                 <View>
-                    <Appbar style={{ backgroundColor: 'white', justifyContent: 'space-around' }}>
+                    <Appbar style = {{ backgroundColor: 'white', justifyContent: 'space-around' }}>
                         <Appbar.Action
-                            icon='plus-box-outline' />
+                            icon = 'plus-box-outline' />
                         <Appbar.Action
-                            title='Deleted note' />
+                            title = 'Deleted note' />
                         <Appbar.Action
                             icon='dots-vertical'
-                            onPress={this.handleRBSheetOpenButton} />
+                            onPress = {this.handleRBSheetOpenButton} />
                     </Appbar>
                 </View>
                 <RBSheet
                     ref={ref => { this.RBSheet = ref }}
                     height={200}
-                    customStyles={{
+                    customStyles = {{
                         container: {
                             borderTopWidth: 1,
                             borderColor: "#d3d3d3",
@@ -157,34 +157,34 @@ export class DeleteActionScreen extends Component {
                             backgroundColor: "transparent",
                         },
                     }}>
-                    <View style={{ marginTop: '10%' }}>
+                    <View style = {{ marginTop: '10%' }}>
                         <Menu.Item
-                            icon='autorenew'
-                            onPress={this.handleRestoreService}
-                            title=' Restore' />
+                            icon = 'autorenew'
+                            onPress = {this.handleRestoreService}
+                            title = ' Restore' />
                         <Menu.Item
-                            title='Delete forever'
-                            icon='delete-outline'
-                            onPress={this.handleDeleteNoteForEver} />
+                            title = 'Delete forever'
+                            icon = 'delete-outline'
+                            onPress = {this.handleDeleteNoteForEver} />
 
                     </View>
                 </RBSheet>
                 <Snackbar
-                    style={{ marginBottom: '30%', flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'grey' }}
-                    style={{ marginBottom: 100 }}
-                    visible={this.state.isDeletable}
-                    onDismiss={this.onDismissSnakbarHandler}
-                    duration={5000}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                    style = {{ marginBottom: '30%', flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'grey' }}
+                    style = {{ marginBottom: 100 }}
+                    visible = {this.state.isDeletable}
+                    onDismiss = {this.onDismissSnakbarHandler}
+                    duration = {5000}>
+                    <View style = {{ flexDirection: 'row', justifyContent: 'space-around' }}>
                         <View>
-                            <Text style={{ marginTop: 10, color: 'white' }}>
+                            <Text style = {{ marginTop: 10, color: 'white' }}>
                                 Note Deleted Successfully
                             </Text>
                         </View>
 
-                        <View style={{ marginLeft: 50 }}>
+                        <View style = {{ marginLeft: 50 }}>
                             <Button
-                                onPress={this.restoreNotesHandler}>
+                                onPress = {this.restoreNotesHandler}>
                                 <Text style={{ color: '#cca300' }}>Restore</Text>
                             </Button>
                         </View>

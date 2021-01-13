@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, Image } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
-import { Appbar, Card, Menu, Paragraph, Title } from 'react-native-paper';
+import { Appbar, Card, Chip, Menu, Paragraph, Title } from 'react-native-paper';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDService';
 import SQLiteLabelServices from '../../../../Services/SQLite_service/SQLiteLabelServices';
@@ -11,6 +11,7 @@ import LabelStyle from '../../../Style/LabelStyle';
 import NotesContainerStyle from '../../../Style/NotesContainerStyle';
 import NotesHolderStyle from '../../../Style/NotesHolderStyle';
 import BottomBar from '../DashboardScreen/dashboardFooter';
+import moment from "moment"
 
 export default class LabelScreen extends Component {
     constructor(props) {
@@ -35,7 +36,7 @@ export default class LabelScreen extends Component {
                     })
                 }
             })
-            await SQLiteLabelServices.selectLabelFromSQliteStorage()
+        await SQLiteLabelServices.selectLabelFromSQliteStorage()
             .then(async result => {
                 var temp = [];
                 if (result.rows.length != 0) {
@@ -103,19 +104,26 @@ export default class LabelScreen extends Component {
                                                     <Paragraph>
                                                         {note.Notes}
                                                     </Paragraph>
-                                                    {console.log(note)}
                                                     <View style={(this.state.listView) ? NotesHolderStyle.label_text_container : NotesHolderStyle.label_text_grid}>
-                                                    {(note.Labels != undefined) ?
-                                                        this.state.labelDetails.map(val =>
-                                                            note.Labels.includes(val.label_id) ?
-                                                                <React.Fragment key={val.label_id}>
-                                                                    {console.log("inside render"+val)}
-                                                                        <Text style={NotesHolderStyle.label_text}>{val.label}</Text>    
-                                                                </React.Fragment>
-                                                                : null
-                                                        )
-                                                        : null
-                                                    }
+                                                        <Chip
+                                                            icon='alarm'
+                                                            style={{ backgroundColor: '#e6b800' }}>
+                                                            {moment(JSON.parse(note.Reminder)).format('D MMM, h.mm a')}
+                                                        </Chip>
+                                                    </View>
+
+                                                    <View style={(this.state.listView) ? NotesHolderStyle.label_text_container : NotesHolderStyle.label_text_grid}>
+                                                        {(note.Labels != undefined) ?
+                                                            this.state.labelDetails.map(val =>
+                                                                note.Labels.includes(val.label_id) ?
+                                                                    <React.Fragment key={val.label_id}>
+                                                                        {console.log("inside render" + val)}
+                                                                        <Text style={NotesHolderStyle.label_text}>{val.label}</Text>
+                                                                    </React.Fragment>
+                                                                    : null
+                                                            )
+                                                            : null
+                                                        }
                                                     </View>
 
                                                 </Card.Content>
@@ -148,7 +156,7 @@ export default class LabelScreen extends Component {
                         <Menu.Item icon="content-copy" title="Make a copy" />
                         <Menu.Item icon="share-variant" title="Send" />
                         <Menu.Item icon="label-outline" title="Labels"
-                        onPress = {this.handleSelectLabel} />
+                            onPress={this.handleSelectLabel} />
                     </View>
                 </RBSheet>
                 <View>

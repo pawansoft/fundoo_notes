@@ -9,7 +9,7 @@ class SQLiteCRUDService {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise((resolve, reject) => {
             db.transaction((transect) => {
-                transect.executeSql(`CREATE TABLE IF NOT EXISTS ${userid} ("NoteKey" TEXT, "Title" TEXT, "Notes" TEXT, "isDeleted" TEXT, "isArchive" TEXT ,"Labels" Text, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
+                transect.executeSql(`CREATE TABLE IF NOT EXISTS ${userid} ("NoteKey" TEXT, "Title" TEXT, "Notes" TEXT, "isDeleted" TEXT, "isArchive" TEXT ,"Labels" Text, "Reminder" Text, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
                     resolve(results)
                 },
                 error => reject(error)
@@ -18,7 +18,7 @@ class SQLiteCRUDService {
         })
     }
 
-    storeNoteToSQLiteService = async (noteKey, title, notes, deletedStatus, isArchive, labels) => {
+    storeNoteToSQLiteService = async (noteKey, title, notes, deletedStatus, isArchive, labels, reminder) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise(async (resolve, reject) => {
             //checking to create table
@@ -26,8 +26,8 @@ class SQLiteCRUDService {
             //adding data logic
             db.transaction((transect) => {
                 transect.executeSql(
-                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted, isArchive, Labels) VALUES (?,?,?,?,?,?)`,
-                    [noteKey, title, notes, deletedStatus, isArchive, labels],
+                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted, isArchive, Labels, Reminder) VALUES (?,?,?,?,?,?,?)`,
+                    [noteKey, title, notes, deletedStatus, isArchive, labels, reminder],
                     async (transect, results) => {
                         resolve(results)
                     },
@@ -37,7 +37,7 @@ class SQLiteCRUDService {
         })
     }
 
-    updateNoteDetailInSQLiteService = async (key, title, notes, deletedStatus, labels) => {
+    updateNoteDetailInSQLiteService = async (key, title, notes, deletedStatus, labels, reminder) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise(async (resolve, reject) => {
             //checking that table is created or not
@@ -45,8 +45,8 @@ class SQLiteCRUDService {
 
             db.transaction(async (transect) => {
                 transect.executeSql(
-                    `UPDATE ${userid} set Title = ? , Notes = ?,isDeleted = ?, Labels = ?  where NoteKey = ?`,
-                    [title, notes, deletedStatus, labels, key],
+                    `UPDATE ${userid} set Title = ? , Notes = ?,isDeleted = ?, Labels = ?, Reminder = ?  where NoteKey = ?`,
+                    [title, notes, deletedStatus, labels, reminder, key],
                     async (transect, results) => {
                         resolve(results)
                     },
@@ -98,7 +98,7 @@ class SQLiteCRUDService {
     }
 
 //Archive function start from here 
-    storeArchiveNoteToSQLiteService = async (noteKey, title, notes, deletedStatus, isArchive) => {
+    storeArchiveNoteToSQLiteService = async (noteKey, title, notes, deletedStatus, isArchive,label, reminder) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise(async (resolve, reject) => {
             //checking to create table
@@ -106,8 +106,8 @@ class SQLiteCRUDService {
             //adding data logic
             db.transaction((transect) => {
                 transect.executeSql(
-                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted, isArchive) VALUES (?,?,?,?,?)`,
-                    [noteKey, title, notes, deletedStatus, isArchive],
+                    `INSERT INTO ${userid} (NoteKey, Title, Notes, isDeleted, isArchive, Labels, Reminder) VALUES (?,?,?,?,?,?,?)`,
+                    [noteKey, title, notes, deletedStatus, isArchive, label, reminder],
                     async (transect, results) => {
                         resolve(results)
                     },

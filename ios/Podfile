@@ -20,6 +20,10 @@ target 'fundoo_notes' do
 
   pod 'react-native-sqlite-storage', :path => '../node_modules/react-native-sqlite-storage'
 
+  pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
+
+  pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker'
+
   target 'fundoo_notesTests' do
     inherit! :complete
     # Pods for testing

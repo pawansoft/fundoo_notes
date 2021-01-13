@@ -45,8 +45,7 @@ const NotesHolderStyle = StyleSheet.create({
         borderRadius : 40,
         marginRight : 10
     },
-    label_text_grid: {
-         
+    label_text_grid: {    
         flexWrap : 'wrap', 
         marginTop : 10,
         flexDirection : 'row'

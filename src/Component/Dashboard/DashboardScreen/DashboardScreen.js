@@ -3,7 +3,8 @@ import {
     View,
     Text,
     Image,
-    FlatList
+    FlatList,
+    ActivityIndicator
 } from 'react-native';
 import BottomBar from './dashboardFooter';
 import DashboardHeader from './DashboardHeader';
@@ -33,7 +34,7 @@ class DashboardScreen extends Component {
             notesFromSQLite: [],
             index: 0,
             endReached: false,
-            showNotes: [],
+            showNotes: []
         }
     }
 
@@ -154,7 +155,9 @@ class DashboardScreen extends Component {
                 })
             }
             this.state.showNotes.push(this.state.notesFromSQLite[this.state.index])
-            this.state.index ++
+           await this.setState({
+               index : this.state.index + 1
+           })
         }
     }
 
@@ -171,10 +174,17 @@ class DashboardScreen extends Component {
                     
                         <View>
                             <FlatList
+                            style = {{marginBottom: '30%'}}
                                 numColumns = {this.props.listView ? 1 : 2}
                                 keyExtractor = {(item, index) => JSON.stringify(index)}
                                 key = {this.props.listView ? 1 : 2}
                                 data = {this.state.showNotes}
+                                ListFooterComponent = {() => 
+                                    (this.state.endReached)?
+                                        <ActivityIndicator size="large" color="#00ff00"/>
+                                    :null
+                                }
+                    
                                 onEndReached = {async () => {
                                     await this.setState({
                                         endReached: true
@@ -182,9 +192,9 @@ class DashboardScreen extends Component {
                                 }}
                                 onScroll = {async () => {
                                     if (this.state.endReached) {
-                                        this.loadData(5)
+                                        this.loadData(8)
                                         await this.setState({
-                                            endReached: false
+                                            endReached: false,
                                         })
                                     }
                                 }}
@@ -196,7 +206,8 @@ class DashboardScreen extends Component {
                                         notes = {item}
                                         noteKey = {item.note_id}
                                         isArchive = {true}
-                                        navigation = {this.props.navigation} />
+                                        navigation = {this.props.navigation} 
+                                    />
                                 )}
                             />
                         </View>
@@ -240,7 +251,7 @@ class DashboardScreen extends Component {
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                                 <View>
                                     <Text style={{ marginTop: 10, color: 'white' }}>
-                                        Note Deleted Successfully
+                                        Note added to archive
                                 </Text>
                                 </View>
                                 <View style={{ marginLeft: 50 }}>
