@@ -393,7 +393,7 @@ export default class NewNotes extends Component {
                                 value={this.state.note}
                                 onChangeText={this.handleNote} />
                         </View>
-                        <View style={NotesHolderStyle.label_text_container}>
+                        <View style={NotesHolderStyle.label_text_container1}>
                             {
                                 (this.state.reminder != '') ?
                                     <Chip
@@ -405,7 +405,7 @@ export default class NewNotes extends Component {
                                     : null
                             }
                         </View>
-                        <View style={NotesHolderStyle.label_text_container}>
+                        <View style={NotesHolderStyle.label_text_container1}>
                             {(this.state.SelectedLabels != undefined) ?
                                 this.state.labelDetails.map(data =>
                                     this.state.SelectedLabels.includes(data.label_id) ?

@@ -6,13 +6,13 @@ import NotesContainerStyle from '../../../Style/NotesContainerStyle'
 import NotesHolderStyle from '../../../Style/NotesHolderStyle'
 import moment from "moment";
 
+
 export default class NoteCard extends Component {
     constructor(props) {
         super(props)
         this.state = {
             labelDetails: []
         }
-        console.log(props);
     }
 
     componentDidMount = async () => {
@@ -28,6 +28,7 @@ export default class NoteCard extends Component {
                 }
             })
     }
+
     updateNote = (key, title, note, labels, archive, reminder) => {
         this.props.navigation.push('NewNotes',
             { key: key, title: title, note: note, selectedLabel: labels, updateNote: true, isArchive: archive, reminder: reminder })
@@ -50,7 +51,7 @@ export default class NoteCard extends Component {
                             (this.props.notes.Reminder != undefined) ?
                                 <Chip
                                     icon='alarm'
-                                    style = {{ backgroundColor: '#e6b800' }}>
+                                    style = {{ backgroundColor: '#e6b800', width: 142}}>
                                     {moment(JSON.parse(this.props.notes.Reminder)).format('D MMM, h.mm a')}
                                 </Chip>
                                 : null}

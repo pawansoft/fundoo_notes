@@ -24,6 +24,8 @@ target 'fundoo_notes' do
 
   pod 'RNCPicker', :path => '../node_modules/@react-native-picker/picker'
 
+
+
   target 'fundoo_notesTests' do
     inherit! :complete
     # Pods for testing

@@ -19,6 +19,7 @@ import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDSer
 import NoteCard from './NoteCard';
 import dashboardStyle from '../../../Style/dashboardStyle';
 
+
 class DashboardScreen extends Component {
     constructor(props) {
         super(props);

@@ -27,13 +27,20 @@ const NotesHolderStyle = StyleSheet.create({
     },
     Note: {
         marginLeft : '10%',
-        marginRight: '10%'
+        marginRight: '10%',
+        height: '20%',
     },
     label_text_container : {
-        marginLeft : 25, 
         flexWrap : 'wrap', 
         marginTop : 10,
         flexDirection : 'row'
+    },
+    label_text_container1:{
+        flexWrap : 'wrap', 
+        marginTop : 10,
+        flexDirection : 'row',
+        marginLeft: '10%'
+        
     },
     label_text: {
         borderWidth : 1, 

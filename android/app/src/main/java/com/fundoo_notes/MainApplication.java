@@ -1,10 +1,11 @@
 package com.fundoo_notes;
 
 import android.app.Application;
-
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage; 
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+//import io.invertase.firebase.RNFirebasePackage;
 import com.reactnativecommunity.picker.RNCPickerPackage;
 import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -21,6 +22,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import com.RNFetchBlob.RNFetchBlobPackage;  
+// import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;                       
+// import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 
 import java.util.List;
 import java.util.Arrays;

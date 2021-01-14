@@ -107,7 +107,7 @@ export default class LabelScreen extends Component {
                                                     <View style={(this.state.listView) ? NotesHolderStyle.label_text_container : NotesHolderStyle.label_text_grid}>
                                                         <Chip
                                                             icon='alarm'
-                                                            style={{ backgroundColor: '#e6b800' }}>
+                                                            style={{ backgroundColor: '#e6b800', width: 142 }}>
                                                             {moment(JSON.parse(note.Reminder)).format('D MMM, h.mm a')}
                                                         </Chip>
                                                     </View>
