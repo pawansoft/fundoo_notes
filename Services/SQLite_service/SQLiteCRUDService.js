@@ -18,6 +18,8 @@ class SQLiteCRUDService {
         })
     }
 
+
+
     storeNoteToSQLiteService = async (noteKey, title, notes, deletedStatus, isArchive, labels, reminder) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise(async (resolve, reject) => {

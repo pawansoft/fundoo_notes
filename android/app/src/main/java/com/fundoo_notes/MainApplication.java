@@ -1,36 +1,25 @@
 package com.fundoo_notes;
 
 import android.app.Application;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage; 
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.pilloxa.backgroundjob.BackgroundJobPackage;
+import com.pilloxa.backgroundjob.BackgroundJobPackage;
 //import io.invertase.firebase.RNFirebasePackage;
-import com.reactnativecommunity.picker.RNCPickerPackage;
-import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import org.pgsqlite.SQLitePluginPackage;
-import org.pgsqlite.SQLitePluginPackage;
-import com.imagepicker.ImagePickerPackage;
-import com.imagepicker.ImagePickerPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
-import com.facebook.reactnative.androidsdk.FBSDKPackage;
+//import com.reactnativecommunity.picker.RNCPickerPackage;
+//import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
-import com.RNFetchBlob.RNFetchBlobPackage;  
-// import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;                       
+// import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 // import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 
 import java.util.List;
-import java.util.Arrays;
 
-import com.facebook.FacebookSdk;
 import com.facebook.CallbackManager;
-import com.facebook.appevents.AppEventsLogger;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -50,6 +39,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
+         
           return packages;
         }
 

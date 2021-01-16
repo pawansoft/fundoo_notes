@@ -18,7 +18,8 @@ import backgroundImageStyle from '../../../Style/backgroundImageStyle';
 import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDService';
 import NoteCard from './NoteCard';
 import dashboardStyle from '../../../Style/dashboardStyle';
-
+import { NativeModules } from 'react-native';
+const { CalendarModule } = NativeModules;
 
 class DashboardScreen extends Component {
     constructor(props) {
