@@ -76,7 +76,7 @@ class FirebaseService {
         })
     }
     _restoreNoteService = async (key, title, note, labels, reminder) => {
-        const userid = JSON.parse(AsyncStorage.getItem('userId'))
+        const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise((resolve, reject) => {
             const notes = {
                 title: title,

@@ -45,6 +45,7 @@ export default class NewNotes extends Component {
             show: false,
             errorDate: false
         }
+        console.log(this.props.route.params);
     }
 
     componentDidMount = async () => {
@@ -123,7 +124,7 @@ export default class NewNotes extends Component {
                 await NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
                     .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
                     .catch(error => console.log(error))
-                
+
                 this.updateNoteIdIntoLabel()
             }
         }
@@ -134,24 +135,43 @@ export default class NewNotes extends Component {
 
     handleArchiveButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
-            NotesServiceController.addArchive(this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
-                .then(() => this.props.navigation.push('Home', {
-                    screen: 'Notes', params: {
-                        key: this.state.key,
-                        userid: this.state.userid,
-                        title: this.state.title,
-                        note: this.state.note,
-                        labels: this.state.SelectedLabels,
-                        isArchived: true
-                    }
-                }))
+            if (this.props.route.params.updateNote == true) {
+                NotesServiceController.restoreArchive(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
+                    .then(() => this.props.navigation.push('Home', {
+                        screen: 'Notes', params: {
+                            key: this.state.key,
+                            userid: this.state.userid,
+                            title: this.state.title,
+                            note: this.state.note,
+                            labels: this.state.SelectedLabels,
+                            isArchived: true,
+                            reminder: this.state.reminder
+                        }
+                    }))
+            }
+            else {
+                NotesServiceController.addArchive(this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
+                    .then(() => this.props.navigation.push('Home', {
+                        screen: 'Notes', params: {
+                            key: this.state.key,
+                            userid: this.state.userid,
+                            title: this.state.title,
+                            note: this.state.note,
+                            labels: this.state.SelectedLabels,
+                            isArchived: true,
+                            reminder: this.state.reminder
+                        }
+                    }))
+            }
+
         }
         else {
             this.props.navigation.push('Home', { screen: 'Notes', params: { isEmpty: true } })
         }
     }
 
-    handleUnArchiveButton = async () => {      
+    handleUnArchiveButton = async () => {
+        console.log(JSON.stringify(this.state.SelectedLabels));
         if (this.state.title != '' || this.state.note != '') {
             NotesServiceController.removeArchive(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
                 .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))

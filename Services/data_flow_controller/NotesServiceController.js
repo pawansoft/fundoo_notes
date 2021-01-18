@@ -36,9 +36,21 @@ class NotesServiceController {
 
     removeArchive = (noteKey, title, note, labels, reminder) => {
         return new Promise(async (resolve, reject) => {
-            SQLiteCRUDService.RestoreArchive(noteKey)
+            SQLiteCRUDService.RestoreArchive(noteKey, "false")
                 .then((data) => {
                     NoteServices._restoreNoteService(noteKey, title, note, labels, reminder)
+                        .then(() => resolve('success'))
+                        .catch(error => reject(error))
+                })
+                .catch(error => reject(error))
+        })
+    }
+
+    restoreArchive = (noteKey, title, note, labels, reminder) => {
+        return new Promise(async (resolve, reject) => {
+            SQLiteCRUDService.RestoreArchive(noteKey, "true")
+                .then((data) => {
+                    NoteServices.storeArchiveToDatabase(noteKey, title, note, labels, reminder)
                         .then(() => resolve('success'))
                         .catch(error => reject(error))
                 })

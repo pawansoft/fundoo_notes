@@ -121,15 +121,16 @@ class SQLiteCRUDService {
         })
     }
 
-    RestoreArchive = async (noteKey) => {
+    RestoreArchive = async (noteKey, isArchive) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise(async (resolve, reject) => {
             //checking to create table
             await this.createTableService();
+
             db.transaction((transect) => {
                 transect.executeSql(
-                    `UPDATE ${userid} set isArchive = ? where noteKey = ?`
-                    ["true", noteKey],
+                    `UPDATE ${userid} set isArchive = ? where noteKey = ?`,
+                    [isArchive, noteKey],
                     async (transect, results) => {
                         resolve(results)
                     },

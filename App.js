@@ -45,7 +45,7 @@ export default class App extends Component {
     
     BackgroundTimer.setInterval(() =>{
       Notifications.sendLocalNotification();
-    }, 10000)
+    }, 60000)
   }
 
   render() {

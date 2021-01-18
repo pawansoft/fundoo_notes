@@ -109,10 +109,12 @@ class DashboardScreen extends Component {
     }
 
     restoreNotesHandler = () => {
-        NotesServiceController.updateNote(this.props.route.params.key,
+        NotesServiceController.removeArchive(this.props.route.params.key,
             this.props.route.params.title,
             this.props.route.params.note,
-            JSON.stringify(this.props.route.params.labels))
+            JSON.stringify(this.props.route.params.labels), 
+            JSON.stringify(this.props.route.params.reminder)
+            )
             .then(() => {
                 this.props.navigation.push('Home', { screen: 'Notes' })
             }).catch(error => console.log(error))
