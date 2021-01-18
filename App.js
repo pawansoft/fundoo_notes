@@ -7,6 +7,7 @@ import PushNotification from 'react-native-push-notification';
 import PushNotifications from './PushNotification';
 import BackgroundTimer from 'react-native-background-timer';
 import Notifications from './Services/push-notification-service/Notifications';
+import NoteServices from './Services/firebase_services/NoteServices';
 
 export default class App extends Component {
   constructor(props) {
@@ -42,6 +43,9 @@ export default class App extends Component {
       popInitialNotification: true,
       requestPermissions: true,
     });  
+    NoteServices._getNoteService()
+    .then(data => console.log(data))
+    .catch(error => console.log(error))
     
     BackgroundTimer.setInterval(() =>{
       Notifications.sendLocalNotification();

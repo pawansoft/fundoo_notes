@@ -20,27 +20,11 @@ export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user_name: '',
-            avatar_url: '',
-            avatar_show: false,
-            userNameValid: '',
             emailId: '',
-            passwordValid: '',
             passcode: '',
             isLoggedIn: false,
-        }
-    }
-
-    validateUserName = async () => {
-        const regex = /^[0-9a-zA-Z]+([._+-][0-9a-zA-Z]+)*[@][0-9A-Za-z]+([.][a-zA-Z]{2,4})*$/
-        if (regex.test(this.state.emailId) == false) {
-            await this.setState({
-                userNameValid: 'Invalid Email'
-            })
-        } else {
-            await this.setState({
-                userNameValid: ''
-            })
+            emailError: '',
+            passwordError: '',
         }
     }
 
@@ -49,8 +33,7 @@ export default class Login extends Component {
         const userId = await AsyncStorage.getItem('userId');
         if (isLoggedIn == 'true') {
             this.props.navigation.navigate('Home')
-        }
-       
+        }      
     }
 
     _setLogingStatusAndDeatil = async (userId) => {
@@ -66,18 +49,6 @@ export default class Login extends Component {
         }
     }
 
-    validatePassword = async () => {
-        const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[*.!@#$%^&(){}:'<>,.>/~`_+=|].).{8,}$/
-        if (regex.test(this.state.passcode) == false) {
-            await this.setState({
-                passwordValid: 'Invalid Format'
-            })
-        } else {
-            await this.setState({
-                passwordValid: ''
-            })
-        }
-    }
 
     handleUserName = async (emailId) => {
         await this.setState({
@@ -91,21 +62,36 @@ export default class Login extends Component {
         })
     }
 
-    handleLoginButton = () => {
+    handleLoginButton = async() => {
         if (this.state.emailId != '' &&
-            this.state.passcode != '' &&
-            this.state.passwordValid == '' &&
-            this.state.userNameValid == '') {
-            UserService.LoginService(this.state.emailId, this.state.passcode)
+            this.state.passcode != '') {
+          await UserService.LoginService(this.state.emailId, this.state.passcode)
                 .then((userDetail) => {
                     this._setLogingStatusAndDeatil(userDetail.user.uid);
                     this.props.navigation.navigate('Home')
-                }).catch((error) =>
-                    console.log(error));
+                }).catch(async error =>{
+                    if(error === 'User not Found') {
+                        await this.setState({
+                            emailError: 'UserNotFound'
+                        })
+                    } else if(error === 'Invalid Email') {
+                        await this.setState({
+                            emailError: 'InvalidEmail'
+                        })
+                    }   
+                    else if(error === 'Invalid Password') {
+                        await this.setState({
+                            passwordError: 'InvalidPassword'
+                        })
+                    }
+                });
 
         }
         else {
-            alert('Please fill al the details')
+            await this.setState({
+                emailError : 'Require',
+                passwordError: 'Require'
+            })
         }
     }
 
@@ -148,7 +134,7 @@ export default class Login extends Component {
                                 onChangeText={this.handleUserName}
                                 placeholder={strings.emailId}
                                 onEndEditing={this.validateUserName} />
-                            <Text style={login_style.error_text}>{this.state.userNameValid}</Text>
+                            <Text style={login_style.error_text}>{this.state.emailError}</Text>
                         </View>
 
                         <View style={login_style.text_container}>
@@ -158,7 +144,7 @@ export default class Login extends Component {
                                 onChangeText={this.handlePassword}
                                 onEndEditing={this.validatePassword}
                                 placeholder={strings.pass} />
-                            <Text style={login_style.error_text}>{this.state.passwordValid}</Text>
+                            <Text style={login_style.error_text}>{this.state.passwordError}</Text>
                         </View>
 
                         <TouchableOpacity style={login_style.forget_password}

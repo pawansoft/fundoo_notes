@@ -32,7 +32,7 @@ const login_style = StyleSheet.create({
     },
     error_text: {
         color : 'red',
-        marginLeft : '70%'
+        marginLeft : '60%'
     },
     forget_password: {
         marginLeft : '5%',

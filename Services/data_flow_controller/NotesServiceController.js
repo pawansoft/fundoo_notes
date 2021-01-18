@@ -11,7 +11,7 @@ class NotesServiceController {
 
             SQLiteCRUDService.storeNoteToSQLiteService(noteKey, title, note, 'false', 'false', labels, reminder).then(
                 (data) => {
-                    firebase_rest_service.storeNotesDetail(noteKey, title, note, labels, reminder, isArchive, isDeleted).then(
+                    firebase_rest_service.storeNoteServiceByRest(noteKey, title, note, labels, reminder, isArchive, isDeleted).then(
                         () => console.log('Uploaded to firebase'))
                         .catch((error) => console.log(error))
                     resolve(data)

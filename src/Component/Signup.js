@@ -130,7 +130,7 @@ export default class Signup extends Component {
         })
     }
 
-    handleSignUpButton = async() => {
+    handleSignUpButton = async () => {
         if (this.state.fname != '' &&
             this.state.lname != '' &&
             this.state.userName != '' &&
@@ -142,25 +142,25 @@ export default class Signup extends Component {
             this.state.passMatch == '') {
             UserService.SignupService(this.state.userName, this.state.password)
                 .then((userDetails) => {
-                        UserService.storeDetailToDatabase(userDetails.user.uid, this.state.userName, this.state.fname, this.state.lname)
-                        .then(() => this.props.navigation.navigate('Login', {isSignin : true}))
+                    UserService.storeDetailToDatabase(userDetails.user.uid, this.state.userName, this.state.fname, this.state.lname)
+                        .then(() => this.props.navigation.navigate('Login', { isSignin: true }))
                         .catch(async error => {
                             await this.setState({
-                                error: error
+                                error : error
                             })
                         })
-                    }).catch(async error => 
-                        await this.setState({
-                            isError: true,
-                            error: error
-                        })
-                    )
+                }).catch(async error =>
+                    await this.setState({
+                        isError: true,
+                        error: error
+                    })
+                )
         }
         else {
-                await this.setState({
-                    isError: true,
-                    error: 'Please fill all the details'
-                })
+            await this.setState({
+                isError: true,
+                error: 'Please fill all the details'
+            })
         }
     }
 
@@ -168,7 +168,7 @@ export default class Signup extends Component {
         this.props.navigation.navigate('Login')
     }
 
-    handleIsErrorSnakbar = async() => {
+    handleIsErrorSnakbar = async () => {
         await this.setState({
             isError: false
         })
@@ -183,85 +183,85 @@ export default class Signup extends Component {
                 </View>
                 <ScrollView>
 
-                <View>
-                    <Text style={RegisterStyle.signin_text}>
-                        {strings.Signup}
-                    </Text>
-                </View>
-
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={RegisterStyle.row_text_input}>
-                        <TextInput
-                            placeholder={strings.firstname}
-                            value={this.state.fname}
-                            onChangeText={this.handleFName}
-                            onEndEditing={this.validateFName} />
-                        <Text style={RegisterStyle.error_first_name}>{this.state.fnameValid}</Text>
-                    </View>
-
-                    <View style={RegisterStyle.row_text_input}>
-                        <TextInput
-                            value={this.state.lname}
-                            onChangeText={this.handleLName}
-                            placeholder={strings.lastname}
-                            onEndEditing={this.validateLName} />
-                        <Text style={RegisterStyle.error_first_name}>{this.state.lnameValid}</Text>
-                    </View>
-                </View>
-
-                <View>
-                    <TextInput
-                        style={RegisterStyle.text_input}
-                        value={this.state.userName}
-                        onChangeText={this.handleUserName}
-                        placeholder={strings.username}
-                        onEndEditing={this.validateUserName} />
-                    <Text style={RegisterStyle.error_first_name}>{this.state.userNameValid}</Text>
-                </View>
-
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={RegisterStyle.row_text_input}>
-                        <TextInput
-                            secureTextEntry={true}
-                            value={this.state.password}
-                            onChangeText={this.handlePassword}
-                            onEndEditing={this.validatePassword}
-                            placeholder={strings.pass} />
-                        <Text style={RegisterStyle.passcode_error}>{this.state.passwordValid}</Text>
-                    </View>
-                    <View style={RegisterStyle.row_text_input}>
-                        <TextInput
-                            secureTextEntry={true}
-                            value={this.state.confirm}
-                            onChangeText={this.handleConfirm}
-                            onEndEditing={this.comparePassword}
-                            placeholder={strings.confirm} />
-                        <Text style={RegisterStyle.passcode_error}>{this.state.passMatch}</Text>
-                    </View >
-                </View>
-
-                <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity style={RegisterStyle.touchable_opacity_style}
-                        onPress={this.SigninInsteadNavigationHandler}>
-                        <Text style={RegisterStyle.button_text}>
-                            {strings.signin}
+                    <View>
+                        <Text style={RegisterStyle.signin_text}>
+                            {strings.Signup}
                         </Text>
-                    </TouchableOpacity>
+                    </View>
 
-                    <TouchableOpacity style={RegisterStyle.button}
-                        onPress={this.handleSignUpButton}>
-                        <Text style={RegisterStyle.button_text}>
-                            {strings.next}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={RegisterStyle.row_text_input}>
+                            <TextInput
+                                placeholder={strings.firstname}
+                                value={this.state.fname}
+                                onChangeText={this.handleFName}
+                                onEndEditing={this.validateFName} />
+                            <Text style={RegisterStyle.error_first_name}>{this.state.fnameValid}</Text>
+                        </View>
+
+                        <View style={RegisterStyle.row_text_input}>
+                            <TextInput
+                                value={this.state.lname}
+                                onChangeText={this.handleLName}
+                                placeholder={strings.lastname}
+                                onEndEditing={this.validateLName} />
+                            <Text style={RegisterStyle.error_first_name}>{this.state.lnameValid}</Text>
+                        </View>
+                    </View>
+
+                    <View>
+                        <TextInput
+                            style={RegisterStyle.text_input}
+                            value={this.state.userName}
+                            onChangeText={this.handleUserName}
+                            placeholder={strings.username}
+                            onEndEditing={this.validateUserName} />
+                        <Text style={RegisterStyle.error_first_name}>{this.state.userNameValid}</Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={RegisterStyle.row_text_input}>
+                            <TextInput
+                                secureTextEntry={true}
+                                value={this.state.password}
+                                onChangeText={this.handlePassword}
+                                onEndEditing={this.validatePassword}
+                                placeholder={strings.pass} />
+                            <Text style={RegisterStyle.passcode_error}>{this.state.passwordValid}</Text>
+                        </View>
+                        <View style={RegisterStyle.row_text_input}>
+                            <TextInput
+                                secureTextEntry={true}
+                                value={this.state.confirm}
+                                onChangeText={this.handleConfirm}
+                                onEndEditing={this.comparePassword}
+                                placeholder={strings.confirm} />
+                            <Text style={RegisterStyle.passcode_error}>{this.state.passMatch}</Text>
+                        </View >
+                    </View>
+
+                    <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity style={RegisterStyle.touchable_opacity_style}
+                            onPress={this.SigninInsteadNavigationHandler}>
+                            <Text style={RegisterStyle.button_text}>
+                                {strings.signin}
+                            </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={RegisterStyle.button}
+                            onPress={this.handleSignUpButton}>
+                            <Text style={RegisterStyle.button_text}>
+                                {strings.next}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </ScrollView>
                 <Snackbar
-                    style = {{ marginBottom: '30%' }}
-                    visible = {this.state.isError}
-                    onDismiss = {this.handleIsErrorSnakbar}
-                    duration = {10000}>
-                        {this.state.error}
+                    style={{ marginBottom: '10%' }}
+                    visible={this.state.isError}
+                    onDismiss={this.handleIsErrorSnakbar}
+                    duration={10000}>
+                    {this.state.error}
                 </Snackbar>
             </View>
         )

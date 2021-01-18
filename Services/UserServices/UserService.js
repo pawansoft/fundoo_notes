@@ -7,7 +7,14 @@ class UserService{
             Firebase.auth()
             .createUserWithEmailAndPassword(email, password)
             .then(userDetail => resolve(userDetail))
-            .catch(error => reject('error'))
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use') {
+                    reject('email in use!')
+            }
+            if (error.code === 'auth/invalid-email') {
+                    reject('invalid email!')
+            }
+            })
         })
     }
 
@@ -16,7 +23,17 @@ class UserService{
             Firebase.auth()
             .signInWithEmailAndPassword(email, password)
             .then(userDetail => resolve(userDetail))
-            .catch(error => reject(error))
+            .catch((error) =>{
+                if(error.code === 'auth/user-not-found') {
+                    reject('User not Found')
+                }
+                else if(error.code === 'auth/wrong-password') {
+                    reject('Invalid Password')
+                }
+                else if(error.code === 'auth/invalid-email') {
+                    reject('Invalid Email')
+                }
+            })
         })
     }
 
@@ -25,7 +42,13 @@ class UserService{
             Firebase.auth()
             .sendPasswordResetEmail(emailId)
             .then(() => resolve('Success'))
-            .catch(error => reject('error'))
+            .catch(error => {
+                if(error.code === 'auth/invalid-email') {
+                    reject('invalid email')
+                } else if(error.code === 'auth/user-not-found') {
+                    reject('User not found')
+                }
+            })
         })
     }
 

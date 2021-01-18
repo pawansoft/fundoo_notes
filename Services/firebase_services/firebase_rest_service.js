@@ -1,41 +1,33 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios'
 
 class firebase_rest_service {
 
-    storeNotesDetail = async (noteid, title, notes, label, reminder, isArchive, isDeleted) => {
+    storeNoteServiceByRest = async (noteid, title, note, label, reminder, isArchive, isDeleted) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
-        return new Promise(async (resolve, reject) => {
-            
-            const note ={
-                title : title,
-                note : notes,
-                label : label,
-                reminder: reminder,
-                isArchive: isArchive,
-                isDeleted: isDeleted
-            }
-
-            fetch(`https://fundoo-notes-8dd0a-default-rtdb.firebaseio.com/Notes/${userid}/${noteid}.json`, {
-                method: 'PUT',
-                heders: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    NoteDetails : note
-                }) 
-            }).then(() => resolve('success'))
-            .catch(error => reject(error))
-        })
+        const notes = {
+            title: title,
+            note: note,
+            label: label,
+            reminder: reminder,
+            isArchive: isArchive,
+            isDeleted: isDeleted
+        }
+        axios.put(`https://fundoo-notes-8dd0a-default-rtdb.firebaseio.com/Notes/${userid}/${noteid}.json`, { notes })
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+            }).catch(error => reject(error))
     }
 
-    DeleteServiceController= async(noteKey) =>{
+    DeleteServiceController = async (noteKey) => {
         const userid = JSON.parse(await AsyncStorage.getItem('userId'))
         return new Promise((resolve, reject) => {
             fetch(`https://fundoo-notes-8dd0a-default-rtdb.firebaseio.com/Notes/${userid}/${noteKey}.json`, {
                 method: 'DELETE'
             })
-            .then(() => resolve('Success'))
-            .catch(() => reject(error))
+                .then(() => resolve('Success'))
+                .catch(() => reject(error))
         })
 
     }

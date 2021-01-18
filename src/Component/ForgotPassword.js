@@ -48,10 +48,13 @@ export default class ForgotPassword extends Component {
             UserService.ResetPasscodeService(this.state.emailId).then(() => {
                 alert('Password reset mail has sent to you please check your mail')
             })
-                .catch(error =>
-                    this.props.navigation.navigate('dialog', {
-                        error
-                    }))
+            .catch(async error =>{
+                await this.setState({
+                    isEmailValid : error
+                })
+            }
+            )
+                    
         }
         else {
             this.props.navigation.navigate('dialog', {
