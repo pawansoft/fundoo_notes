@@ -21,6 +21,12 @@ export default class PopulatedLabel extends Component{
             selectedLabel : []
         }
     }
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
 
     componentDidMount = async() => {
         await SQLiteLabelServices.selectLabelFromSQliteStorage()
@@ -68,7 +74,6 @@ export default class PopulatedLabel extends Component{
                 selectedLabel : labels
             })
         }
-        console.log(this.state.selectedLabel);
     }
 
     handleSearchLabelInput = async (search) => {

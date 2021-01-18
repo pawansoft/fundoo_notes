@@ -51,6 +51,12 @@ class DashboardScreen extends Component {
             showProfileScreen: false
         })
     }
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
 
     async componentDidMount() {
 
@@ -176,7 +182,7 @@ class DashboardScreen extends Component {
                     
                         <View>
                             <FlatList
-                            style = {{marginBottom: '30%'}}
+                            style = {{marginBottom: '20%'}}
                                 numColumns = {this.props.listView ? 1 : 2}
                                 keyExtractor = {(item, index) => JSON.stringify(index)}
                                 key = {this.props.listView ? 1 : 2}

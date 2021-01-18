@@ -16,7 +16,6 @@ import moment from "moment"
 export default class LabelScreen extends Component {
     constructor(props) {
         super(props)
-        console.log(this.props.route.params);
         this.state = {
             listView: true,
             notesFromSQLite: [],
@@ -53,7 +52,6 @@ export default class LabelScreen extends Component {
         await this.setState({
             listView: !this.state.listView
         })
-        console.log(this.state.listView);
     }
 
     handleSearch = () => {
@@ -94,7 +92,6 @@ export default class LabelScreen extends Component {
                                 note.Labels != null ?
                                     note.Labels.includes(this.props.route.params.labelId) ?
                                         <React.Fragment key={note.NoteKey}>
-                                            {console.log("inside render" + note.Labels)}
                                             {<Card
                                                 style={(this.state.listView) ? NotesContainerStyle.container_list : NotesContainerStyle.container}>
                                                 <Card.Content style={{ backgroundColor: 'white' }}>
@@ -117,7 +114,6 @@ export default class LabelScreen extends Component {
                                                             this.state.labelDetails.map(val =>
                                                                 note.Labels.includes(val.label_id) ?
                                                                     <React.Fragment key={val.label_id}>
-                                                                        {console.log("inside render" + val)}
                                                                         <Text style={NotesHolderStyle.label_text}>{val.label}</Text>
                                                                     </React.Fragment>
                                                                     : null

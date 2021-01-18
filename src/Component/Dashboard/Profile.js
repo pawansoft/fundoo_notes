@@ -126,7 +126,6 @@ export default class Profile extends Component {
               fileUri: url
             })
           })
-        console.log('response', JSON.stringify(response));
         this.setState({
           fileUri: response.uri
         });
@@ -144,7 +143,6 @@ export default class Profile extends Component {
     };
     launchImageLibrary(options, async (response) => {
       this.handleCancel();
-      console.log('Response = ', response);
       if (!response.didCancel) {
         await this.uploadProfileImage(response.uri)
           .then(url => {
@@ -152,7 +150,6 @@ export default class Profile extends Component {
               fileUri: url
             })
           })
-        console.log('response', JSON.stringify(response));
         this.setState({
           fileUri: response.uri
         });

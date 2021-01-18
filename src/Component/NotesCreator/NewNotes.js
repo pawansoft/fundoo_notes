@@ -20,6 +20,7 @@ import ProfileStyle from '../../Style/ProfileStyle';
 import SelectDateAndTime from '../Dashboard/Reminder/SelectDateAndTime';
 import { Appbar, Chip, Menu, Modal, Portal, Provider, Snackbar } from 'react-native-paper';
 import moment from "moment";
+import firebase_rest_service from '../../../Services/firebase_services/firebase_rest_service';
 
 const db = openDatabase({ name: 'fundoo_notes.db', createFromLocation: '~data/fundoo_notes.db' });
 
@@ -44,7 +45,6 @@ export default class NewNotes extends Component {
             show: false,
             errorDate: false
         }
-        console.log(this.props);
     }
 
     componentDidMount = async () => {
@@ -83,7 +83,6 @@ export default class NewNotes extends Component {
                 reminder: JSON.parse(this.props.route.params.reminder)
             })
         }
-        console.log(this.state.isArchive);
         await SQLiteLabelServices.selectLabelFromSQliteStorage()
             .then(async result => {
                 var temp = [];
@@ -114,7 +113,7 @@ export default class NewNotes extends Component {
     handleBackButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
             if (this.props.route.params.newNote == true) {
-                await NotesServiceController.addNote(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
+                await NotesServiceController.addNote(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder), 'false', 'false')
                     .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
                     .catch(error => console.log(error))
 
@@ -124,6 +123,7 @@ export default class NewNotes extends Component {
                 await NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
                     .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
                     .catch(error => console.log(error))
+                
                 this.updateNoteIdIntoLabel()
             }
         }
@@ -134,7 +134,7 @@ export default class NewNotes extends Component {
 
     handleArchiveButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
-            NotesServiceController.addArchive(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
+            NotesServiceController.addArchive(this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
                 .then(() => this.props.navigation.push('Home', {
                     screen: 'Notes', params: {
                         key: this.state.key,
@@ -151,9 +151,9 @@ export default class NewNotes extends Component {
         }
     }
 
-    handleUnArchiveButton = async () => {
+    handleUnArchiveButton = async () => {      
         if (this.state.title != '' || this.state.note != '') {
-            NotesServiceController.removeArchive(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels))
+            NotesServiceController.removeArchive(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
                 .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
                 .catch(error => console.log(error))
         }
@@ -218,10 +218,7 @@ export default class NewNotes extends Component {
         if (this.state.SelectedLabels.length > 0) {
             this.state.labelDetails.map(label => {
                 if (this.state.SelectedLabels.includes(label.label_id)) {
-                    console.log(label);
-                    console.log("in first if condition");
                     noteId = JSON.parse(label.NoteKey);
-                    console.log(noteId);
                     if (noteId != null && noteId != 0) {
                         if (!noteId.includes(this.state.key)) {
                             noteId.push(this.state.key)
@@ -236,7 +233,6 @@ export default class NewNotes extends Component {
 
                 }
                 else {
-                    console.log("inside first else");
                     noteId = JSON.parse(label.NoteKey)
                     if (noteId != null) {
                         if (noteId.includes(this.state.key)) {
@@ -308,7 +304,6 @@ export default class NewNotes extends Component {
                 show: false
             })
         }
-        console.log(this.state.date)
     }
 
     saveChoosenTime = async () => {
@@ -341,7 +336,6 @@ export default class NewNotes extends Component {
         today.setHours(today.getHours() + 4);
         today.setMinutes(0)
         await this.setState({
-
             date: today,
             reminder: '',
             openDateTimePicker: false,

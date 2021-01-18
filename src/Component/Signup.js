@@ -10,6 +10,8 @@ import UserService from '../../Services/UserServices/UserService';
 import RegisterStyle from '../Style/Register';
 import { strings } from '../Localization/Localization'
 import SQLiteCRUDService from '../../Services/SQLite_service/SQLiteCRUDService';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Snackbar } from 'react-native-paper';
 export default class Signup extends Component {
 
     constructor(props) {
@@ -25,6 +27,9 @@ export default class Signup extends Component {
             password: '',
             passMatch: '',
             confirm: '',
+            error: '',
+            isError: false,
+            isRegisterd: ''
         }
     }
 
@@ -125,7 +130,7 @@ export default class Signup extends Component {
         })
     }
 
-    handleSignUpButton = () => {
+    handleSignUpButton = async() => {
         if (this.state.fname != '' &&
             this.state.lname != '' &&
             this.state.userName != '' &&
@@ -137,26 +142,36 @@ export default class Signup extends Component {
             this.state.passMatch == '') {
             UserService.SignupService(this.state.userName, this.state.password)
                 .then((userDetails) => {
-                    SQLiteCRUDService.storeUserDetailToSQLLiteService(this.state.userName, this.state.fname, this.state.lastname).then(() => {
-                        console.log('Success');
-                    }).catch(error => console.log(error))
-                    UserService.storeDetailToDatabase(userDetails.user.uid, this.state.userName, this.state.fname, this.state.lname)
-                    this.props.navigation.navigate('Login')
-                }).catch(error =>
-                    this.props.navigation.navigate('dialog', {
-                        error
-                    }))
-
+                        UserService.storeDetailToDatabase(userDetails.user.uid, this.state.userName, this.state.fname, this.state.lname)
+                        .then(() => this.props.navigation.navigate('Login', {isSignin : true}))
+                        .catch(async error => {
+                            await this.setState({
+                                error: error
+                            })
+                        })
+                    }).catch(async error => 
+                        await this.setState({
+                            isError: true,
+                            error: error
+                        })
+                    )
         }
         else {
-            this.props.navigation.navigate('dialog', {
-                error: 'Some fields are invalid to null'
-            })
+                await this.setState({
+                    isError: true,
+                    error: 'Please fill all the details'
+                })
         }
     }
 
     SigninInsteadNavigationHandler = () => {
         this.props.navigation.navigate('Login')
+    }
+
+    handleIsErrorSnakbar = async() => {
+        await this.setState({
+            isError: false
+        })
     }
 
     render() {
@@ -166,6 +181,7 @@ export default class Signup extends Component {
                 <View>
                     <Image source={require('../assets/logo.png')} style={{ marginLeft: '20%' }} />
                 </View>
+                <ScrollView>
 
                 <View>
                     <Text style={RegisterStyle.signin_text}>
@@ -239,6 +255,14 @@ export default class Signup extends Component {
                         </Text>
                     </TouchableOpacity>
                 </View>
+                </ScrollView>
+                <Snackbar
+                    style = {{ marginBottom: '30%' }}
+                    visible = {this.state.isError}
+                    onDismiss = {this.handleIsErrorSnakbar}
+                    duration = {10000}>
+                        {this.state.error}
+                </Snackbar>
             </View>
         )
     }

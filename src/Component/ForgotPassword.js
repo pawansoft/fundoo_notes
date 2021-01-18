@@ -97,7 +97,7 @@ export default class ForgotPassword extends Component {
 
 
                             <TouchableOpacity
-                                style={{ marginLeft: '30%', marginTop: '7%' }}
+                                style={{ marginLeft: '20%', marginTop: '7%' }}
                                 onPress={this.handleLoginButton}>
                                 <Text style={login_style.button_text}>
                                     {strings.signin}

@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.ocetnik.timer.BackgroundTimerPackage;
+import com.ocetnik.timer.BackgroundTimerPackage;
 import com.pilloxa.backgroundjob.BackgroundJobPackage;
 import com.pilloxa.backgroundjob.BackgroundJobPackage;
 //import io.invertase.firebase.RNFirebasePackage;
@@ -39,6 +41,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
+          packages.add(new PushNotificationPackage());
          
           return packages;
         }

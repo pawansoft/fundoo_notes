@@ -24,6 +24,13 @@ class LevelActions extends Component {
         }
     }
 
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
     handleCheckButton = async () => {
         if (!this.state.errorMsg && !this.state.emptyMsg) {
             this.setState({
@@ -88,7 +95,6 @@ class LevelActions extends Component {
     }
 
     handleDeleteButton = async () => {
-        console.log(this.props.labelKey);
         await NoteServices.deleteLabelInFirebase(this.props.labelKey)
             .then(async () => {
                 await NoteServices.getLabelFromDatabase()

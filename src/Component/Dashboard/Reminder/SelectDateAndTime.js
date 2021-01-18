@@ -47,7 +47,7 @@ export default class SelectDateAndTime extends Component {
                 <View style = {DateTimePickerStyle.button_container_style}>
                     {this.props.reminder != '' ?
                         <Button 
-                            style = {{marginLeft : 20, backgroundColor: '#cc0000'}}
+                            style = {{ backgroundColor: '#cc0000'}}
                             onPress = {this.props.deleteReminder}
                             labelStyle = {{color  : 'black'}}>
                                 Delete
@@ -56,7 +56,7 @@ export default class SelectDateAndTime extends Component {
                         null
                     }
                     <Button 
-                        style = {{marginLeft : 5}}
+                        
                         onPress = {this.props.dismissModal}
                         labelStyle = {{color  : 'black'}}>
                             Cancel

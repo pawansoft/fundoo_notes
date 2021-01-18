@@ -11,8 +11,8 @@ const DateTimePickerStyle = StyleSheet.create({
 
     button_container_style : {
         flexDirection : 'row', 
-        justifyContent : 'flex-end',
-        marginTop : 80
+        justifyContent : 'space-around',
+        marginTop : 20
     },
     date_selector_style:{
         marginBottom : 100
@@ -37,13 +37,13 @@ const DateTimePickerStyle = StyleSheet.create({
         borderBottomWidth : 0.7, 
         paddingBottom : 5,
         paddingLeft : 5,
+        height: 40,
         borderColor : 'grey'
     },
 
     save_button_style : {
         backgroundColor : '#e6b800', 
         width : 90, 
-        marginLeft : 15
     }
 })
 

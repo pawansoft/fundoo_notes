@@ -18,7 +18,6 @@ class PushNotificationService{
         let fcmToken = await AsyncStorage.getItem('fcmToken');
         if(!fcmToken){          
             fcmToken = await messaging().getToken();
-            console.log("Token" +fcmToken);
             if (fcmToken) {
                 // user has a device token
                 await AsyncStorage.setItem('fcmToken', fcmToken);

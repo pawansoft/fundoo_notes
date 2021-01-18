@@ -24,8 +24,8 @@ class Notification{
                   }
                 }
             }
-          
         })
+        console.log('Local notification is updating');
       }
 }
 

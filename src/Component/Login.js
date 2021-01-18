@@ -8,7 +8,7 @@ import {
     ScrollView,
 
 } from 'react-native';
-import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
+import { Button, Paragraph, Dialog, Portal, Snackbar } from 'react-native-paper';
 import { strings } from '../Localization/Localization'
 import login_style from '../Style/login_style';
 import UserService from '../../Services/UserServices/UserService';
@@ -44,12 +44,13 @@ export default class Login extends Component {
         }
     }
 
-    async componentDidMount() {
+    componentDidMount = async() => {
         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
         const userId = await AsyncStorage.getItem('userId');
         if (isLoggedIn == 'true') {
             this.props.navigation.navigate('Home')
         }
+       
     }
 
     _setLogingStatusAndDeatil = async (userId) => {
@@ -125,6 +126,12 @@ export default class Login extends Component {
 
     }
 
+    handleIsSignInSnakbar = async() => {
+        await this.setState({
+            isSignIn: false
+        })
+    }
+
     render() {
         return (
             <View>
@@ -186,6 +193,13 @@ export default class Login extends Component {
                     </View>
 
                 </ScrollView>
+                <Snackbar
+                    style = {{ marginBottom: '30%' }}
+                    visible = {this.state.isSignin}
+                    onDismiss = {this.handleIsSignInSnakbar}
+                    duration = {10000}>
+                        Siggned in successfully
+                </Snackbar>
 
             </View>
         )

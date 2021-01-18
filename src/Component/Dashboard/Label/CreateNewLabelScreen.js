@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, ScrollView } from 'react-native';
+import { View, Text, TextInput, ScrollView, Image } from 'react-native';
 import { Appbar} from 'react-native-paper';
 import {storeLabelContent, storeNoteKeys, storeLabels} from '../../../redux/actions/CreateNewLabelActions'
 import { connect } from 'react-redux'
@@ -8,6 +8,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import LevelActions from './LabelActions';
 import NoteServices from '../../../../Services/firebase_services/NoteServices';
 import NotesServiceController from '../../../../Services/data_flow_controller/NotesServiceController';
+import backgroundImageStyle from '../../../Style/backgroundImageStyle';
 
 class CreateNewLabelScreen extends Component {
     constructor(props) {
@@ -101,6 +102,8 @@ class CreateNewLabelScreen extends Component {
     render() {
         return (
             <View style={CreateNewLabelStyles.container}>
+                <Image style={backgroundImageStyle.backgroundImage} source={require('../../../assets/background1.jpg')}>
+                </Image>
                 <View>
                     <Appbar style={CreateNewLabelStyles.header_style}>
                         <Appbar.Action

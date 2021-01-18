@@ -41,7 +41,6 @@ class DrawerContent extends Component {
             await this.props.storeLabels(this.state.labelNoteKeys);
         })
         .catch(error => console.log(error))
-        console.log(this.state.labelsContent);
     }
 
     handleNoteButton = () => {

@@ -34,6 +34,13 @@ export default class NoteCard extends Component {
             { key: key, title: title, note: note, selectedLabel: labels, updateNote: true, isArchive: archive, reminder: reminder })
     }
 
+    componentWillUnmount() {
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
+    }
+
     render() {
         return (
             <Card

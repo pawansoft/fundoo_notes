@@ -9,7 +9,11 @@ const NotesContainerStyle = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#bbb',
         width : '45%',
-        backgroundColor: 'white'
+        backgroundColor: '#ffffff',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.9,
+        shadowRadius: 2,  
     },
     container_title: {
         marginBottom : 5,
@@ -20,7 +24,11 @@ const NotesContainerStyle = StyleSheet.create({
         marginTop: '2%',
         marginLeft: '2%',
         borderBottomWidth: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,  
     },
     snakbarButton: {
         width: 500

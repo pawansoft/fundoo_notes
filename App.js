@@ -1,29 +1,26 @@
 import React, { Component } from 'react';
 import StackScreen from './navigation/StackScreen';
-import {Provider} from 'react-redux'
+import { Provider } from 'react-redux'
 import store from './src/redux/store'
 import PushNotificationService from './Services/push-notification-service/PushNotificationService';
 import PushNotification from 'react-native-push-notification';
+import PushNotifications from './PushNotification';
+import BackgroundTimer from 'react-native-background-timer';
 import Notifications from './Services/push-notification-service/Notifications';
-import BackgroundJob from 'react-native-background-job';
-import { AppState } from 'react-native';
-export default class App extends Component{
-  constructor(props){
+
+export default class App extends Component {
+  constructor(props) {
     super(props)
-    this.state = {
-      appState: AppState.currentState
-    }
   }
 
-  componentDidMount = async() =>{
-   
-    AppState.addEventListener("change", this._handleAppStateChange);
+  componentDidMount = async () => {
+    PushNotifications.startService();
 
     PushNotificationService.checkPermission();
-   
+
     PushNotification.configure({
       onRegister: function (token) {
-          console.log("TOKEN:", token);
+        console.log("TOKEN:", token);
       },
 
       onNotification: function (notification) {
@@ -34,51 +31,28 @@ export default class App extends Component{
         console.log("ACTION:", notification.action);
         console.log("NOTIFICATION:", notification);
       },
-      onRegistrationError: function(err) {
-          console.error(err.message, err);
+      onRegistrationError: function (err) {
+        console.error(err.message, err);
       },
       permissions: {
         alert: true,
         badge: true,
         sound: true,
-    },
-    popInitialNotification: true,
-    requestPermissions: true,
-  });
+      },
+      popInitialNotification: true,
+      requestPermissions: true,
+    });  
+    
+    BackgroundTimer.setInterval(() =>{
+      Notifications.sendLocalNotification();
+    }, 10000)
   }
 
-  backgroundJob = {
-    jobKey : 'PushLotification',
-    job: () => {
-      setInterval(() => {
-        Notifications.sendLocalNotification();
-      }, 60000);
-    }
-  }
-
-  
-  _handleAppStateChange = nextAppState => {
-    if (
-      this.state.appState.match(/inactive|background/) 
-    ) {
-      console.log("app is in background");
-      BackgroundJob.register(this.backgroundJob)
-    }
-    else{
-      console.log("in else condition");
-      setInterval(() => {
-        Notifications.sendLocalNotification();
-      }, 30000);
-    }
-
-    this.setState({ appState: nextAppState });
-  };
-
-  render(){
-    return(
-      <Provider store = {store}>
-      <StackScreen/>
-      </Provider> 
+  render() {
+    return (
+      <Provider store={store}>
+        <StackScreen />
+      </Provider>
     )
   }
 };

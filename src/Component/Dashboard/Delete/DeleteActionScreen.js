@@ -26,7 +26,6 @@ export class DeleteActionScreen extends Component {
             selectedLabel: [],
             labelDetails: []
         }
-        console.log(this.props);
     }
 
     componentDidMount = async () => {
@@ -70,6 +69,7 @@ export class DeleteActionScreen extends Component {
     }
 
     handleDeleteNoteForEver = () => {
+        this.handleCancel();
         NotesServiceController.deleteNoteFromBin(this.state.key)
             .then(() => this.props.navigation.push('Home', { screen: 'Delete' }))
             .catch(error => console.log(error))
@@ -92,10 +92,15 @@ export class DeleteActionScreen extends Component {
     }
 
     restoreNotesHandler = () => {
+        this.handleCancel();
         NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note)
             .then(() => {
                 this.props.navigation.push('Home', { screen: 'Notes' })
             }).catch(error => console.log(error))
+    }
+    handleCancel = () => {
+        const { onPress } = this.props
+        this.RBSheet.close()
     }
 
     render() {
