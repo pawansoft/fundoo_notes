@@ -10,10 +10,15 @@ const NotesContainerStyle = StyleSheet.create({
         borderColor: '#bbb',
         width : '45%',
         backgroundColor: '#ffffff',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.9,
-        shadowRadius: 2,  
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.35,
+        shadowRadius: 3.84,
+        
+        elevation: 8, 
     },
     container_title: {
         marginBottom : 5,
@@ -23,12 +28,18 @@ const NotesContainerStyle = StyleSheet.create({
         width : '96%',
         marginTop: '2%',
         marginLeft: '2%',
-        borderBottomWidth: 1,
+        borderWidth: 0.5,
+        borderColor: 'grey',
         backgroundColor: 'white',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,  
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.35,
+        shadowRadius: 3.84,
+        
+        elevation: 8,
     },
     snakbarButton: {
         width: 500

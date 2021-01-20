@@ -8,7 +8,6 @@ import {
     ScrollView
 } from 'react-native';
 import { strings } from '../Localization/Localization';
-
 import UserService from '../../Services/UserServices/UserService';
 import login_style from '../Style/login_style';
 import reset_component_style from '../Style/reset_component_style';
@@ -97,7 +96,6 @@ export default class ForgotPassword extends Component {
                                     {strings.next}
                                 </Text>
                             </TouchableOpacity>
-
 
                             <TouchableOpacity
                                 style={{ marginLeft: '20%', marginTop: '7%' }}

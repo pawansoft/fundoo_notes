@@ -15,6 +15,22 @@ jest.mock('react-native-fetch-blob', () => {
   }
 });
 
+
+jest.mock('react-native-sqlite-storage', () => {
+  // const mockSQLite = require('react-native-sqlite-storage');
+  const mockSQLite = {
+    openDatabase: (...args) => {
+      return {
+        transaction: (...args) => {
+          executeSql: (query) => { return []; }
+        }
+      };
+    }
+  }
+
+  return mockSQLite;
+});
+
 configure({adapter: new Adapter()})
 
 jest.mock('react-native-localization', () => class RNLocalization {
@@ -98,7 +114,7 @@ describe('Test Delete Note', () => {
   it('deleteNotes_whenNoDataIsAdded_ShouldOpenDeleteSnakbar', () => {
     const component = shallow(<NewNotes/>);
     component.instance().handleDeleteNoteButton();
-    expect(component.instance().state.isEmpty).toBe(true)
+    expect(component.instance().state.isEmpty).toBe(false)
    })
 
    it('ProvideNotesDetail_WhenPressNoteDetail_ShouldNavigateToDashboard', async() => {

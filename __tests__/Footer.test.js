@@ -2,7 +2,7 @@ import React from 'react';
 import {configure, shallow} from 'enzyme';
 import {Appbar} from 'react-native-paper';
 import Adapter from 'enzyme-adapter-react-16'
-import BottomBar from '../src/Component/Dashboard/dashboardFooter';
+import BottomBar from '../src/Component/Dashboard/DashboardScreen/dashboardFooter';
 import MockAsyncStorage from 'mock-async-storage';
 
 const mockImpl = new MockAsyncStorage();

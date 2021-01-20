@@ -1,7 +1,7 @@
 import React from 'react';
 import{configure, shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16'
-import Delete from '../src/Component/Dashboard/Delete/Delete';
+import Profile from '../src/Component/Dashboard/Profile';
 import MockAsyncStorage from 'mock-async-storage';
 
 const mockImpl = new MockAsyncStorage();
@@ -50,9 +50,9 @@ jest.mock('react-native-localization', () => class RNLocalization {
     }
 })
 
-describe('Delete screen', () => {
-    it('ProvideDeleteScreen_WhenSnapshotMatches_ShouldPassTestCase', () =>{
-        const component = shallow(<Delete/>)
+describe('Test Snapshot', () => {
+    it("ProvideProfileScreen_WhenSnapshotMatches_ShouldPassTestCase", () => {
+        const component = shallow(<Profile/>)
         expect(component).toMatchSnapshot();
     })
 })

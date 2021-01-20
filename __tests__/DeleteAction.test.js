@@ -2,10 +2,9 @@ import React from 'react';
 import {configure, shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import MockAsyncStorage from 'mock-async-storage';
-import { DeleteActionScreen } from '../src/Component/Dashboard/DeleteActionScreen';
+import { DeleteActionScreen } from '../src/Component/Dashboard/Delete/DeleteActionScreen';
 import { Appbar, Menu } from 'react-native-paper';
 import NoteServices from '../Services/firebase_services/NoteServices';
-import { AsyncStorage } from 'react-native';
 
 const mockImpl = new MockAsyncStorage();
 jest.mock('@react-native-async-storage/async-storage', () => mockImpl);
@@ -15,6 +14,22 @@ jest.mock('react-native-fetch-blob', () => {
     DocumentDir: () => {},
     polyfill: () => {},
   }
+});
+
+
+jest.mock('react-native-sqlite-storage', () => {
+  // const mockSQLite = require('react-native-sqlite-storage');
+  const mockSQLite = {
+    openDatabase: (...args) => {
+      return {
+        transaction: (...args) => {
+          executeSql: (query) => { return []; }
+        }
+      };
+    }
+  }
+
+  return mockSQLite;
 });
 
 configure({adapter: new Adapter()})
@@ -60,7 +75,8 @@ describe('Test functionality of delete screen', () => {
         const onPressEvent = jest.fn();
 
         const component = shallow(<DeleteActionScreen onPress = {onPressEvent} navigation = {navigation}/>)
-        NoteServices._restoreNoteService()
+        NoteServices.restoreNotesHandler();
+        
         await component.instance().handleNewNoteCreateButton();
         expect(navigation.navigate).toBeCalledWith("NewNotes")
     })

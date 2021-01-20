@@ -4,8 +4,8 @@ import {configure, shallow} from 'enzyme';
 import {Appbar, Avatar, Searchbar} from 'react-native-paper';
 
 import Adapter from 'enzyme-adapter-react-16'
-import DashboardHeader from '../src/Component/Dashboard/DashboardHeader';
-import DashboardScreen from '../src/Component/Dashboard/DashboardScreen';
+import DashboardHeader from '../src/Component/Dashboard/DashboardScreen/DashboardHeader';
+import DashboardScreen from '../src/Component/Dashboard/DashboardScreen/DashboardScreen';
 import MockAsyncStorage from 'mock-async-storage';
 
 const mockImpl = new MockAsyncStorage();

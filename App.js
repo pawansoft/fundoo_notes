@@ -4,10 +4,11 @@ import { Provider } from 'react-redux'
 import store from './src/redux/store'
 import PushNotificationService from './Services/push-notification-service/PushNotificationService';
 import PushNotification from 'react-native-push-notification';
-import PushNotifications from './PushNotification';
 import BackgroundTimer from 'react-native-background-timer';
 import Notifications from './Services/push-notification-service/Notifications';
 import NoteServices from './Services/firebase_services/NoteServices';
+import {NativeModules} from 'react-native'
+const {PushNotificationModule} = NativeModules;
 
 export default class App extends Component {
   constructor(props) {
@@ -15,7 +16,7 @@ export default class App extends Component {
   }
 
   componentDidMount = async () => {
-    PushNotifications.startService();
+    PushNotificationModule.startService();
 
     PushNotificationService.checkPermission();
 
@@ -32,6 +33,7 @@ export default class App extends Component {
         console.log("ACTION:", notification.action);
         console.log("NOTIFICATION:", notification);
       },
+      
       onRegistrationError: function (err) {
         console.error(err.message, err);
       },
@@ -47,9 +49,9 @@ export default class App extends Component {
     .then(data => console.log(data))
     .catch(error => console.log(error))
     
-    BackgroundTimer.setInterval(() =>{
-      Notifications.sendLocalNotification();
-    }, 60000)
+    // BackgroundTimer.setInterval(() =>{
+    //   Notifications.sendLocalNotification();
+    // }, 60000)
   }
 
   render() {

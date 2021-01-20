@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import com.facebook.react.HeadlessJsTaskService;
 
 public class PushNotificationService extends Service {
+
     private Handler handler = new Handler();
     private Runnable runnableCode = new Runnable() {
         @Override

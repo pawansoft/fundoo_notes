@@ -168,7 +168,7 @@ export default class Delete extends Component {
                         <View style={{ width: '80%', marginLeft: '10%', marginTop: '10%', borderRadius: 10 }}>
                             <Button
                                 icon='delete-outline'>
-                                <Text style={{ color: 'Red', fontWeight: 'bold', fontSize: 18 }}>
+                                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>
                                     Clean Recycle bin
                             </Text>
                             </Button>

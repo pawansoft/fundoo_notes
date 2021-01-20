@@ -29,7 +29,7 @@ export default class DashboardHeader extends Component {
         })
 
         await this.setState({
-            imageUri: this.state.userDetail[this.state.userid].photo,
+            imageUri: this.state.userDetail[userId].photo,
         })
     }
 

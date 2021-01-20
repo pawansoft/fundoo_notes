@@ -1,7 +1,7 @@
 import React from 'react';
 import {configure, shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16'
-import DashboardScreen from '../src/Component/Dashboard/DashboardScreen';
+import DashboardScreen from '../src/Component/Dashboard/DashboardScreen/DashboardScreen';
 import MockAsyncStorage from 'mock-async-storage';
 
 const mockImpl = new MockAsyncStorage();
@@ -13,6 +13,8 @@ jest.mock('react-native-fetch-blob', () => {
     polyfill: () => {},
   }
 });
+
+
 
 configure({adapter: new Adapter()})
 

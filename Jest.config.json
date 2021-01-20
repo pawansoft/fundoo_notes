@@ -22,5 +22,8 @@
     "coveragePathIgnorePatterns": [
         "/node_modules/",
         "/jest"
-    ]
+    ],
+    "globals" :{
+        "window" : {}
+      }
 }

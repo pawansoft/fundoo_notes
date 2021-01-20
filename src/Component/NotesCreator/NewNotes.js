@@ -45,7 +45,6 @@ export default class NewNotes extends Component {
             show: false,
             errorDate: false
         }
-        console.log(this.props.route.params);
     }
 
     componentDidMount = async () => {
@@ -203,6 +202,7 @@ export default class NewNotes extends Component {
     handleDeleteNoteButton = async () => {
         this.handleCancel()
         if (this.state.title != '' || this.state.note != '') {
+            console.log("from delete"+JSON.stringify(this.state.SelectedLabels));
             NotesServiceController.moveToRecycleBin(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels))
                 .then(() => this.props.navigation.push('Home', {
                     screen: 'Notes', params: {
@@ -297,6 +297,12 @@ export default class NewNotes extends Component {
                 date: new Date(this.state.reminder)
             })
         }
+        else if (this.state.reminder == '') {
+            await this.setState({
+                date: new Date()
+                
+            })
+        }
         await this.setState({
             openDateTimePicker: true,
         })
@@ -337,6 +343,7 @@ export default class NewNotes extends Component {
     }
 
     showMode = async (currentMode) => {
+        
         await this.setState({
             show: true,
             mode: currentMode

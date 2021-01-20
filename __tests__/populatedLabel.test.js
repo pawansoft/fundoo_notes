@@ -1,8 +1,8 @@
 import React from 'react';
 import{configure, shallow} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16'
-import Delete from '../src/Component/Dashboard/Delete/Delete';
 import MockAsyncStorage from 'mock-async-storage';
+import PopulatedLabel from '../src/Component/Dashboard/Label/PopulatedLabel';
 
 const mockImpl = new MockAsyncStorage();
 jest.mock('@react-native-async-storage/async-storage', () => mockImpl);
@@ -50,9 +50,9 @@ jest.mock('react-native-localization', () => class RNLocalization {
     }
 })
 
-describe('Delete screen', () => {
-    it('ProvideDeleteScreen_WhenSnapshotMatches_ShouldPassTestCase', () =>{
-        const component = shallow(<Delete/>)
+describe('create new Label screen', () => {
+    it('ProvideCreateLabelScreen_WhenSnapshotMatches_ShouldPassTestCase', () =>{
+        const component = shallow(<PopulatedLabel/>)
         expect(component).toMatchSnapshot();
     })
 })

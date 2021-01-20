@@ -8,4 +8,4 @@ import {name as appName} from './app.json';
 import Notifications from './Services/push-notification-service/Notifications';
 
 AppRegistry.registerComponent(appName, () => App);
-AppRegistry.registerHeadlessTask('PushNotifications', () => Notifications.sendLocalNotification)
+AppRegistry.registerHeadlessTask('SendLocalNotification', () => Notifications.sendLocalNotification)

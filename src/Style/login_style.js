@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native'
 const login_style = StyleSheet.create({
     container: {
-        borderWidth : 2,
+        borderWidth : 1,
         alignContent : 'center',
         borderColor : 'black',
         width : '90%',
@@ -9,12 +9,13 @@ const login_style = StyleSheet.create({
         height : '100%',
         borderRadius : 5,
         
+        
     },
     
     header_image : {
         height : '2%',
         alignSelf : 'center',
-        marginBottom : '20%'
+        marginBottom : '25%'
     },
     login_header_text: {
         fontSize : 20,

@@ -15,6 +15,7 @@ jest.mock('react-native-fetch-blob', () => {
       polyfill: () => {},
     }
   });
+  
 
 jest.mock('react-native-localization', () => class RNLocalization {
     language = 'en-US'
@@ -53,43 +54,16 @@ describe('Test Login States', () => {
      test('ProvidePassword_WhenAdded_ShouldStoreAtState', () => {
          const component = shallow(<Login/>);
          component.instance().handlePassword('Pk@1234567');
-         expect(component.instance().state.password).toBe('Pk@1234567');
+         expect(component.instance().state.passcode).toBe('Pk@1234567');
      })
  })
  describe('Test Invalid input', () => {
-     test('ProvideUserName_WhenIncorrectFormat_ShouldGenerateInvalidField', () => {
-        const component = shallow(<Login/>);
-        component.instance().handleUserName('1234567');
-        component.instance().validateUserName()
-        expect(component.instance().state.userNameValid).toBe('Invalid Email'); 
-     })
-
-     test('ProvideUserName_WhenFollowCorrectForment_ErrorMessageShouldRemove', () => {
-         const component = shallow(<Login/>);
-         component.instance().handleUserName('123456');
-         component.instance().validateUserName();
-         expect(component.instance().state.userNameValid).toBe('Invalid Email');
-         component.instance().handleUserName('pk.soft29@gmail.com');
-         component.instance().validateUserName();
-         expect(component.instance().state.userNameValid).toBe('');
-     })
-
-     test('ProvidePassword_WhenIncorrectFormat_ShouldGenerateInvalidField', () => {
-        const component = shallow(<Login/>);
-        component.instance().handlePassword('1234567');
-        component.instance().validatePassword()
-        expect(component.instance().state.passwordValid).toBe('Invalid Format');
-     })
-
-
-     test('ProvidePassword_WhenFollowCorrectForment_ErrorMessageShouldRemove', () => {
-        const component = shallow(<Login/>);
-        component.instance().handlePassword('123456');
-        component.instance().validatePassword();
-        expect(component.instance().state.passwordValid).toBe('Invalid Format');
-        component.instance().handlePassword('pk.soft29com');
-        component.instance().validatePassword();
-        expect(component.instance().state.validatePassword).toBe(undefined)
+    it('ProvideLoginDetail_WhenEmailNotFound_ShouldRejectWithError', async() => {
+      const component = shallow(<Login/>)
+        component.instance().handleUserName('pk.soft@gmail.com');
+        component.instance().handlePassword('Pk@16123114')
+        await component.instance().handleLoginButton();
+        expect(component.instance().state.emailError).toBe('UserNotFound')
     })
  })
 

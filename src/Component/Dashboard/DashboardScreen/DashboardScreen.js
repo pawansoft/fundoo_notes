@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import BottomBar from './dashboardFooter';
 import DashboardHeader from './DashboardHeader';
-import { Portal, Snackbar, Modal, Provider, Button, Appbar } from 'react-native-paper';
+import { Portal, Snackbar, Modal, Provider, Button, Appbar, IconButton } from 'react-native-paper';
 import Profile from '../Profile';
 import ProfileStyle from '../../../Style/ProfileStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,6 +20,7 @@ import NoteCard from './NoteCard';
 import dashboardStyle from '../../../Style/dashboardStyle';
 import { NativeModules } from 'react-native';
 const { CalendarModule } = NativeModules;
+const {PushNotificationModule} = NativeModules;
 
 class DashboardScreen extends Component {
     constructor(props) {
@@ -170,6 +171,9 @@ class DashboardScreen extends Component {
            })
         }
     }
+     onPress = () => {
+        CalendarModule.startService();
+      };
 
     render() {
         return (
@@ -180,7 +184,14 @@ class DashboardScreen extends Component {
                     </Image>
                     <View>
                         <DashboardHeader navigation={this.props.navigation} onPress={this.selectView} listView={this.state.listView} onSelectProfile={this.showProfile} testToSearch={this.state.textToSearch} />
+                        <Button
+                        title="Click "
+                       
+                        onPress={this.onPress}
+                        >Click me</Button>
                     </View>
+                    
+                    
                     
                         <View>
                             <FlatList

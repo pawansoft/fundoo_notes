@@ -1,8 +1,8 @@
 import React from 'react';
-import{configure, shallow} from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16'
-import Delete from '../src/Component/Dashboard/Delete/Delete';
+import {configure, shallow} from 'enzyme';
 import MockAsyncStorage from 'mock-async-storage';
+import Adapter from 'enzyme-adapter-react-16';
+import SearchNote from '../src/Component/Dashboard/DashboardScreen/SearchNotes';
 
 const mockImpl = new MockAsyncStorage();
 jest.mock('@react-native-async-storage/async-storage', () => mockImpl);
@@ -12,21 +12,6 @@ jest.mock('react-native-fetch-blob', () => {
     DocumentDir: () => {},
     polyfill: () => {},
   }
-});
-
-jest.mock('react-native-sqlite-storage', () => {
-  // const mockSQLite = require('react-native-sqlite-storage');
-  const mockSQLite = {
-    openDatabase: (...args) => {
-      return {
-        transaction: (...args) => {
-          executeSql: (query) => { return []; }
-        }
-      };
-    }
-  }
-
-  return mockSQLite;
 });
 
 configure({adapter: new Adapter()})
@@ -50,9 +35,9 @@ jest.mock('react-native-localization', () => class RNLocalization {
     }
 })
 
-describe('Delete screen', () => {
-    it('ProvideDeleteScreen_WhenSnapshotMatches_ShouldPassTestCase', () =>{
-        const component = shallow(<Delete/>)
-        expect(component).toMatchSnapshot();
+describe('test LabelAction', () => {
+    it('provideSnapshot_whenMatched_testShouldpass', () =>{
+        const componnt = shallow(<SearchNote/>)
+        expect(componnt).toMatchSnapshot();
     })
 })

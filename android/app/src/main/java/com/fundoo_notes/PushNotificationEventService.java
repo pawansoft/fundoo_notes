@@ -12,7 +12,7 @@ public class PushNotificationEventService extends HeadlessJsTaskService {
     {
         Bundle extras = intent.getExtras() ;
         return  new HeadlessJsTaskConfig(
-                "PushNotification",
+                "SendLocalNotification",
                 extras != null ? Arguments.fromBundle(extras) : null,
                 5000,
         true);
