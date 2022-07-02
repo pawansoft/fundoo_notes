@@ -6,7 +6,7 @@ import {
     Image,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import FirebaseService from '../../../../Services/firebase_services/NoteServices';
+// import FirebaseService from '../../../../Services/firebase_services/NoteServices';
 import { Card, Paragraph, Title, Provider, Appbar, Button } from 'react-native-paper';
 import NotesContainerStyle from '../../../Style/NotesContainerStyle';
 import dashboardStyle from '../../../Style/dashboardStyle';

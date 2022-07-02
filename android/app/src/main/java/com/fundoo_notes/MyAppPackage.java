@@ -19,7 +19,7 @@ public class MyAppPackage  implements ReactPackage {
         List<NativeModule> modules = new ArrayList<>();
 
         modules.add(new CalendarModule(reactContext));
-        modules.add(new PushNotificationModule(reactContext));
+//        modules.add(new PushNotificationModule(reactContext));
         return modules;
     }
 

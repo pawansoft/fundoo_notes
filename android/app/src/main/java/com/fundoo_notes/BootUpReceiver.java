@@ -8,7 +8,7 @@ import android.os.Build;
 public class BootUpReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-            context.startService(new Intent(context, PushNotificationService.class));
+//            context.startService(new Intent(context, PushNotificationService.class));
         }
 
 }

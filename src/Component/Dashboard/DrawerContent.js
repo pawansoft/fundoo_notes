@@ -11,7 +11,7 @@ import { strings } from '../../Localization/Localization';
 import { connect } from 'react-redux'
 import {storeLabelContent, storeNoteKeys, storeLabels} from '../../redux/actions/CreateNewLabelActions'
 
-import NoteServices from '../../../Services/firebase_services/NoteServices';
+// import NoteServices from '../../../Services/firebase_services/NoteServices';
 
 class DrawerContent extends Component {
     constructor(props){
@@ -24,23 +24,23 @@ class DrawerContent extends Component {
     }
 
     componentDidMount = async () => {
-        await NoteServices.getLabelFromDatabase()
-        .then(async (labelContent) => {
-            let tempKey = await Object.keys(labelContent)
-            let labels = []
-            tempKey.map(key => {
-                labels.push(labelContent[key].labelName)
-            })
-            await this.setState({
-                labelNoteKeys : tempKey,
-                labelsContent: labelContent,
-                labels : labels
-            })
-            await this.props.storeLabelContent(this.state.labelsContent);
-            await this.props.storeNoteKeys(this.state.labelNoteKeys);
-            await this.props.storeLabels(this.state.labelNoteKeys);
-        })
-        .catch(error => console.log(error))
+        // await NoteServices.getLabelFromDatabase()
+        // .then(async (labelContent) => {
+        //     let tempKey = await Object.keys(labelContent)
+        //     let labels = []
+        //     tempKey.map(key => {
+        //         labels.push(labelContent[key].labelName)
+        //     })
+        //     await this.setState({
+        //         labelNoteKeys : tempKey,
+        //         labelsContent: labelContent,
+        //         labels : labels
+        //     })
+        //     await this.props.storeLabelContent(this.state.labelsContent);
+        //     await this.props.storeNoteKeys(this.state.labelNoteKeys);
+        //     await this.props.storeLabels(this.state.labelNoteKeys);
+        // })
+        // .catch(error => console.log(error))
     }
 
     handleNoteButton = () => {

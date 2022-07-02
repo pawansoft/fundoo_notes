@@ -11,7 +11,7 @@ import {
 import { Button, Paragraph, Dialog, Portal, Snackbar } from 'react-native-paper';
 import { strings } from '../Localization/Localization'
 import login_style from '../Style/login_style';
-import UserService from '../../Services/UserServices/UserService';
+// import UserService from '../../Services/UserServices/UserService';
 import SocialService from '../../Services/UserServices/SocialService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -63,36 +63,37 @@ export default class Login extends Component {
     }
 
     handleLoginButton = async() => {
-        if (this.state.emailId != '' &&
-            this.state.passcode != '') {
-          await UserService.LoginService(this.state.emailId, this.state.passcode)
-                .then((userDetail) => {
-                    this._setLogingStatusAndDeatil(userDetail.user.uid);
-                    this.props.navigation.navigate('Home')
-                }).catch(async error =>{
-                    if(error === 'User not Found') {
-                        await this.setState({
-                            emailError: 'UserNotFound'
-                        })
-                    } else if(error === 'Invalid Email') {
-                        await this.setState({
-                            emailError: 'InvalidEmail'
-                        })
-                    }   
-                    else if(error === 'Invalid Password') {
-                        await this.setState({
-                            passwordError: 'InvalidPassword'
-                        })
-                    }
-                });
+        this.props.navigation.navigate('Home')
+        // if (this.state.emailId != '' &&
+        //     this.state.passcode != '') {
+        //   await UserService.LoginService(this.state.emailId, this.state.passcode)
+        //         .then((userDetail) => {
+        //             this._setLogingStatusAndDeatil(userDetail.user.uid);
+        //             this.props.navigation.navigate('Home')
+        //         }).catch(async error =>{
+        //             if(error === 'User not Found') {
+        //                 await this.setState({
+        //                     emailError: 'UserNotFound'
+        //                 })
+        //             } else if(error === 'Invalid Email') {
+        //                 await this.setState({
+        //                     emailError: 'InvalidEmail'
+        //                 })
+        //             }   
+        //             else if(error === 'Invalid Password') {
+        //                 await this.setState({
+        //                     passwordError: 'InvalidPassword'
+        //                 })
+        //             }
+        //         });
 
-        }
-        else {
-            await this.setState({
-                emailError : 'Require',
-                passwordError: 'Require'
-            })
-        }
+        // }
+        // else {
+        //     await this.setState({
+        //         emailError : 'Require',
+        //         passwordError: 'Require'
+        //     })
+        // }
     }
 
     handleSignupButtonNavigation = () => {
@@ -100,15 +101,15 @@ export default class Login extends Component {
     }
 
     handleFacebookButton = () => {
-        SocialService.facebookLogin()
-            .then(UserCredential => {
-                SocialService._storeFBDetailIntoFirebase(UserCredential);
-                this._setLogingStatusAndDeatil(userDetails.user.uid);
-                this.props.navigation.navigate('Home');
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        // SocialService.facebookLogin()
+        //     .then(UserCredential => {
+        //         SocialService._storeFBDetailIntoFirebase(UserCredential);
+        //         this._setLogingStatusAndDeatil(userDetails.user.uid);
+        //         this.props.navigation.navigate('Home');
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //     })
 
     }
 

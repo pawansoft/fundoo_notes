@@ -13,14 +13,14 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons'
 import NotesContainerStyle from '../../Style/NotesContainerStyle';
 import { openDatabase } from 'react-native-sqlite-storage';
-import NotesServiceController from '../../../Services/data_flow_controller/NotesServiceController';
+// import NotesServiceController from '../../../Services/data_flow_controller/NotesServiceController';
 import backgroundImageStyle from '../../Style/backgroundImageStyle';
 import SQLiteLabelServices from '../../../Services/SQLite_service/SQLiteLabelServices';
 import ProfileStyle from '../../Style/ProfileStyle';
 import SelectDateAndTime from '../Dashboard/Reminder/SelectDateAndTime';
 import { Appbar, Chip, Menu, Modal, Portal, Provider, Snackbar } from 'react-native-paper';
 import moment from "moment";
-import firebase_rest_service from '../../../Services/firebase_services/firebase_rest_service';
+// import firebase_rest_service from '../../../Services/firebase_services/firebase_rest_service';
 
 const db = openDatabase({ name: 'fundoo_notes.db', createFromLocation: '~data/fundoo_notes.db' });
 
@@ -113,18 +113,18 @@ export default class NewNotes extends Component {
     handleBackButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
             if (this.props.route.params.newNote == true) {
-                await NotesServiceController.addNote(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder), 'false', 'false')
-                    .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
-                    .catch(error => console.log(error))
+                // await NotesServiceController.addNote(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder), 'false', 'false')
+                //     .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
+                //     .catch(error => console.log(error))
 
-                this.updateNoteIdIntoLabel()
+                // this.updateNoteIdIntoLabel()
             }
             else if (this.props.route.params.updateNote == true) {
-                await NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
-                    .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
-                    .catch(error => console.log(error))
+                // await NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
+                //     .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
+                //     .catch(error => console.log(error))
 
-                this.updateNoteIdIntoLabel()
+                // this.updateNoteIdIntoLabel()
             }
         }
         else {
@@ -135,32 +135,32 @@ export default class NewNotes extends Component {
     handleArchiveButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
             if (this.props.route.params.updateNote == true) {
-                NotesServiceController.restoreArchive(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
-                    .then(() => this.props.navigation.push('Home', {
-                        screen: 'Notes', params: {
-                            key: this.state.key,
-                            userid: this.state.userid,
-                            title: this.state.title,
-                            note: this.state.note,
-                            labels: this.state.SelectedLabels,
-                            isArchived: true,
-                            reminder: this.state.reminder
-                        }
-                    }))
+                // NotesServiceController.restoreArchive(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
+                //     .then(() => this.props.navigation.push('Home', {
+                //         screen: 'Notes', params: {
+                //             key: this.state.key,
+                //             userid: this.state.userid,
+                //             title: this.state.title,
+                //             note: this.state.note,
+                //             labels: this.state.SelectedLabels,
+                //             isArchived: true,
+                //             reminder: this.state.reminder
+                //         }
+                //     }))
             }
             else {
-                NotesServiceController.addArchive(this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
-                    .then(() => this.props.navigation.push('Home', {
-                        screen: 'Notes', params: {
-                            key: this.state.key,
-                            userid: this.state.userid,
-                            title: this.state.title,
-                            note: this.state.note,
-                            labels: this.state.SelectedLabels,
-                            isArchived: true,
-                            reminder: this.state.reminder
-                        }
-                    }))
+                // NotesServiceController.addArchive(this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
+                //     .then(() => this.props.navigation.push('Home', {
+                //         screen: 'Notes', params: {
+                //             key: this.state.key,
+                //             userid: this.state.userid,
+                //             title: this.state.title,
+                //             note: this.state.note,
+                //             labels: this.state.SelectedLabels,
+                //             isArchived: true,
+                //             reminder: this.state.reminder
+                //         }
+                //     }))
             }
 
         }
@@ -172,9 +172,9 @@ export default class NewNotes extends Component {
     handleUnArchiveButton = async () => {
         console.log(JSON.stringify(this.state.SelectedLabels));
         if (this.state.title != '' || this.state.note != '') {
-            NotesServiceController.removeArchive(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
-                .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
-                .catch(error => console.log(error))
+            // NotesServiceController.removeArchive(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
+            //     .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
+            //     .catch(error => console.log(error))
         }
         else {
             this.props.navigation.push('Home', { screen: 'Notes', params: { isEmpty: true } })
@@ -203,18 +203,18 @@ export default class NewNotes extends Component {
         this.handleCancel()
         if (this.state.title != '' || this.state.note != '') {
             console.log("from delete"+JSON.stringify(this.state.SelectedLabels));
-            NotesServiceController.moveToRecycleBin(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels))
-                .then(() => this.props.navigation.push('Home', {
-                    screen: 'Notes', params: {
-                        key: this.state.key,
-                        userid: this.state.userid,
-                        title: this.state.title,
-                        note: this.state.note,
-                        labels: this.state.SelectedLabels,
-                        isDeleted: true
-                    }
-                }))
-                .catch(error => console.log(error))
+            // NotesServiceController.moveToRecycleBin(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels))
+            //     .then(() => this.props.navigation.push('Home', {
+            //         screen: 'Notes', params: {
+            //             key: this.state.key,
+            //             userid: this.state.userid,
+            //             title: this.state.title,
+            //             note: this.state.note,
+            //             labels: this.state.SelectedLabels,
+            //             isDeleted: true
+            //         }
+            //     }))
+            //     .catch(error => console.log(error))
         }
         else {
             await this.setState({
@@ -242,13 +242,13 @@ export default class NewNotes extends Component {
                     if (noteId != null && noteId != 0) {
                         if (!noteId.includes(this.state.key)) {
                             noteId.push(this.state.key)
-                            NotesServiceController.updateNoteIdInLabel(JSON.stringify(noteId), label.label_id, label.label)
-                                .then(() => console.log('updated Successfully'))
+                            // NotesServiceController.updateNoteIdInLabel(JSON.stringify(noteId), label.label_id, label.label)
+                            //     .then(() => console.log('updated Successfully'))
                         }
                     }
                     else {
-                        NotesServiceController.updateNoteIdInLabel(JSON.stringify(this.state.noteKey), label.label_id, label.label)
-                            .then(() => console.log("updated"))
+                        // NotesServiceController.updateNoteIdInLabel(JSON.stringify(this.state.noteKey), label.label_id, label.label)
+                        //     .then(() => console.log("updated"))
                     }
 
                 }
@@ -258,8 +258,8 @@ export default class NewNotes extends Component {
                         if (noteId.includes(this.state.key)) {
                             let index = noteId.indexOf(this.state.key)
                             noteId.splice(index, 1)
-                            NotesServiceController.updateNoteIdInLabel(JSON.stringify(noteId), label.label_id, label.label)
-                                .then(() => console.log('index removed successfully'))
+                            // NotesServiceController.updateNoteIdInLabel(JSON.stringify(noteId), label.label_id, label.label)
+                            //     .then(() => console.log('index removed successfully'))
                         }
                     }
 
@@ -272,8 +272,8 @@ export default class NewNotes extends Component {
                     if (noteId.includes(this.state.key)) {
                         let index = noteId.indexOf(this.state.key)
                         noteId.splice(index, 1)
-                        NotesServiceController.updateNoteIdInLabel(JSON.stringify(noteId), label.label_id, label.label)
-                            .then(() => console.log('updated all label'))
+                        // NotesServiceController.updateNoteIdInLabel(JSON.stringify(noteId), label.label_id, label.label)
+                        //     .then(() => console.log('updated all label'))
                     }
                 }
 

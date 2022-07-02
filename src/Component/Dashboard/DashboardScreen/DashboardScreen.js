@@ -12,8 +12,8 @@ import { Portal, Snackbar, Modal, Provider, Button, Appbar, IconButton } from 'r
 import Profile from '../Profile';
 import ProfileStyle from '../../../Style/ProfileStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import FirebaseService from '../../../../Services/firebase_services/NoteServices';
-import NotesServiceController from '../../../../Services/data_flow_controller/NotesServiceController';
+// import FirebaseService from '../../../../Services/firebase_services/NoteServices';
+// import NotesServiceController from '../../../../Services/data_flow_controller/NotesServiceController';
 import backgroundImageStyle from '../../../Style/backgroundImageStyle';
 import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDService';
 import NoteCard from './NoteCard';
@@ -79,13 +79,13 @@ class DashboardScreen extends Component {
             }
         }
         const userid = await AsyncStorage.getItem('userId');
-        await FirebaseService._getNoteService(userid).then(async data => {
-            let notes = data ? data : {}
+        // await FirebaseService._getNoteService(userid).then(async data => {
+        //     let notes = data ? data : {}
 
-            await this.setState({
-                notes: notes
-            })
-        })
+        //     await this.setState({
+        //         notes: notes
+        //     })
+        // })
 
         await SQLiteCRUDService.getConditionalDetailsFromSQLiteDatabase('false', 'false')
             .then(async (data) => {
@@ -110,25 +110,25 @@ class DashboardScreen extends Component {
     }
 
     restoreNotesHandler = () => {
-        NotesServiceController.removeArchive(this.props.route.params.key,
-            this.props.route.params.title,
-            this.props.route.params.note,
-            JSON.stringify(this.props.route.params.labels), 
-            JSON.stringify(this.props.route.params.reminder)
-            )
-            .then(() => {
-                this.props.navigation.push('Home', { screen: 'Notes' })
-            }).catch(error => console.log(error))
+        // NotesServiceController.removeArchive(this.props.route.params.key,
+        //     this.props.route.params.title,
+        //     this.props.route.params.note,
+        //     JSON.stringify(this.props.route.params.labels), 
+        //     JSON.stringify(this.props.route.params.reminder)
+        //     )
+        //     .then(() => {
+        //         this.props.navigation.push('Home', { screen: 'Notes' })
+        //     }).catch(error => console.log(error))
     }
 
     restoreArchived = () => {
-        NotesServiceController.removeArchive(this.props.route.params.key, 
-                                            this.props.route.params.title, 
-                                            this.props.route.params.note, 
-                                            this.props.route.params.labels)
+        // NotesServiceController.removeArchive(this.props.route.params.key, 
+        //                                     this.props.route.params.title, 
+        //                                     this.props.route.params.note, 
+        //                                     this.props.route.params.labels)
 
-            .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
-            .catch(error => console.log(error))
+        //     .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
+        //     .catch(error => console.log(error))
     }
 
     snakbarHandler = async () => {

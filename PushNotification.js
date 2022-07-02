@@ -1,5 +1,5 @@
-import {NativeModules} from 'react-native'
+// import {NativeModules} from 'react-native'
 
-const {SendLocalNotification} = NativeModules;
+// const {SendLocalNotification} = NativeModules;
 
-export default PushNotifications
+// export default PushNotifications

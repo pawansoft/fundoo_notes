@@ -20,12 +20,12 @@ public class CalendarModule extends ReactContextBaseJavaModule {
     public void createCalendarEvent(String name, String location) {
         Log.d("CalendarModule", "Create event called with name: " + name
                 + " and location: " + location);
-       PushNotificationModule pushNotificationModule = new PushNotificationModule()
+//       PushNotificationModule pushNotificationModule = new PushNotificationModule()
     }
 
     @ReactMethod
     public void startService(){
-        this.reactContext.startService(new Intent(this.reactContext, PushNotificationService.class));
+//        this.reactContext.startService(new Intent(this.reactContext, PushNotificationService.class));
         Log.d("this is", "Our task is working properly" );
     }
 

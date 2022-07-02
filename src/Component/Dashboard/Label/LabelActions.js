@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux'
 import { Appbar } from 'react-native-paper'
-import NoteServices from '../../../../Services/firebase_services/NoteServices';
+// import NoteServices from '../../../../Services/firebase_services/NoteServices';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { storeLabelContent, storeNoteKeys } from '../../../redux/actions/CreateNewLabelActions'
 import LabelActionStyle from '../../../Style/LabelActionStyle';
@@ -36,21 +36,21 @@ class LevelActions extends Component {
             this.setState({
                 editLabel: ''
             })
-            NoteServices.updateLabelInFirebase(this.props.labelKey, this.state.editTextInput)
-                .then(async () => {
-                    NoteServices.getLabelFromDatabase()
-                        .then(async data => {
-                            let labels = data ? data : {}
-                            let tempKeys = []
-                            tempKeys = Object.keys(labels)
-                            await this.setState({
-                                edit: false,
-                                noteKeys: tempKeys,
-                            })
-                            await this.props.storeNoteKeys(this.state.noteKeys)
-                        })
-                })
-                .catch(error => console.log(error))
+            // NoteServices.updateLabelInFirebase(this.props.labelKey, this.state.editTextInput)
+            //     .then(async () => {
+            //         NoteServices.getLabelFromDatabase()
+            //             .then(async data => {
+            //                 let labels = data ? data : {}
+            //                 let tempKeys = []
+            //                 tempKeys = Object.keys(labels)
+            //                 await this.setState({
+            //                     edit: false,
+            //                     noteKeys: tempKeys,
+            //                 })
+            //                 await this.props.storeNoteKeys(this.state.noteKeys)
+            //             })
+            //     })
+            //     .catch(error => console.log(error))
         }
     }
 
@@ -95,23 +95,23 @@ class LevelActions extends Component {
     }
 
     handleDeleteButton = async () => {
-        await NoteServices.deleteLabelInFirebase(this.props.labelKey)
-            .then(async () => {
-                await NoteServices.getLabelFromDatabase()
-                    .then(async data => {
-                        let labels = data ? data : {}
-                        let tempKeys = []
-                        tempKeys = Object.keys(labels)
-                        await this.setState({
-                            edit: false,
-                            noteKeys: tempKeys
-                        }, () => {
-                            this.props.storeNoteKeys(this.state.noteKeys)
-                            this.props.storeLabelContent(labels)
-                        })
-                    })
-            })
-            .catch(error => console.log(error))
+        // await NoteServices.deleteLabelInFirebase(this.props.labelKey)
+        //     .then(async () => {
+        //         await NoteServices.getLabelFromDatabase()
+        //             .then(async data => {
+        //                 let labels = data ? data : {}
+        //                 let tempKeys = []
+        //                 tempKeys = Object.keys(labels)
+        //                 await this.setState({
+        //                     edit: false,
+        //                     noteKeys: tempKeys
+        //                 }, () => {
+        //                     this.props.storeNoteKeys(this.state.noteKeys)
+        //                     this.props.storeLabelContent(labels)
+        //                 })
+        //             })
+        //     })
+        //     .catch(error => console.log(error))
     }
 
     render() {

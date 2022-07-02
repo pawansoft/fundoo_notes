@@ -6,8 +6,8 @@ import { connect } from 'react-redux'
 import CreateNewLabelStyles from '../../../Style/CreateNewLabelStyle';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import LevelActions from './LabelActions';
-import NoteServices from '../../../../Services/firebase_services/NoteServices';
-import NotesServiceController from '../../../../Services/data_flow_controller/NotesServiceController';
+// import NoteServices from '../../../../Services/firebase_services/NoteServices';
+// import NotesServiceController from '../../../../Services/data_flow_controller/NotesServiceController';
 import backgroundImageStyle from '../../../Style/backgroundImageStyle';
 
 class CreateNewLabelScreen extends Component {
@@ -67,30 +67,30 @@ class CreateNewLabelScreen extends Component {
     }
 
     updateLabels = async () => {
-        await NoteServices.getLabelFromDatabase()
-            .then(async (labelContent) => {
-                let tempKeys = Object.keys(labelContent)
-                let labels = []
-                tempKeys.map(key => {
-                    labels.push(labelContent[key].labelName)
-                })
-                await this.setState({
-                    labelNoteKeys: tempKeys,
-                    labelContent: labelContent,
-                    enteredLabel: '',
-                    labelExistErrorMessage: false
-                })
-                await this.props.storeLabelContent(this.state.labelContent)
-                await this.props.storeNoteKeys(this.state.labelNoteKeys)
-            })
-            .catch(error => console.log(error))
+        // await NoteServices.getLabelFromDatabase()
+        //     .then(async (labelContent) => {
+        //         let tempKeys = Object.keys(labelContent)
+        //         let labels = []
+        //         tempKeys.map(key => {
+        //             labels.push(labelContent[key].labelName)
+        //         })
+        //         await this.setState({
+        //             labelNoteKeys: tempKeys,
+        //             labelContent: labelContent,
+        //             enteredLabel: '',
+        //             labelExistErrorMessage: false
+        //         })
+        //         await this.props.storeLabelContent(this.state.labelContent)
+        //         await this.props.storeNoteKeys(this.state.labelNoteKeys)
+        //     })
+        //     .catch(error => console.log(error))
     }
 
     createLabel = async () => {
         if(this.state.enteredLabel != '' && !this.state.labelExistErrorMessage) {
-            await NotesServiceController.storeLabel(this.state.enteredLabel)
-            .then(() => console.log("Added Successfully"))
-            .catch(error => console.log(error))
+            // await NotesServiceController.storeLabel(this.state.enteredLabel)
+            // .then(() => console.log("Added Successfully"))
+            // .catch(error => console.log(error))
             // await NoteServices.addLabelInDatabase(this.props.userId, this.state.enteredLabel)
         }
         this.setState({

@@ -7,7 +7,7 @@ import UserService from '../../../Services/UserServices/UserService';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker'
 import RBsheetProfile from './RBSheetProfile';
-import Firebase from '../../../config/Firebase';
+// import Firebase from '../../../config/Firebase';
 import RNFetchBlob from 'react-native-fetch-blob'
 
 const Blob = RNFetchBlob.polyfill.Blob
@@ -38,39 +38,39 @@ export default class Profile extends Component {
   }
 
   uploadProfileImage = (uri, mime = 'application/octet-stream') => {
-    return new Promise(async (resolve, reject) => {
-      const userid = await AsyncStorage.getItem('userId');
-      let uploadBlob = null
-      const imageRef = Firebase.storage().ref(userid)
-      fs.readFile(uri, 'base64')
-        .then((data) => {
-          return Blob.build(data, { type: `${mime};BASE64` })
-        })
-        .then((blob) => {
-          uploadBlob = blob
-          return imageRef.put(blob, { contentType: mime })
-        })
-        .then(() => {
-          uploadBlob.close()
-          return imageRef.getDownloadURL()
-        })
-        .then((url) => {
-          UserService._updateImageUrlService(this.state.userid, url)
-          resolve(url)
-        })
-        .catch((error) => {
-          reject(error)
-        })
-    })
+    // return new Promise(async (resolve, reject) => {
+    //   const userid = await AsyncStorage.getItem('userId');
+    //   let uploadBlob = null
+    //   const imageRef = Firebase.storage().ref(userid)
+    //   fs.readFile(uri, 'base64')
+    //     .then((data) => {
+    //       return Blob.build(data, { type: `${mime};BASE64` })
+    //     })
+    //     .then((blob) => {
+    //       uploadBlob = blob
+    //       return imageRef.put(blob, { contentType: mime })
+    //     })
+    //     .then(() => {
+    //       uploadBlob.close()
+    //       return imageRef.getDownloadURL()
+    //     })
+    //     .then((url) => {
+    //       UserService._updateImageUrlService(this.state.userid, url)
+    //       resolve(url)
+    //     })
+    //     .catch((error) => {
+    //       reject(error)
+    //     })
+    // })
   }
 
   getProfileImageService = () => {
-    return new Promise(async (resolve, reject) => {
-      const userid = await AsyncStorage.getItem('userId');
-      Firebase.storage().ref('/' + userid).getDownloadURL()
-        .then(url => resolve(url))
-        .catch(error => reject(error))
-    })
+    // return new Promise(async (resolve, reject) => {
+    //   const userid = await AsyncStorage.getItem('userId');
+    //   Firebase.storage().ref('/' + userid).getDownloadURL()
+    //     .then(url => resolve(url))
+    //     .catch(error => reject(error))
+    // })
   }
 
   handleLogoutButton = async () => {
@@ -80,9 +80,9 @@ export default class Profile extends Component {
       .catch(error => console.log(error))
   }
 
-  uploadUserProfileImage = (imageUrl) => {
-    Firebase.database().ref('users/')
-  }
+  // uploadUserProfileImage = (imageUrl) => {
+  //   Firebase.database().ref('users/')
+  // }
 
   async componentDidMount() {
     const userid = JSON.parse(await AsyncStorage.getItem('userId'));
