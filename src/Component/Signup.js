@@ -12,6 +12,7 @@ import { strings } from '../Localization/Localization'
 import SQLiteCRUDService from '../../Services/SQLite_service/SQLiteCRUDService';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Snackbar } from 'react-native-paper';
+import Datalayr from '../../Services/Datalayer/Datalayr';
 export default class Signup extends Component {
 
     constructor(props) {
@@ -140,21 +141,8 @@ export default class Signup extends Component {
             this.state.userNameValid == '' &&
             this.state.passwordValid == '' &&
             this.state.passMatch == '') {
-            UserService.SignupService(this.state.userName, this.state.password)
-                .then((userDetails) => {
-                    UserService.storeDetailToDatabase(userDetails.user.uid, this.state.userName, this.state.fname, this.state.lname)
-                        .then(() => this.props.navigation.navigate('Login', { isSignin: true }))
-                        .catch(async error => {
-                            await this.setState({
-                                error : error
-                            })
-                        })
-                }).catch(async error =>
-                    await this.setState({
-                        isError: true,
-                        error: error
-                    })
-                )
+            Datalayr.AddSignupdetails(this.state.fname, this.state.lname, this.state.userName, this.state.password)
+            this.props.navigation.navigate('Login', { isSignin: true })
         }
         else {
             await this.setState({

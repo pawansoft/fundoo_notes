@@ -20,9 +20,8 @@ import ProfileStyle from '../../Style/ProfileStyle';
 import SelectDateAndTime from '../Dashboard/Reminder/SelectDateAndTime';
 import { Appbar, Chip, Menu, Modal, Portal, Provider, Snackbar } from 'react-native-paper';
 import moment from "moment";
+import Datalayr from '../../../Services/Datalayer/Datalayr';
 // import firebase_rest_service from '../../../Services/firebase_services/firebase_rest_service';
-
-const db = openDatabase({ name: 'fundoo_notes.db', createFromLocation: '~data/fundoo_notes.db' });
 
 export default class NewNotes extends Component {
     constructor(props) {
@@ -33,6 +32,7 @@ export default class NewNotes extends Component {
             key: '',
             userid: '',
             isEmpty: false,
+            isDeleted: false,
             SelectedLabels: [],
             reminder: '',
             labelDetails: [],
@@ -48,12 +48,15 @@ export default class NewNotes extends Component {
     }
 
     componentDidMount = async () => {
-        const userId = await AsyncStorage.getItem('userId');
+        const userId = Datalayr.getLoggedUserId()
         await this.setState({
             userid: userId
         })
+        console.log(this.props.route.params.updateNote === true, 'note to be updated');
 
-        if (this.props.route.params.newNote == true) {
+
+        if (this.props.route.params.newNote === true) {
+
             if (this.props.route.params.note != null || this.props.route.params.title != null) {
                 var temp = [];
                 const newKey = new Date()
@@ -70,9 +73,22 @@ export default class NewNotes extends Component {
             }
 
         }
-        else if (this.props.route.params.updateNote == true) {
+
+        else if (this.props.route.params.updateNote === true) {
             var temp = [];
+            console.log(this.props.route.params.title, 'this is my log for data');
             temp.push(this.props.route.params.key)
+            this.setState(
+                {
+                    title: this.props.route.params.title
+                }
+            )
+            this.setState({
+                note: this.props.route.params.note
+            })
+            this.setState({
+                isArchive: this.props.route.params.isArchive
+            })
             await this.setState({
                 noteKey: temp,
                 key: this.props.route.params.key,
@@ -82,19 +98,10 @@ export default class NewNotes extends Component {
                 isArchive: this.props.route.params.isArchive,
                 reminder: JSON.parse(this.props.route.params.reminder)
             })
+
+            console.log(this.state);
         }
-        await SQLiteLabelServices.selectLabelFromSQliteStorage()
-            .then(async result => {
-                var temp = [];
-                if (result.rows.length != 0) {
-                    for (let i = 0; i < result.rows.length; ++i)
-                        temp.push(result.rows.item(i));
-                    this.setState({
-                        labelDetails: temp
-                    })
-                }
-            })
-            .catch(error => console.log(error))
+
     }
     //storeNoteIdIntoLabels
 
@@ -113,18 +120,14 @@ export default class NewNotes extends Component {
     handleBackButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
             if (this.props.route.params.newNote == true) {
-                // await NotesServiceController.addNote(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder), 'false', 'false')
-                //     .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
-                //     .catch(error => console.log(error))
 
-                // this.updateNoteIdIntoLabel()
+                Datalayr.AddNote(this.state.key, this.state.title, this.state.note, this.state.isDeleted, this.state.isArchive)
+                this.props.navigation.push('Home', { screen: 'Notes' })
             }
             else if (this.props.route.params.updateNote == true) {
-                // await NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
-                //     .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
-                //     .catch(error => console.log(error))
-
-                // this.updateNoteIdIntoLabel()
+                let response = Datalayr.UpdateNoteService(this.props.route.params.key, this.state.title, this.state.note, false, this.props.route.params.isArchive)
+                console.log(response, 'this is my response');
+                this.props.navigation.push('Home', { screen: 'Notes' })
             }
         }
         else {
@@ -134,33 +137,13 @@ export default class NewNotes extends Component {
 
     handleArchiveButton = async () => {
         if (this.state.title != '' || this.state.note != '') {
-            if (this.props.route.params.updateNote == true) {
-                // NotesServiceController.restoreArchive(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
-                //     .then(() => this.props.navigation.push('Home', {
-                //         screen: 'Notes', params: {
-                //             key: this.state.key,
-                //             userid: this.state.userid,
-                //             title: this.state.title,
-                //             note: this.state.note,
-                //             labels: this.state.SelectedLabels,
-                //             isArchived: true,
-                //             reminder: this.state.reminder
-                //         }
-                //     }))
+            if (this.props.route.params.updateNote === true) {
+                Datalayr.handleIsArchive(this.props.route.params.key)
+                this.props.navigation.push('Home', { screen: 'Notes' })
             }
             else {
-                // NotesServiceController.addArchive(this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
-                //     .then(() => this.props.navigation.push('Home', {
-                //         screen: 'Notes', params: {
-                //             key: this.state.key,
-                //             userid: this.state.userid,
-                //             title: this.state.title,
-                //             note: this.state.note,
-                //             labels: this.state.SelectedLabels,
-                //             isArchived: true,
-                //             reminder: this.state.reminder
-                //         }
-                //     }))
+                Datalayr.AddNote(2, this.state.title, this.state.note, false, true)
+                this.props.navigation.push('Home', { screen: 'Notes' })
             }
 
         }
@@ -171,7 +154,8 @@ export default class NewNotes extends Component {
 
     handleUnArchiveButton = async () => {
         console.log(JSON.stringify(this.state.SelectedLabels));
-        if (this.state.title != '' || this.state.note != '') {
+        if (this.state.title !== '' || this.state.note !== '') {
+            Datalayr.handleIsArchive()
             // NotesServiceController.removeArchive(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels), JSON.stringify(this.state.reminder))
             //     .then(() => this.props.navigation.push('Home', { screen: 'Notes' }))
             //     .catch(error => console.log(error))
@@ -202,19 +186,8 @@ export default class NewNotes extends Component {
     handleDeleteNoteButton = async () => {
         this.handleCancel()
         if (this.state.title != '' || this.state.note != '') {
-            console.log("from delete"+JSON.stringify(this.state.SelectedLabels));
-            // NotesServiceController.moveToRecycleBin(this.state.key, this.state.title, this.state.note, JSON.stringify(this.state.SelectedLabels))
-            //     .then(() => this.props.navigation.push('Home', {
-            //         screen: 'Notes', params: {
-            //             key: this.state.key,
-            //             userid: this.state.userid,
-            //             title: this.state.title,
-            //             note: this.state.note,
-            //             labels: this.state.SelectedLabels,
-            //             isDeleted: true
-            //         }
-            //     }))
-            //     .catch(error => console.log(error))
+            let response = Datalayr.handleMoveToRecyclebin(this.props.route.params.key)
+            this.props.navigation.push('Home', { screen: 'Notes' })
         }
         else {
             await this.setState({
@@ -300,7 +273,7 @@ export default class NewNotes extends Component {
         else if (this.state.reminder == '') {
             await this.setState({
                 date: new Date()
-                
+
             })
         }
         await this.setState({
@@ -343,7 +316,7 @@ export default class NewNotes extends Component {
     }
 
     showMode = async (currentMode) => {
-        
+
         await this.setState({
             show: true,
             mode: currentMode
@@ -394,7 +367,7 @@ export default class NewNotes extends Component {
                             />
 
                             <Appbar.Action
-                                icon={(this.state.isArchive == 'true') ? 'archive-arrow-up-outline' : 'archive-arrow-down-outline'}
+                                icon={this.state.isArchive === 'true' ? 'archive-arrow-up-outline' : 'archive-arrow-down-outline'}
                                 onPress={(this.state.isArchive == 'true') ? this.handleUnArchiveButton : this.handleArchiveButton}
                             />
                         </View>
@@ -492,7 +465,7 @@ export default class NewNotes extends Component {
                         onDismiss={this.onDismissSnakbarHandler}
                         duration={10000}>
                         Empty notes can not be deleted
-                </Snackbar>
+                    </Snackbar>
                     <Portal>
                         <Modal
                             visible={this.state.openDateTimePicker}

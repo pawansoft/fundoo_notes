@@ -9,6 +9,7 @@ import { launchImageLibrary, launchCamera } from 'react-native-image-picker'
 import RBsheetProfile from './RBSheetProfile';
 // import Firebase from '../../../config/Firebase';
 import RNFetchBlob from 'react-native-fetch-blob'
+import Datalayr from '../../../Services/Datalayer/Datalayr';
 
 const Blob = RNFetchBlob.polyfill.Blob
 const fs = RNFetchBlob.fs
@@ -75,9 +76,8 @@ export default class Profile extends Component {
 
   handleLogoutButton = async () => {
     await AsyncStorage.setItem('isLoggedIn', 'false');
-    await AsyncStorage.setItem('userId', '')
-    UserService.logoutService().then(() => this.props.navigation.navigate('Login'))
-      .catch(error => console.log(error))
+    await Datalayr.setLoggedUserId(null)
+    this.props.navigation.navigate('Login')
   }
 
   // uploadUserProfileImage = (imageUrl) => {
@@ -186,11 +186,11 @@ export default class Profile extends Component {
           <Button
             onPress={() => this.props.navigation.push('Home', { screen: 'Notes' })}>
             Close
-                  </Button>
+          </Button>
           <Button
             onPress={this.handleLogoutButton}>
             Logout
-                  </Button>
+          </Button>
         </View>
 
         <RBSheet
@@ -198,7 +198,7 @@ export default class Profile extends Component {
           height={200}
           customStyles={{
             container: {
-             
+
               borderTopWidth: 1,
               borderColor: "#d3d3d3",
             },

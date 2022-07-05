@@ -11,7 +11,7 @@ import DashboardHeader from './DashboardHeader';
 import { Portal, Snackbar, Modal, Provider, Button, Appbar, IconButton } from 'react-native-paper';
 import Profile from '../Profile';
 import ProfileStyle from '../../../Style/ProfileStyle';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 // import FirebaseService from '../../../../Services/firebase_services/NoteServices';
 // import NotesServiceController from '../../../../Services/data_flow_controller/NotesServiceController';
 import backgroundImageStyle from '../../../Style/backgroundImageStyle';
@@ -19,8 +19,9 @@ import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDSer
 import NoteCard from './NoteCard';
 import dashboardStyle from '../../../Style/dashboardStyle';
 import { NativeModules } from 'react-native';
+import Datalayr from '../../../../Services/Datalayer/Datalayr';
 const { CalendarModule } = NativeModules;
-const {PushNotificationModule} = NativeModules;
+const { PushNotificationModule } = NativeModules;
 
 class DashboardScreen extends Component {
     constructor(props) {
@@ -54,7 +55,7 @@ class DashboardScreen extends Component {
     }
     componentWillUnmount() {
         // fix Warning: Can't perform a React state update on an unmounted component
-        this.setState = (state,callback)=>{
+        this.setState = (state, callback) => {
             return;
         };
     }
@@ -78,14 +79,12 @@ class DashboardScreen extends Component {
                 })
             }
         }
-        const userid = await AsyncStorage.getItem('userId');
-        // await FirebaseService._getNoteService(userid).then(async data => {
-        //     let notes = data ? data : {}
-
-        //     await this.setState({
-        //         notes: notes
-        //     })
-        // })
+        const userid = Datalayr.getLoggedUserId()
+        await this.setState({
+            notes: Datalayr.getNoteByUser(userid)
+        })
+        console.log(Datalayr.getNoteByUser(userid), 'note for testing');
+        
 
         await SQLiteCRUDService.getConditionalDetailsFromSQLiteDatabase('false', 'false')
             .then(async (data) => {
@@ -98,15 +97,15 @@ class DashboardScreen extends Component {
                     })
                 }
             })
-            let tempNotes = []
-            let loadingIndex
-            for(loadingIndex = 0; loadingIndex < 10 && loadingIndex < this.state.notesFromSQLite.length; loadingIndex++){
-                tempNotes.push(this.state.notesFromSQLite[loadingIndex])
-            }
-            await this.setState({
-                showNotes : tempNotes,
-                index : loadingIndex
-            })
+        let tempNotes = []
+        let loadingIndex
+        for (loadingIndex = 0; loadingIndex < 10 && loadingIndex < this.state.notesFromSQLite.length; loadingIndex++) {
+            tempNotes.push(this.state.notesFromSQLite[loadingIndex])
+        }
+        await this.setState({
+            showNotes: tempNotes,
+            index: loadingIndex
+        })
     }
 
     restoreNotesHandler = () => {
@@ -157,108 +156,108 @@ class DashboardScreen extends Component {
             listView: !this.state.listView
         })
     }
-    
+
     loadData = async (addIndex) => {
-        for(let i = 0; i < addIndex; i++) {
-            if(this.state.index == this.state.notesFromSQLite.length) {
+        for (let i = 0; i < addIndex; i++) {
+            if (this.state.index == this.state.notesFromSQLite.length) {
                 await this.setState({
                     index: 0,
                 })
             }
             this.state.showNotes.push(this.state.notesFromSQLite[this.state.index])
-           await this.setState({
-               index : this.state.index + 1
-           })
+            await this.setState({
+                index: this.state.index + 1
+            })
         }
     }
-     onPress = () => {
+    onPress = () => {
         CalendarModule.startService();
-      };
+    };
 
     render() {
         return (
             <Provider >
 
                 <View style={{ flex: 1, justifyContent: "space-between", backgroundColor: '#FAEBD7' }}>
-                    <Image style={backgroundImageStyle.backgroundImage} source = {require('../../../assets/background1.jpg')}>
+                    <Image style={backgroundImageStyle.backgroundImage} source={require('../../../assets/background1.jpg')}>
                     </Image>
                     <View>
                         <DashboardHeader navigation={this.props.navigation} onPress={this.selectView} listView={this.state.listView} onSelectProfile={this.showProfile} testToSearch={this.state.textToSearch} />
-                        <Button
-                        title="Click "
-                       
-                        onPress={this.onPress}
-                        >Click me</Button>
+                        {/* <Button
+                            title="Click "
+
+                            onPress={this.onPress}
+                        >Click me</Button> */}
                     </View>
-                    
-                    
-                    
-                        <View>
-                            <FlatList
-                            style = {{marginBottom: '20%'}}
-                                numColumns = {this.props.listView ? 1 : 2}
-                                keyExtractor = {(item, index) => JSON.stringify(index)}
-                                key = {this.props.listView ? 1 : 2}
-                                data = {this.state.showNotes}
-                                ListFooterComponent = {() => 
-                                    (this.state.endReached)?
-                                        <ActivityIndicator size="large" color="#00ff00"/>
-                                    :null
-                                }
-                    
-                                onEndReached = {async () => {
+
+
+
+                    <View>
+                        <FlatList
+                            style={{ marginBottom: '20%' }}
+                            numColumns={this.props.listView ? 1 : 2}
+                            keyExtractor={(item, index) => JSON.stringify(index)}
+                            key={this.props.listView ? 1 : 2}
+                            data={this.state.notes}
+                            ListFooterComponent={() =>
+                                (this.state.endReached) ?
+                                    <ActivityIndicator size="large" color="#00ff00" />
+                                    : null
+                            }
+
+                            onEndReached={async () => {
+                                await this.setState({
+                                    endReached: true
+                                })
+                            }}
+                            onScroll={async () => {
+                                if (this.state.endReached) {
+                                    this.loadData(8)
                                     await this.setState({
-                                        endReached: true
+                                        endReached: false,
                                     })
-                                }}
-                                onScroll = {async () => {
-                                    if (this.state.endReached) {
-                                        this.loadData(8)
-                                        await this.setState({
-                                            endReached: false,
-                                        })
-                                    }
-                                }}
+                                }
+                            }}
 
-                                onEndReachedThreshold = {0.1}
-                                renderItem = {({ item }) => (
-                                    <NoteCard
-                                        listView = {this.state.listView}
-                                        notes = {item}
-                                        noteKey = {item.note_id}
-                                        isArchive = {true}
-                                        navigation = {this.props.navigation} 
-                                    />
-                                )}
-                            />
-                        </View>
+                            onEndReachedThreshold={0.1}
+                            renderItem={({ item }) => (
+                                <NoteCard
+                                    listView={this.state.listView}
+                                    notes={item}
+                                    noteKey={item.note_id}
+                                    isArchive={true}
+                                    navigation={this.props.navigation}
+                                />
+                            )}
+                        />
+                    </View>
 
-                    <View style = {dashboardStyle.footer}>
-                        <BottomBar  navigation={this.props.navigation} />
+                    <View style={dashboardStyle.footer}>
+                        <BottomBar navigation={this.props.navigation} />
                     </View>
                     <View>
                         <Snackbar
-                            style = {{ marginBottom: '30%' }}
-                            visible = {this.state.showEmptyNoteSnackbar}
-                            onDismiss = {this.snakbarHandler}
-                            duration = {10000}>
+                            style={{ marginBottom: '30%' }}
+                            visible={this.state.showEmptyNoteSnackbar}
+                            onDismiss={this.snakbarHandler}
+                            duration={10000}>
                             Empty Note Discarded
                         </Snackbar>
                         <Snackbar
                             style={{ marginBottom: '30%', flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'grey' }}
-                            visible = {this.state.showDeleteNoteSnackbar}
-                            onDismiss = {this.deleteSnakbarHandler}
-                            duration = {1000}>
-                            <View style = {{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                            visible={this.state.showDeleteNoteSnackbar}
+                            onDismiss={this.deleteSnakbarHandler}
+                            duration={1000}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                                 <View>
-                                    <Text style = {{ marginTop: 10, color: 'white' }}>
+                                    <Text style={{ marginTop: 10, color: 'white' }}>
                                         Note Deleted Successfully
-                                </Text>
+                                    </Text>
                                 </View>
-                                <View style = {{ marginLeft: 50 }}>
+                                <View style={{ marginLeft: 50 }}>
                                     <Button
-                                        onPress = {this.restoreNotesHandler}>
-                                        <Text style = {{ color: '#cca300' }}>UNDO</Text>
+                                        onPress={this.restoreNotesHandler}>
+                                        <Text style={{ color: '#cca300' }}>UNDO</Text>
                                     </Button>
                                 </View>
                             </View>
@@ -273,7 +272,7 @@ class DashboardScreen extends Component {
                                 <View>
                                     <Text style={{ marginTop: 10, color: 'white' }}>
                                         Note added to archive
-                                </Text>
+                                    </Text>
                                 </View>
                                 <View style={{ marginLeft: 50 }}>
                                     <Button

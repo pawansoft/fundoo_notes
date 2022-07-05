@@ -31,7 +31,7 @@ export default class NoteCard extends Component {
 
     updateNote = (key, title, note, labels, archive, reminder) => {
         this.props.navigation.push('NewNotes',
-            { key: key, title: title, note: note, selectedLabel: labels, updateNote: true, isArchive: archive, reminder: reminder })
+            { key: key, title: title, note: note, selectedLabel: labels, updateNote: true, isArchive: archive, reminder: reminder , newNote: false})
     }
 
     componentWillUnmount() {
@@ -39,6 +39,7 @@ export default class NoteCard extends Component {
         this.setState = (state,callback)=>{
             return;
         };
+       
     }
 
     render() {

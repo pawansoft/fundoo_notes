@@ -15,6 +15,7 @@ import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDSer
 import backgroundImageStyle from '../../../Style/backgroundImageStyle';
 import SQLiteLabelServices from '../../../../Services/SQLite_service/SQLiteLabelServices';
 import NotesHolderStyle from '../../../Style/NotesHolderStyle';
+import Datalayr from '../../../../Services/Datalayer/Datalayr';
 
 export default class Delete extends Component {
     constructor(props) {
@@ -41,29 +42,10 @@ export default class Delete extends Component {
     }
 
     async componentDidMount() {
+        this.setState({
 
-        await SQLiteCRUDService.getConditionalDetailsFromSQLiteDatabase('false', 'true')
-            .then(async (data) => {
-                var temp = []
-                if (data.rows.length != 0) {
-                    for (let i = 0; i < data.rows.length; ++i)
-                        temp.push(data.rows.item(i));
-                    await this.setState({
-                        notesFromSQLite: temp
-                    })
-                }
-            })
-        await SQLiteLabelServices.selectLabelFromSQliteStorage()
-            .then(async result => {
-                var temp = [];
-                if (result.rows.length != 0) {
-                    for (let i = 0; i < result.rows.length; ++i)
-                        temp.push(result.rows.item(i));
-                    this.setState({
-                        labelDetails: temp
-                    })
-                }
-            })
+            notesFromSQLite: Datalayr.getNoteByUserDelete()
+        })
     }
 
     selectView = async () => {
@@ -120,34 +102,31 @@ export default class Delete extends Component {
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                             {this.state.notesFromSQLite.reverse().map(val => (
                                 <React.Fragment key={val.NoteKey}>
-                                    {val.isDeleted == "true" ?
+                                    <Card
+                                        onPress={() => this.deleteNoteActionHandler(val)}
+                                        style={NotesContainerStyle.container_list}>
 
-                                        (<Card
-                                            onPress={() => this.deleteNoteActionHandler(val)}
-                                            style={NotesContainerStyle.container_list}>
-
-                                            <Card.Content style={{ backgroundColor: 'white' }}>
-                                                <Title style={{ color: 'black' }}>
-                                                    {val.Title}
-                                                </Title>
-                                                <Paragraph style={{ color: 'black' }}>
-                                                    {val.Notes}
-                                                </Paragraph>
-                                                <View style={NotesHolderStyle.label_text_container}>
-                                                    {(val.Labels != undefined) ?
-                                                        this.state.labelDetails.map(data =>
-                                                            val.Labels.includes(data.label_id) ?
-                                                                <React.Fragment key={data.label_id}>
-                                                                    <Text style={NotesHolderStyle.label_text}>{data.label}</Text>
-                                                                </React.Fragment>
-                                                                : null
-                                                        )
-                                                        : null
-                                                    }
-                                                </View>
-                                            </Card.Content>
-                                        </Card>)
-                                        : null}
+                                        <Card.Content style={{ backgroundColor: 'white' }}>
+                                            <Title style={{ color: 'black' }}>
+                                                {val.Title}
+                                            </Title>
+                                            <Paragraph style={{ color: 'black' }}>
+                                                {val.Notes}
+                                            </Paragraph>
+                                            <View style={NotesHolderStyle.label_text_container}>
+                                                {(val.Labels != undefined) ?
+                                                    this.state.labelDetails.map(data =>
+                                                        val.Labels.includes(data.label_id) ?
+                                                            <React.Fragment key={data.label_id}>
+                                                                <Text style={NotesHolderStyle.label_text}>{data.label}</Text>
+                                                            </React.Fragment>
+                                                            : null
+                                                    )
+                                                    : null
+                                                }
+                                            </View>
+                                        </Card.Content>
+                                    </Card>
                                 </React.Fragment>
                             ))
                             }
@@ -170,7 +149,7 @@ export default class Delete extends Component {
                                 icon='delete-outline'>
                                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>
                                     Clean Recycle bin
-                            </Text>
+                                </Text>
                             </Button>
                         </View>
                     </RBSheet>

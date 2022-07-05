@@ -13,6 +13,7 @@ import NotesServiceController from '../../../../Services/data_flow_controller/No
 import backgroundImageStyle from '../../../Style/backgroundImageStyle';
 import SQLiteLabelServices from '../../../../Services/SQLite_service/SQLiteLabelServices';
 import NotesContainerStyle from '../../../Style/NotesContainerStyle';
+import Datalayr from '../../../../Services/Datalayer/Datalayr';
 
 export class DeleteActionScreen extends Component {
     constructor(props) {
@@ -62,17 +63,15 @@ export class DeleteActionScreen extends Component {
     }
 
     handleRestoreService = () => {
-        NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note)
-            .then(() => {
-                this.props.navigation.push('Home', { screen: 'Delete' })
-            }).catch(error => console.log(error))
+        Datalayr.handleRestoreNote(this.props.route.params.notes.NoteKey)
+        this.props.navigation.push('Home', { screen: 'Delete' })
     }
 
     handleDeleteNoteForEver = () => {
         this.handleCancel();
-        NotesServiceController.deleteNoteFromBin(this.state.key)
-            .then(() => this.props.navigation.push('Home', { screen: 'Delete' }))
-            .catch(error => console.log(error))
+        Datalayr.DeleteNoteService(this.state.key)
+        this.props.navigation.push('Home', { screen: 'Delete' })
+
     }
 
     handleRBSheetOpenButton = async () => {
@@ -93,10 +92,8 @@ export class DeleteActionScreen extends Component {
 
     restoreNotesHandler = () => {
         this.handleCancel();
-        NotesServiceController.updateNote(this.state.key, this.state.title, this.state.note)
-            .then(() => {
-                this.props.navigation.push('Home', { screen: 'Notes' })
-            }).catch(error => console.log(error))
+        Datalayr.handleRestoreNote(this.props.route.params.notes.NoteKey)
+        this.props.navigation.push('Home', { screen: 'Notes' })
     }
     handleCancel = () => {
         const { onPress } = this.props
@@ -139,20 +136,20 @@ export class DeleteActionScreen extends Component {
                     </View>
                 </ScrollView>
                 <View>
-                    <Appbar style = {{ backgroundColor: 'white', justifyContent: 'space-around' }}>
+                    <Appbar style={{ backgroundColor: 'white', justifyContent: 'space-around' }}>
                         <Appbar.Action
-                            icon = 'plus-box-outline' />
+                            icon='plus-box-outline' />
                         <Appbar.Action
-                            title = 'Deleted note' />
+                            title='Deleted note' />
                         <Appbar.Action
                             icon='dots-vertical'
-                            onPress = {this.handleRBSheetOpenButton} />
+                            onPress={this.handleRBSheetOpenButton} />
                     </Appbar>
                 </View>
                 <RBSheet
                     ref={ref => { this.RBSheet = ref }}
                     height={200}
-                    customStyles = {{
+                    customStyles={{
                         container: {
                             borderTopWidth: 1,
                             borderColor: "#d3d3d3",
@@ -162,34 +159,34 @@ export class DeleteActionScreen extends Component {
                             backgroundColor: "transparent",
                         },
                     }}>
-                    <View style = {{ marginTop: '10%' }}>
+                    <View style={{ marginTop: '10%' }}>
                         <Menu.Item
-                            icon = 'autorenew'
-                            onPress = {this.handleRestoreService}
-                            title = ' Restore' />
+                            icon='autorenew'
+                            onPress={this.handleRestoreService}
+                            title=' Restore' />
                         <Menu.Item
-                            title = 'Delete forever'
-                            icon = 'delete-outline'
-                            onPress = {this.handleDeleteNoteForEver} />
+                            title='Delete forever'
+                            icon='delete-outline'
+                            onPress={this.handleDeleteNoteForEver} />
 
                     </View>
                 </RBSheet>
                 <Snackbar
-                    style = {{ marginBottom: '30%', flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'grey' }}
-                    style = {{ marginBottom: 100 }}
-                    visible = {this.state.isDeletable}
-                    onDismiss = {this.onDismissSnakbarHandler}
-                    duration = {5000}>
-                    <View style = {{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                    style={{ marginBottom: '30%', flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'grey' }}
+
+                    visible={this.state.isDeletable}
+                    onDismiss={this.onDismissSnakbarHandler}
+                    duration={5000}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                         <View>
-                            <Text style = {{ marginTop: 10, color: 'white' }}>
+                            <Text style={{ marginTop: 10, color: 'white' }}>
                                 Note Deleted Successfully
                             </Text>
                         </View>
 
-                        <View style = {{ marginLeft: 50 }}>
+                        <View style={{ marginLeft: 50 }}>
                             <Button
-                                onPress = {this.restoreNotesHandler}>
+                                onPress={this.restoreNotesHandler}>
                                 <Text style={{ color: '#cca300' }}>Restore</Text>
                             </Button>
                         </View>

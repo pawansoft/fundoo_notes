@@ -70,7 +70,7 @@ export default class ForgotPassword extends Component {
         return (
             <View>
                 <View style={login_style.header_image}>
-                    <Image source={require('../assets/logo.png')} />
+                    <Image style={login_style.logo} source={require('../assets/logo.png')} />
                 </View>
 
                 <ScrollView style={login_style.scroll_view}>

@@ -60,6 +60,10 @@ const login_style = StyleSheet.create({
     },
     scroll_view :{
         marginBottom : 200
+    },
+    logo:{
+        height: 100,
+        width:200
     }
 })
 export default login_style

@@ -5,6 +5,7 @@ import {
     FlatList
 } from 'react-native'
 import { Appbar} from 'react-native-paper'
+import Datalayr from '../../../../Services/Datalayer/Datalayr'
 import SQLiteCRUDService from '../../../../Services/SQLite_service/SQLiteCRUDService'
 import backgroundImageStyle from '../../../Style/backgroundImageStyle'
 import dashboardStyle from '../../../Style/dashboardStyle'
@@ -24,27 +25,11 @@ export default class ArchiveScreen extends Component {
     }
 
     async componentDidMount() {
-        await SQLiteCRUDService.getConditionalDetailsFromSQLiteDatabase("true", "false")
-            .then(async (data) => {
-                var temp = []
-                if (data.rows.length != 0) {
-                    for (let i = 0; i < data.rows.length; ++i)
-                        temp.push(data.rows.item(i));
-                    await this.setState({
-                        notesFromSQLite: temp
-                    })
-                }
-            }
-        )
-        let tempNotes = []
-            let loadingIndex
-            for(loadingIndex = 0; loadingIndex < 10 && loadingIndex < this.state.notesFromSQLite.length; loadingIndex++){
-                tempNotes.push(this.state.notesFromSQLite[loadingIndex])
-            }
-            await this.setState({
-                showNotes : tempNotes,
-                index : loadingIndex
-            })
+        this.setState({
+            showNotes : Datalayr.getNoteByUserArchived()
+        })
+       
+       
     }
 
     selectView = async () => {

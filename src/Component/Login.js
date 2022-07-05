@@ -12,8 +12,9 @@ import { Button, Paragraph, Dialog, Portal, Snackbar } from 'react-native-paper'
 import { strings } from '../Localization/Localization'
 import login_style from '../Style/login_style';
 // import UserService from '../../Services/UserServices/UserService';
-import SocialService from '../../Services/UserServices/SocialService';
+// import SocialService from '../../Services/UserServices/SocialService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Datalayr from '../../Services/Datalayer/Datalayr';
 
 export default class Login extends Component {
 
@@ -28,12 +29,12 @@ export default class Login extends Component {
         }
     }
 
-    componentDidMount = async() => {
+    componentDidMount = async () => {
         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
-        const userId = await AsyncStorage.getItem('userId');
-        if (isLoggedIn == 'true') {
+        const userId = Datalayr.getLoggedUserId()
+        if (isLoggedIn == 'true' && userId) {
             this.props.navigation.navigate('Home')
-        }      
+        }
     }
 
     _setLogingStatusAndDeatil = async (userId) => {
@@ -42,7 +43,8 @@ export default class Login extends Component {
                 isLoggedIn: true
             })
             await AsyncStorage.setItem('isLoggedIn', JSON.stringify(this.state.isLoggedIn));
-            await AsyncStorage.setItem('userId', JSON.stringify(userId));
+            Datalayr.setLoggedUserId(userId)
+            this.props.navigation.navigate('Home')
         }
         catch (error) {
             console.log(error);
@@ -62,8 +64,24 @@ export default class Login extends Component {
         })
     }
 
-    handleLoginButton = async() => {
-        this.props.navigation.navigate('Home')
+    handleLoginButton = async () => {
+        if (this.state.emailId != '' &&
+            this.state.passcode != '') {
+            let isLoggedIn = Datalayr.LoginHandler(this.state.emailId, this.state.passcode)
+            console.log(isLoggedIn[0].email);
+            if (isLoggedIn !== false) {
+                this._setLogingStatusAndDeatil(isLoggedIn[0].email);
+            } else {
+                this.setState({
+                    emailError: 'UserNotFound'
+                })
+            }
+        } else {
+            await this.setState({
+                emailError: 'Require',
+                passwordError: 'Require'
+            })
+        }
         // if (this.state.emailId != '' &&
         //     this.state.passcode != '') {
         //   await UserService.LoginService(this.state.emailId, this.state.passcode)
@@ -113,7 +131,7 @@ export default class Login extends Component {
 
     }
 
-    handleIsSignInSnakbar = async() => {
+    handleIsSignInSnakbar = async () => {
         await this.setState({
             isSignIn: false
         })
@@ -123,7 +141,7 @@ export default class Login extends Component {
         return (
             <View>
                 <View style={login_style.header_image}>
-                    <Image source={require('../assets/logo.png')} />
+                    <Image style={login_style.logo} source={require('../assets/logo.png')} />
                 </View>
 
                 <ScrollView style={login_style.scroll_view}>
@@ -181,11 +199,11 @@ export default class Login extends Component {
 
                 </ScrollView>
                 <Snackbar
-                    style = {{ marginBottom: '30%' }}
-                    visible = {this.state.isSignin}
-                    onDismiss = {this.handleIsSignInSnakbar}
-                    duration = {10000}>
-                        Siggned in successfully
+                    style={{ marginBottom: '30%' }}
+                    visible={this.state.isSignin}
+                    onDismiss={this.handleIsSignInSnakbar}
+                    duration={10000}>
+                    Siggned in successfully
                 </Snackbar>
 
             </View>
